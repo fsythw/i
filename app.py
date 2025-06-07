@@ -4,7 +4,7 @@ import json
 
 from src.models import Metadata, MetadataNoRel, Data
 from src.prompts import generate_prompt
-from src.llm import call_llm_2, enrich_metadata_with_relationships
+from src.llm import first_call, second_call
 
 st.title("CSV Metadata Explorer")
 
@@ -30,7 +30,7 @@ if uploaded_files:
         columns = list(df.columns)
 
         prompt = generate_prompt(table_name, sample_data, columns)
-        llm_response = call_llm_2(prompt)
+        llm_response = second_call(prompt)
 
         try:
           metadata_no_rel_obj = MetadataNoRel.model_validate_json(llm_response)
@@ -60,7 +60,7 @@ if uploaded_files:
 
     if st.button("Enrich with Relationships"):
         enrichment_prompt = json.dumps([m.model_dump() for m in all_metadata], indent=2)
-        enriched_response = enrich_metadata_with_relationships(all_metadata)
+        enriched_response = second_call(all_metadata)
 
         try:
             data_obj = Data.model_validate_json(enriched_response)

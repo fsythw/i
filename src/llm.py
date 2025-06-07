@@ -6,7 +6,7 @@ from src.prompts import generate_enrichment_prompt
 client = genai.Client(api_key=st.secrets['google']["GENAI_API_KEY"])
 
 
-def call_llm_2(prompt: str) -> str:
+def first_call(prompt: str) -> str:
     response = client.models.generate_content(
         model="gemini-2.0-flash",
         contents=prompt,
@@ -17,7 +17,7 @@ def call_llm_2(prompt: str) -> str:
     )
     return response.text
 
-def enrich_metadata_with_relationships(all_metadata: list[Metadata]) -> str:
+def second_call(all_metadata: list[Metadata]) -> str:
     prompt = generate_enrichment_prompt(all_metadata)
     response = client.models.generate_content(
         model="gemini-2.0-flash",
