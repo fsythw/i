@@ -1,14 +1,25 @@
 import streamlit as st
 import pandas as pd
 import json
+import os
 
 from src.models import Metadata, MetadataNoRel, Data
 from src.prompts import generate_prompt
-from src.llm import first_call, second_call
+from src.llm import call_llm_2, enrich_metadata_with_relationships
 
 st.title("CSV Metadata Explorer")
 
 N_SAMPLE_ROWS = 5
+
+
+description_path = os.path.join("data", "desc.json")
+try:
+    with open(description_path, "r") as f:
+        table_descriptions = json.load(f)
+except Exception as e:
+    st.warning(f"Could not load table descriptions: {e}")
+    table_descriptions = {}
+
 
 uploaded_files = st.file_uploader("Upload CSV files", type="csv", accept_multiple_files=True)
 
@@ -20,6 +31,10 @@ if uploaded_files:
         df = pd.read_csv(uploaded_file)
         st.subheader(f"{table_name}")
 
+        default_description = table_descriptions.get(table_name, "")
+        table_description = st.text_area(f"Description for `{table_name}`", default_description)
+
+        st.markdown(table_description)
 
         sample_data = (
             df.drop_duplicates()
@@ -30,7 +45,7 @@ if uploaded_files:
         columns = list(df.columns)
 
         prompt = generate_prompt(table_name, sample_data, columns)
-        llm_response = second_call(prompt)
+        llm_response = call_llm_2(prompt)
 
         try:
           metadata_no_rel_obj = MetadataNoRel.model_validate_json(llm_response)
@@ -55,16 +70,3 @@ if uploaded_files:
 
         except Exception as e:
           st.error(f"Failed to parse metadata: {e}")
-
-
-
-    if st.button("Enrich with Relationships"):
-        enrichment_prompt = json.dumps([m.model_dump() for m in all_metadata], indent=2)
-        enriched_response = second_call(all_metadata)
-
-        try:
-            data_obj = Data.model_validate_json(enriched_response)
-            st.subheader("Enriched Metadata")
-            st.json(data_obj.model_dump())
-        except Exception as e:
-            st.error(f"Enrichment failed: {e}")

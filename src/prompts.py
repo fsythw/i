@@ -1,5 +1,6 @@
 import json
 from src.models import Metadata
+import pydantic 
 
 def generate_prompt(table_name, sample_data, columns):
     return f"""
@@ -17,7 +18,7 @@ For each column, provide:
 - name
 - type (e.g., string, integer, float, date, boolean)
 - description
-- example value (from the sample)
+- Example values from the sample
 Also provide a table-level description and relevant tags. If it might be a primary or foreign key, indicate so in the description.
 
 Output the metadata as a JSON object.
@@ -34,6 +35,7 @@ Here is the current metadata for all tables:
 Instructions:
 - For each table, look at all columns and try to identify if any of them reference another table's primary key.
 - Add a "relationships" key to each table, with a list of relationship objects.
+
 
 Return the full metadata for the database.
 """
