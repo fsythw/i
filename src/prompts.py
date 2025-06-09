@@ -2,11 +2,12 @@ import json
 from src.models import Metadata
 import pydantic 
 
-def generate_prompt(table_name, sample_data, columns):
+def generate_prompt(table_name, sample_data, columns, table_description=""):
     return f"""
 You are a data catalog assistant. Your task is to generate metadata for a dataset.
 
 Table name: "{table_name}"
+{f"Table description: {table_description}" if table_description else ""}
 
 Sample data:
 {json.dumps(sample_data, indent=2)}
@@ -17,9 +18,9 @@ Columns:
 For each column, provide:
 - name
 - type (e.g., string, integer, float, date, boolean)
-- description
+- description. If it might be a primary or foreign key, indicate so.
 - Example values from the sample
-Also provide a table-level description and relevant tags. If it might be a primary or foreign key, indicate so in the description.
+Use the table-level description provided. 
 
 Output the metadata as a JSON object.
 """

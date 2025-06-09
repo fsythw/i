@@ -9,7 +9,7 @@ from src.llm import call_llm_2, enrich_metadata_with_relationships
 
 st.title("CSV Metadata Explorer")
 
-N_SAMPLE_ROWS = 5
+N_SAMPLE_ROWS = 20
 
 
 description_path = os.path.join("data", "desc.json")
@@ -44,7 +44,7 @@ if uploaded_files:
         st.dataframe(sample_data)
         columns = list(df.columns)
 
-        prompt = generate_prompt(table_name, sample_data, columns)
+        prompt = generate_prompt(table_name, sample_data, columns, table_description)
         llm_response = call_llm_2(prompt)
 
         try:
