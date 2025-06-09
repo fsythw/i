@@ -4,7 +4,7 @@ from typing import List
 
 
 class Relationship(BaseModel):
-
+    from_table: str
     from_column: str
     to_table: str
     to_column: str

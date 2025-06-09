@@ -1,6 +1,5 @@
 import json
 from src.models import Metadata
-import pydantic 
 
 def generate_prompt(table_name, sample_data, columns, table_description=""):
     return f"""
