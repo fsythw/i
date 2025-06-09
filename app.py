@@ -9,7 +9,7 @@ from src.llm import call_llm_2, enrich_metadata_with_relationships
 
 st.title("CSV Metadata Explorer")
 
-N_SAMPLE_ROWS = 20
+N_SAMPLE_ROWS = 50
 
 
 description_path = os.path.join("data", "desc.json")
@@ -34,7 +34,6 @@ if uploaded_files:
         default_description = table_descriptions.get(table_name, "")
         table_description = st.text_area(f"Description for `{table_name}`", default_description)
 
-        st.markdown(table_description)
 
         sample_data = (
             df.drop_duplicates()
@@ -70,7 +69,7 @@ if uploaded_files:
 
         except Exception as e:
           st.error(f"Failed to parse metadata: {e}")
-          
+
     # Optional enrichment (Pass 2)
     if st.button("Enrich with Relationships"):
         enrichment_prompt = json.dumps([m.model_dump() for m in all_metadata], indent=2)

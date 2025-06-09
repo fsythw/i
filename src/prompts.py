@@ -34,7 +34,7 @@ Here is the current metadata for all tables:
 
 Instructions:
 - For each table, look at all columns and try to identify if any of them reference another table's primary key.
-- Add a "relationships" key to each table, with a list of relationship objects.
+- Add a "relationships" key to each table, with a list of relationship objects. A relationship should appear in both tables.
 
 
 Return the full metadata for the database.
