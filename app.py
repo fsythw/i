@@ -61,12 +61,24 @@ if uploaded_files:
           st.markdown("### Column Metadata")
           st.dataframe(columns_df, use_container_width=True)
 
-          with st.expander("Show Raw JSON"):
-            st.json(metadata_obj.model_dump())
+          # with st.expander("Show Raw JSON"):
+          #   st.json(metadata_obj.model_dump())
 
-          st.markdown("### Export")
-          metadata_json = json.dumps(metadata_obj.model_dump(), indent=2)
-          st.download_button("Download JSON", metadata_json, file_name=f"{table_name}_metadata.json", mime="application/json")
+          # st.markdown("### Export")
+          # metadata_json = json.dumps(metadata_obj.model_dump(), indent=2)
+          # st.download_button("Download JSON", metadata_json, file_name=f"{table_name}_metadata.json", mime="application/json")
 
         except Exception as e:
           st.error(f"Failed to parse metadata: {e}")
+          
+    # Optional enrichment (Pass 2)
+    if st.button("Enrich with Relationships"):
+        enrichment_prompt = json.dumps([m.model_dump() for m in all_metadata], indent=2)
+        enriched_response = enrich_metadata_with_relationships(all_metadata)
+
+        try:
+            data_obj = Data.model_validate_json(enriched_response)
+            st.subheader("Enriched Metadata")
+            st.json(data_obj.model_dump())
+        except Exception as e:
+            st.error(f"Enrichment failed: {e}")
