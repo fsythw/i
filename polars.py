@@ -15,3 +15,7 @@ for column in df.columns:
 print(unique_columns)
 
 print(df.schema.keys(), df.schema.values())
+
+## pandas
+## d.nunique()
+## convert_dtypes() for best data type
