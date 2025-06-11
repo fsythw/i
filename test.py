@@ -1,6 +1,6 @@
 import polars
 
-df = polars.read_csv("C:/Users/faith/Downloads/data/1/PATIENTS.csv", ignore_errors=True, rechunk=False)
+df = polars.read_csv("C:\\Users\\admin\\Downloads\\1\\ICUSTAYS.csv", ignore_errors=True, rechunk=False, try_parse_dates=True)
 
 total_rows = len(df)
 
@@ -13,3 +13,5 @@ for column in df.columns:
         unique_columns.append(column)
 
 print(unique_columns)
+
+print(df.schema.keys(), df.schema.values())
