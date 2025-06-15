@@ -16,15 +16,15 @@ def call_llm_2(prompt):
   )
   return response.text
 
-def enrich_metadata_with_relationships(all_metadata: list[Metadata]):
-    prompt = generate_enrichment_prompt(all_metadata)
-    response = client.models.generate_content(
-        model="gemini-2.0-flash",
-        contents=prompt,
-        config={
-            "response_mime_type": "application/json",
-            "response_schema": Data,
+# def enrich_metadata_with_relationships(all_metadata: list[Metadata]):
+#     prompt = generate_enrichment_prompt(all_metadata)
+#     response = client.models.generate_content(
+#         model="gemini-2.0-flash",
+#         contents=prompt,
+#         config={
+#             "response_mime_type": "application/json",
+#             "response_schema": Data,
 
-        },
-    )
-    return response.text
+#         },
+#     )
+#     return response.text

@@ -12,21 +12,21 @@ class Relationship(BaseModel):
 
 class Column(BaseModel):
     name: str
-    type: str
+    data_type: str
+    is_primary_key: bool
     description: str
-    example_value: List[str]
+
+    
 
 class Metadata(BaseModel):
     table_name: str
     description: str
-    tags: List[str]
     columns: List[Column]
     relationships: List[Relationship] = []
 
 class MetadataNoRel(BaseModel):
     table_name: str
     description: str
-    tags: List[str]
     columns: List[Column]
 
 class Data(BaseModel):
