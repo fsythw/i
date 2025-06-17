@@ -4,7 +4,7 @@ import json
 
 from google import genai
 
-from src.models import Metadata, MetadataNoRel, Data
+from src.models import Data
 from src.prompts import call_gemini_descriptions, call_gemini_table_description, judge_and_improve_table_schema, enrich_metadata_with_relationships
 
 client = genai.Client(api_key=st.secrets['google']["GENAI_API_KEY"])
@@ -29,10 +29,6 @@ if uploaded_files:
         table_name = uploaded_file.name.split('.')[0]
         df = pl.read_csv(uploaded_file, rechunk=False, try_parse_dates=True, ignore_errors=True)
         st.subheader(f"{table_name}")
-
-        # default_description = table_descriptions.get(table_name, "")
-        # table_description = st.text_area(f"Description for `{table_name}`", default_description)
-
 
         # sample_data = (
         #     df.drop_duplicates()
@@ -69,8 +65,6 @@ if uploaded_files:
         print(f"Table Description for {table_name}:\n{table_description}", table_name)
 
 
-        
-
         # memory = ConversationBufferMemory(return_messages=True)
         # conversation = ConversationChain(
         #     llm=lc,
@@ -104,13 +98,11 @@ if uploaded_files:
         #     for col in refined_schema
         # ]
 
-
-        # --- Display in Streamlit ---
         st.write(table_description)
-        st.subheader("📄 Column Metadata (Table View)")
+        st.subheader("column metadata)")
         st.dataframe(refined_schema, use_container_width=True)
 
-        st.subheader("📦 Final Metadata (JSON)")
+        st.subheader("json")
         st.json(final_metadata)
 
 
@@ -120,13 +112,6 @@ if uploaded_files:
         #   metadata_obj = Metadata(**metadata_no_rel_obj.model_dump())
         all_metadata.append(final_metadata)
 
-
-
-        # # #   columns_df = pd.DataFrame([col.model_dump() for col in metadata_obj.columns])
-        # # #   columns_df = columns_df[["name", "type", "description", "example_value"]]
-
-        # # #   st.markdown("### Column Metadata")
-        # # #   st.dataframe(columns_df, use_container_width=True)
 
         # except Exception as e:
         #   st.error(f"Failed to parse metadata: {e}")
