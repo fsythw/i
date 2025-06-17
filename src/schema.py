@@ -15,7 +15,6 @@ class Column(BaseModel):
     data_type: str
     is_primary_key: bool
     description: str
-
     
 
 class Metadata(BaseModel):
@@ -31,4 +30,5 @@ class MetadataNoRel(BaseModel):
 
 class Data(BaseModel):
     database_name: str
+    database_desc: str
     metadata: List[Metadata]

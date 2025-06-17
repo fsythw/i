@@ -158,6 +158,7 @@ def enrich_metadata_with_relationships(metadata_list, client):
     Given the following table schemas, identify potential foreign key relationships between tables. 
     Use data type, column description, and primary key status to infer if a column references another table's primary key.
     Also give a description of the entire database.
+    
 
 
     Schemas:

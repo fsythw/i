@@ -135,8 +135,11 @@ if uploaded_files:
         enriched_response = enrich_metadata_with_relationships(all_metadata, client)
 
         try:
-            data_obj = Data.model_validate_json(json.dumps(enriched_response))
-            st.subheader("Enriched Metadata")
-            st.json(data_obj.model_dump())
+            all_metadata = enriched_response["metadata"]
+            db_desc = enriched_response.get("database_name", "Untitled")
+            st.subheader("w/ relationships")
+            st.write(f"database description: {db_desc}")
+            st.json(all_metadata)
+
         except Exception as e:
             st.error(f"Enrichment failed: {e}")
