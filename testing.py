@@ -3,9 +3,8 @@ import polars as pl
 import json
 
 from google import genai
-
-from src.models import Data
 from src.prompts import call_gemini_descriptions, call_gemini_table_description, judge_and_improve_table_schema, enrich_metadata_with_relationships
+from src.visualisation import render_er_diagram
 
 client = genai.Client(api_key=st.secrets['google']["GENAI_API_KEY"])
 ONE_SHOT_EXAMPLE = {
@@ -135,6 +134,10 @@ if uploaded_files:
 
             with open("all_metadata.json", "w") as f:
                 json.dump(enriched_metadata, f, indent=2)
+            
+            st.subheader("📊 ER Diagram")
+            diagram = render_er_diagram(enriched_metadata)
+            st.graphviz_chart(diagram)
 
         except Exception as e:
             st.error(f"Enrichment failed: {e}")

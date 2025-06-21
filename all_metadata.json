@@ -1,186 +1,185 @@
 [
   {
     "table_name": "PATIENTS",
-    "description": "The PATIENTS table contains demographic and mortality information for patients. Key fields include a unique patient identifier (SUBJECT_ID), gender, date of birth (DOB), and dates of death from various sources (DOD, DOD_HOSP, DOD_SSN). The EXPIRE_FLAG indicates whether the patient record has expired. ROW_ID is a unique identifier for each row.",
-    "tags": [],
+    "description": "The PATIENTS table contains demographic information for all patients in the database. This table includes patient identifiers, gender, date of birth, and date of death (if applicable), as well as an expiration flag. The primary key is a composite key of `ROW_ID` and `SUBJECT_ID`.",
     "columns": [
       {
         "name": "ROW_ID",
-        "type": "Int64",
-        "description": "Unique identifier for each row in the table.",
-        "example_value": []
+        "data_type": "Int64",
+        "is_primary_key": true,
+        "description": "Unique identifier for each row in the table."
       },
       {
         "name": "SUBJECT_ID",
-        "type": "Int64",
-        "description": "Foreign key linking to the PATIENTS table, representing a unique patient identifier.",
-        "example_value": []
+        "data_type": "Int64",
+        "is_primary_key": true,
+        "description": "The patient identifier."
       },
       {
         "name": "GENDER",
-        "type": "String",
-        "description": "Patient's gender, recorded as either 'M' (male) or 'F' (female).",
-        "example_value": []
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The gender of the patient, 'F' for female and 'M' for male."
       },
       {
         "name": "DOB",
-        "type": "Datetime(time_unit='us', time_zone=None)",
-        "description": "Patient's date of birth.",
-        "example_value": []
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "The date of birth of the patient."
       },
       {
         "name": "DOD",
-        "type": "Datetime(time_unit='us', time_zone=None)",
-        "description": "Patient's date of death, if applicable.",
-        "example_value": []
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "The date of death of the patient, if applicable."
       },
       {
         "name": "DOD_HOSP",
-        "type": "Datetime(time_unit='us', time_zone=None)",
-        "description": "Date of death as recorded in the hospital. This may differ from the date of death recorded elsewhere.",
-        "example_value": []
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "Date of death recorded in the hospital, if applicable."
       },
       {
         "name": "DOD_SSN",
-        "type": "Datetime(time_unit='us', time_zone=None)",
-        "description": "Date of death as recorded by the Social Security Administration. This may differ from the date of death recorded elsewhere.",
-        "example_value": []
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "Date of death recorded by the Social Security number, if applicable."
       },
       {
         "name": "EXPIRE_FLAG",
-        "type": "Int64",
-        "description": "Indicates whether the patient's record has expired. 1 indicates the record is expired, 0 indicates it is not.",
-        "example_value": []
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "A flag indicating whether the patient entry has expired or not, represented as 0 or 1."
       }
     ],
     "relationships": []
   },
   {
     "table_name": "ADMISSIONS",
-    "description": "The ADMISSIONS table contains information on individual hospital admissions for patients in the dataset. It includes demographics, admission and discharge times, admission types and locations, insurance details, diagnoses, and in-hospital mortality status. This table provides a comprehensive overview of each patient's hospital stay.",
-    "tags": [],
+    "description": "The ADMISSIONS table contains information about hospital admissions for patients. It includes patient demographics, admission and discharge times, admission types and locations, insurance details, diagnoses, and mortality flags. This table serves as a central record for each hospital stay, linking patients to their admission details and outcomes.",
     "columns": [
       {
         "name": "ROW_ID",
-        "type": "Int64",
-        "description": "Unique identifier for each row in the table.",
-        "example_value": []
+        "data_type": "Int64",
+        "is_primary_key": true,
+        "description": "Unique identifier for each row in the table."
       },
       {
         "name": "SUBJECT_ID",
-        "type": "Int64",
-        "description": "Unique identifier for each patient in the dataset.",
-        "example_value": []
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "The patient's unique identifier."
       },
       {
         "name": "HADM_ID",
-        "type": "Int64",
-        "description": "Unique identifier for each hospital admission.",
-        "example_value": []
+        "data_type": "Int64",
+        "is_primary_key": true,
+        "description": "The patient's hospital admission unique identifier."
       },
       {
         "name": "ADMITTIME",
-        "type": "Datetime(time_unit='us', time_zone=None)",
-        "description": "The date and time of hospital admission.",
-        "example_value": []
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "The date and time the patient was admitted to the hospital."
       },
       {
         "name": "DISCHTIME",
-        "type": "Datetime(time_unit='us', time_zone=None)",
-        "description": "The date and time of hospital discharge.",
-        "example_value": []
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "The date and time the patient was discharged from the hospital."
       },
       {
         "name": "DEATHTIME",
-        "type": "Datetime(time_unit='us', time_zone=None)",
-        "description": "The date and time of death for patients who died in the hospital. Null if the patient did not die during the hospitalization.",
-        "example_value": []
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "The date and time of the patient's death, if it occurred during the hospital stay. Null if the patient did not die during the admission."
       },
       {
         "name": "ADMISSION_TYPE",
-        "type": "String",
-        "description": "The type of admission (e.g., EMERGENCY, ELECTIVE, NEWBORN, URGENT).",
-        "example_value": []
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The type of admission (e.g., URGENT, ELECTIVE, EMERGENCY)."
       },
       {
         "name": "ADMISSION_LOCATION",
-        "type": "String",
-        "description": "The location of the patient prior to admission (e.g., PHYS REFERRAL/NORMAL DELI, CLINIC REFERRAL/PREMATURE).",
-        "example_value": []
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The location from which the patient was admitted to the hospital."
       },
       {
         "name": "DISCHARGE_LOCATION",
-        "type": "String",
-        "description": "The location to which the patient was discharged (e.g., HOME, LONG TERM CARE HOSPITAL).",
-        "example_value": []
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The location to which the patient was discharged after their hospital stay."
       },
       {
         "name": "INSURANCE",
-        "type": "String",
-        "description": "The type of insurance the patient has (e.g., Medicaid, Self Pay).",
-        "example_value": []
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The type of insurance the patient has."
       },
       {
         "name": "LANGUAGE",
-        "type": "String",
-        "description": "The primary language spoken by the patient.",
-        "example_value": []
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The primary language of the patient. Uses an abbreviated code."
       },
       {
         "name": "RELIGION",
-        "type": "String",
-        "description": "The patient's self-identified religion.",
-        "example_value": []
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The patient's religious affiliation."
       },
       {
         "name": "MARITAL_STATUS",
-        "type": "String",
-        "description": "The patient's marital status.",
-        "example_value": []
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The patient's marital status."
       },
       {
         "name": "ETHNICITY",
-        "type": "String",
-        "description": "The patient's ethnicity.",
-        "example_value": []
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The patient's self-identified ethnicity."
       },
       {
         "name": "EDREGTIME",
-        "type": "Datetime(time_unit='us', time_zone=None)",
-        "description": "The date and time the patient was registered in the emergency department. Null if the patient was not seen in the ED.",
-        "example_value": []
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "The date and time the patient was registered in the emergency department (ED)."
       },
       {
         "name": "EDOUTTIME",
-        "type": "Datetime(time_unit='us', time_zone=None)",
-        "description": "The date and time the patient left the emergency department. Null if the patient was not seen in the ED.",
-        "example_value": []
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "The date and time the patient left the emergency department (ED)."
       },
       {
         "name": "DIAGNOSIS",
-        "type": "String",
-        "description": "The primary diagnosis for the patient's admission.",
-        "example_value": []
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The diagnosis given for the patient's admission to the hospital. This is often a free-text field."
       },
       {
         "name": "HOSPITAL_EXPIRE_FLAG",
-        "type": "Int64",
-        "description": "A flag indicating whether the patient died in the hospital (1) or not (0) during this admission.",
-        "example_value": []
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "A binary flag indicating whether the patient expired (died) during the hospital admission. 1 indicates the patient died, 0 indicates they survived to discharge."
       },
       {
         "name": "HAS_CHARTEVENTS_DATA",
-        "type": "Int64",
-        "description": "A flag indicating whether there is associated chart events data for this admission (1) or not (0).",
-        "example_value": []
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "A binary flag indicating whether the patient has data in the CHARTEVENTS table. 1 indicates the patient has CHARTEVENTS data, 0 indicates they do not."
       }
     ],
     "relationships": [
       {
+        "from_table": "ADMISSIONS",
         "from_column": "SUBJECT_ID",
         "to_table": "PATIENTS",
         "to_column": "SUBJECT_ID",
-        "reason": "SUBJECT_ID in ADMISSIONS table is a foreign key referencing SUBJECT_ID in PATIENTS table."
+        "reason": "SUBJECT_ID in ADMISSIONS likely references SUBJECT_ID in PATIENTS to identify the patient associated with the admission."
       }
     ]
   }
