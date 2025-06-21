@@ -48,6 +48,7 @@ You are a clinical data assistant. Your job is to write meaningful, specific des
 You will be given:
 - column name
 - some example values
+- summary statistics of the column
 
 Avoid vague phrases. Use the context of values to help explain what each column likely represents.
 
@@ -99,10 +100,10 @@ def judge_and_improve_table_schema(table_name, schema_info, client, threshold=8,
         You are a data documentation expert.
 
         Given the metadata for a table named `{table_name}`, evaluate the overall quality of column descriptions. Consider:
-        - clarity
-        - precision
+        - clarity, precision
         - how well the descriptions reflect inter-column relationships
         - whether the descriptions make sense together as a coherent schema
+        - if a column is not a primary key, make sure the description is unambiguous and does not mention "unique" or any similar variation.
 
         Respond in **strict JSON** format:
         {{
@@ -139,6 +140,7 @@ def judge_and_improve_table_schema(table_name, schema_info, client, threshold=8,
             return current_schema  # fallback to last good schema
 
         score = response.get("score", 0)
+        print(score)
         if score >= threshold:
             break  # done refining
 
