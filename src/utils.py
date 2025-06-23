@@ -1,5 +1,7 @@
 import itertools
 import polars as pl
+from datetime import datetime
+import re 
 
 def discover_primary_key(df: pl.DataFrame) -> list[str]:
 
@@ -34,12 +36,11 @@ def discover_primary_key(df: pl.DataFrame) -> list[str]:
 
     return list(filtered[0])  # fallback to first composite
 
-
 def find_inclusion_dependencies_from_metadata(metadata, error_threshold=0.1):
     fk_candidates = []
 
     pk_index = {
-        (table["table_name"], col["name"]): set(col["unique_values"])
+        (table["table_name"], col["name"]): col
         for table in metadata
         for col in table["columns"]
         if col.get("is_primary_key")
@@ -48,24 +49,51 @@ def find_inclusion_dependencies_from_metadata(metadata, error_threshold=0.1):
     for table in metadata:
         for col in table["columns"]:
             if col.get("is_primary_key"):
-                continue  # skip PKs
-            fk_vals = set(col.get("unique_values", []))
-            if not fk_vals:
                 continue
+            fk_min, fk_max = col.get("min"), col.get("max")
+            fk_name = col["name"]
+            fk_table = table["table_name"]
 
-            for (pk_table, pk_col), pk_vals in pk_index.items():
-                if not pk_vals:
+            for (pk_table, pk_col), pk_meta in pk_index.items():
+                pk_min, pk_max = pk_meta.get("min"), pk_meta.get("max")
+
+                # If any min/max missing, skip
+                if None in [fk_min, fk_max, pk_min, pk_max]:
                     continue
-                unmatched = fk_vals - pk_vals
-                match_ratio = 1 - len(unmatched) / max(len(fk_vals), 1) 
 
-                if match_ratio >= (1 - error_threshold):
+                if fk_min >= pk_min and fk_max <= pk_max:
                     fk_candidates.append({
-                        "from_table": table["table_name"],
-                        "from_column": col["name"],
+                        "from_table": fk_table,
+                        "from_column": fk_name,
                         "to_table": pk_table,
                         "to_column": pk_col,
-                        "match_ratio": match_ratio
+                        "match_type": "range_inclusion"
                     })
 
-    return fk_candidates #list
+    return fk_candidates
+
+
+def convert_datetime_to_str(obj):
+    if isinstance(obj, dict):
+        return {k: convert_datetime_to_str(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_datetime_to_str(v) for v in obj]
+    elif isinstance(obj, datetime):
+        return obj.isoformat()
+    else:
+        return obj
+
+ISO_DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}")
+
+def convert_str_to_datetime(obj):
+    if isinstance(obj, dict):
+        return {k: convert_str_to_datetime(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_str_to_datetime(v) for v in obj]
+    elif isinstance(obj, str) and ISO_DATE_RE.match(obj):
+        try:
+            return datetime.fromisoformat(obj)
+        except ValueError:
+            return obj
+    else:
+        return obj

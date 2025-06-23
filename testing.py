@@ -12,6 +12,9 @@ ONE_SHOT_EXAMPLE = {
     "name": "GENDER",
     "data_type": "string",
     "is_primary_key": False,
+    "min": "F",
+    "max": "M",
+    "nullable": 0,
     "example_values": ["M", "F"],
     "statistic": [{'statistic': 'count', 'GENDER': '46520'}, {'statistic': 'null_count', 'GENDER': '0'}, {'statistic': 'mean', 'GENDER': None}, {'statistic': 'std', 'GENDER': None}, {'statistic': 'min', 'GENDER': 'F'}, {'statistic': '25%', 'GENDER': None}, {'statistic': '50%', 'GENDER': None}, {'statistic': '75%', 'GENDER': None}, {'statistic': 'max', 'GENDER': 'M'}],
     "description": "Patient's gender, recorded as either 'M' (male) or 'F' (female)."
@@ -49,17 +52,25 @@ if uploaded_files:
         unique_counts = df.select(pl.all().n_unique()).row(0) 
         null_counts = df.null_count().row(0)
         n_rows = df.height
+    
 
         schema_info = []
         
         for col, dtype, uniq, nulls in zip(df.columns, df.dtypes, unique_counts, null_counts):
             stats = df.select(col).drop_nulls().describe().to_dicts()
+            col_min = str(df[col].min())
+            col_max = str(df[col].max())
             schema_info.append({
                 "name": col,
                 "data_type": str(dtype),
                 "is_primary_key": col in pk_cols,
+                "n_unique": uniq,
+                "min": col_min,
+                "max": col_max,
+                "nullable": nulls > 0,
                 "example_values": df[col].unique().sample(n=3, seed=42, with_replacement=True).to_list(),
                 "statistics": stats
+                
             })
 
         llm_input = [{"name": col["name"], "example_values": col["example_values"], "statistics": col["statistics"]} for col in schema_info]
@@ -93,7 +104,9 @@ if uploaded_files:
         cached_metadata[table["table_name"]] = table #merge
 
     with open("all_metadata.json", "w") as f:
-        json.dump(list(cached_metadata.values()), f, indent=2) #write
+        #json.dump(list(cached_metadata.values()), f, indent=2) #write
+        json.dump(list(cached_metadata.values()), f, indent=2)
+
 
     st.success("saved.")
 
@@ -101,7 +114,8 @@ if uploaded_files:
         #enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values()), client)
 
         foreign_keys = find_inclusion_dependencies_from_metadata(list(cached_metadata.values()))
-        enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values), foreign_keys, client)
+        print(foreign_keys)
+        enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values()), foreign_keys, client)
         try:
             enriched_metadata = enriched_response["metadata"]
             db_desc = enriched_response.get("database_name", "Untitled")

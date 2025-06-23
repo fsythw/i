@@ -1,223 +1,7 @@
 [
   {
-    "table_name": "J28DK2",
-    "description": "The J28DK2 table contains demographic and mortality data for patients in a study. It includes subject identifiers (SJID), gender (GEND), date of birth (DOB), and multiple date of death records (DOD, DOD_HOSP, DOD_SSN) from different sources. The EXP_FLG column indicates whether a patient belongs to an experimental or control group. The primary key is RWID, a unique row identifier.\n",
-    "columns": [
-      {
-        "name": "RWID",
-        "data_type": "Int64",
-        "is_primary_key": true,
-        "description": "A unique identifier for each row in the dataset."
-      },
-      {
-        "name": "SJID",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "Subject ID, likely a unique identifier assigned to each patient in the study."
-      },
-      {
-        "name": "GEND",
-        "data_type": "String",
-        "is_primary_key": false,
-        "description": "Patient's gender, recorded as either 'M' (male) or 'F' (female)."
-      },
-      {
-        "name": "DOB",
-        "data_type": "Datetime(time_unit='us', time_zone=None)",
-        "is_primary_key": false,
-        "description": "Patient's date of birth, recorded in YYYY-MM-DD format."
-      },
-      {
-        "name": "DOD",
-        "data_type": "Datetime(time_unit='us', time_zone=None)",
-        "is_primary_key": false,
-        "description": "Patient's date of death, recorded in YYYY-MM-DD format."
-      },
-      {
-        "name": "DOD_HOSP",
-        "data_type": "Datetime(time_unit='us', time_zone=None)",
-        "is_primary_key": false,
-        "description": "Patient's date of death, recorded by the hospital in YYYY-MM-DD format."
-      },
-      {
-        "name": "DOD_SSN",
-        "data_type": "Datetime(time_unit='us', time_zone=None)",
-        "is_primary_key": false,
-        "description": "Patient's date of death, recorded by the Social Security Administration in YYYY-MM-DD format."
-      },
-      {
-        "name": "EXP_FLG",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "A binary flag indicating whether the patient is part of an experimental group (1) or a control group (0)."
-      }
-    ]
-  },
-  {
-    "table_name": "VMW9F2",
-    "description": "Table VMW9F2 contains information about patient movement and location within the hospital system, including ward and care unit transitions during hospital admissions and ICU stays. It includes identifiers for subjects (patients), hospital admissions, and ICU stays, along with timestamps indicating entry and exit times for each location. The table also records the length of stay (LOS) associated with each movement event and the source database where the data originated. This table is useful for tracking patient flow and analyzing length of stay in different units.\n",
-    "columns": [
-      {
-        "name": "RWID",
-        "data_type": "Int64",
-        "is_primary_key": true,
-        "description": "A unique identifier for each row in the dataset."
-      },
-      {
-        "name": "SJID",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "A subject identifier, likely a unique identifier for each patient."
-      },
-      {
-        "name": "HADMID",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "Hospital Admission Identifier, a unique identifier for each hospital admission."
-      },
-      {
-        "name": "ICUID",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "Intensive Care Unit (ICU) Identifier, a unique identifier for each ICU stay."
-      },
-      {
-        "name": "DB_SRC",
-        "data_type": "String",
-        "is_primary_key": false,
-        "description": "Source database for the record. Values may indicate a specific database or a combination (e.g., 'both')."
-      },
-      {
-        "name": "EVT_TP",
-        "data_type": "String",
-        "is_primary_key": false,
-        "description": "Event type associated with the record (e.g., 'admit', 'transfer')."
-      },
-      {
-        "name": "PREV_CUNIT",
-        "data_type": "String",
-        "is_primary_key": false,
-        "description": "Previous Care Unit. Indicates the type of care unit the patient was in prior to the current event (e.g., 'CCU', 'TSICU')."
-      },
-      {
-        "name": "CUR_CUNIT",
-        "data_type": "String",
-        "is_primary_key": false,
-        "description": "Current Care Unit. Indicates the type of care unit the patient is currently in (e.g., 'NWARD', 'CCU')."
-      },
-      {
-        "name": "PREV_WDID",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "Previous Ward ID. Numerical identifier for the ward the patient was previously in."
-      },
-      {
-        "name": "CURR_WARDID",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "Current Ward ID. Numerical identifier for the ward the patient is currently in."
-      },
-      {
-        "name": "INTM",
-        "data_type": "Datetime(time_unit='us', time_zone=None)",
-        "is_primary_key": false,
-        "description": "The 'in' timestamp, indicating when the event started or when the patient entered a specific location."
-      },
-      {
-        "name": "OUTTM",
-        "data_type": "Datetime(time_unit='us', time_zone=None)",
-        "is_primary_key": false,
-        "description": "The 'out' timestamp, indicating when the event ended or when the patient left a specific location."
-      },
-      {
-        "name": "LOS",
-        "data_type": "Float64",
-        "is_primary_key": false,
-        "description": "Length of Stay. Duration of stay, calculated as the difference between the 'out' timestamp (OUTTM) and the 'in' timestamp (INTM), likely measured in days."
-      }
-    ]
-  },
-  {
-    "table_name": "A9S71",
-    "description": "Table A9S71 contains information on medical procedures and services (identified by CPT codes) performed during hospital admissions. It includes details such as the patient (SJID), hospital admission (HADMID), cost center (CST_CTR), date of service (CHARTDT), and specific CPT code information (CPT_CD, CPT_NO, CPT_SUFF, SECHEAD, SUBSECHEAD, DESC). The table links procedures to specific patient encounters and provides context for cost analysis and service tracking within the hospital.\n",
-    "columns": [
-      {
-        "name": "RWID",
-        "data_type": "Int64",
-        "is_primary_key": true,
-        "description": "A unique identifier for each row in the dataset."
-      },
-      {
-        "name": "SJID",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "Subject ID: A numerical identifier assigned to each patient in the study."
-      },
-      {
-        "name": "HADMID",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "Hospital Admission ID: A numerical identifier for each hospital admission."
-      },
-      {
-        "name": "CST_CTR",
-        "data_type": "String",
-        "is_primary_key": false,
-        "description": "Cost Center: The department or unit within the hospital where the cost was incurred, such as 'ICU' or 'Resp'."
-      },
-      {
-        "name": "CHARTDT",
-        "data_type": "String",
-        "is_primary_key": false,
-        "description": "Charting Date: The date when the procedure or observation was recorded, formatted as DD/MM/YYYY HH:MM:SS."
-      },
-      {
-        "name": "CPT_CD",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "CPT Code: Numeric code representing a medical procedure or service."
-      },
-      {
-        "name": "CPT_NO",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "CPT Number: The numeric identifier associated with a Current Procedural Terminology (CPT) code."
-      },
-      {
-        "name": "CPT_SUFF",
-        "data_type": "String",
-        "is_primary_key": false,
-        "description": "CPT Suffix: Alphanumeric suffix providing additional detail for a CPT code. Likely a modifier with a value of 'T'."
-      },
-      {
-        "name": "TIX_ID_SEQ",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "Tax ID Sequence: A numerical identifier associated with a Tax ID."
-      },
-      {
-        "name": "SECHEAD",
-        "data_type": "String",
-        "is_primary_key": false,
-        "description": "Section Heading: The primary category or section of the CPT code, describing the general type of service provided (e.g., 'Evaluation and management', 'Anesthesia', 'Surgery')."
-      },
-      {
-        "name": "SUBSECHEAD",
-        "data_type": "String",
-        "is_primary_key": false,
-        "description": "Sub-Section Heading: A more specific categorization of the CPT code, providing further detail about the nature of the service (e.g., 'Hospital inpatient services', 'Conscious sedation (deleted codes)')."
-      },
-      {
-        "name": "DESC",
-        "data_type": "String",
-        "is_primary_key": false,
-        "description": "Description: Detailed description of procedure associated with the CPT code, for example, ventilator management in the Intensive Care Unit."
-      }
-    ]
-  },
-  {
-    "table_name": "2NCH8",
-    "description": "Table 2NCH8 provides a comprehensive dictionary of ITEMIDs used within the clinical database. It maps each ITEMID to a descriptive label, abbreviation, source database, linked table, category, unit of measurement, parameter type, and a (currently unpopulated) concept identifier. This table facilitates understanding and interpretation of clinical data by providing context for each measurement or concept recorded in the system.\n",
+    "table_name": "ADMISSIONS",
+    "description": "The ADMISSIONS table contains information about patient hospital admissions, including admission and discharge times, admission type and location, discharge location, insurance details, patient demographics (language, religion, marital status, ethnicity), diagnosis, and in-hospital mortality. It also indicates the availability of chart event data for each admission. Each row represents a unique hospital admission.",
     "columns": [
       {
         "name": "ROW_ID",
@@ -226,58 +10,240 @@
         "description": "Unique identifier for each row in the table."
       },
       {
-        "name": "ITEMID",
+        "name": "SUBJECT_ID",
         "data_type": "Int64",
         "is_primary_key": false,
-        "description": "The unique identifier for a given clinical measurement, such as heart rate, blood pressure, or medication. Corresponds to a specific concept within the database."
+        "description": "Unique identifier for a patient."
       },
       {
-        "name": "LABEL",
-        "data_type": "String",
+        "name": "HADM_ID",
+        "data_type": "Int64",
         "is_primary_key": false,
-        "description": "A descriptive label associated with the ITEMID, providing a human-readable description of the clinical measurement or concept (e.g., drug name, lab test name, etc.)."
+        "description": "Unique identifier for a patient's hospital admission."
       },
       {
-        "name": "ABBREVIATION",
-        "data_type": "String",
+        "name": "ADMITTIME",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "description": "An abbreviated form or acronym for the LABEL, providing a shorter representation of the clinical measurement or concept."
+        "description": "Timestamp of when the patient was admitted to the hospital."
       },
       {
-        "name": "DBSOURCE",
-        "data_type": "String",
+        "name": "DISCHTIME",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "description": "Indicates the database source from which the data originated, such as 'carevue' or 'metavision'."
+        "description": "Timestamp of when the patient was discharged from the hospital."
       },
       {
-        "name": "LINKSTO",
-        "data_type": "String",
+        "name": "DEATHTIME",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "description": "Specifies the table to which this item is linked, such as 'chartevents', 'inputevents_mv' or 'procedureevents_mv'."
+        "description": "Timestamp of when the patient died, if applicable. Null if the patient did not die during the hospitalization."
       },
       {
-        "name": "CATEGORY",
+        "name": "ADMISSION_TYPE",
         "data_type": "String",
         "is_primary_key": false,
-        "description": "Categorizes the ITEMID into broader groups, such as 'Urine' or '4-Procedures'."
+        "description": "Type of admission, e.g., EMERGENCY, URGENT, or ELECTIVE."
       },
       {
-        "name": "UNITNAME",
+        "name": "ADMISSION_LOCATION",
         "data_type": "String",
         "is_primary_key": false,
-        "description": "The unit of measurement associated with the ITEMID, such as 'mL/m2' or 'grams'."
+        "description": "Location of the patient prior to admission."
       },
       {
-        "name": "PARAM_TYPE",
+        "name": "DISCHARGE_LOCATION",
         "data_type": "String",
         "is_primary_key": false,
-        "description": "Indicates the data type or parameter type associated with the ITEMID, such as 'Numeric' or 'Solution'."
+        "description": "Location to which the patient was discharged."
       },
       {
-        "name": "CONCEPTID",
+        "name": "INSURANCE",
         "data_type": "String",
         "is_primary_key": false,
-        "description": "Maps the ITEMID to a standardized concept identifier from a clinical ontology, which is not populated in this dataset."
+        "description": "Type of insurance the patient has."
+      },
+      {
+        "name": "LANGUAGE",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "Primary language of the patient. Note: values prefixed with '*' may indicate a need for interpretation or translation."
+      },
+      {
+        "name": "RELIGION",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "Patient's religion."
+      },
+      {
+        "name": "MARITAL_STATUS",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "Patient's marital status."
+      },
+      {
+        "name": "ETHNICITY",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "Patient's ethnicity."
+      },
+      {
+        "name": "EDREGTIME",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "Timestamp when the patient was registered in the emergency department. Only present for admissions involving the emergency department."
+      },
+      {
+        "name": "EDOUTTIME",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "Timestamp when the patient left the emergency department. Only present for admissions involving the emergency department."
+      },
+      {
+        "name": "DIAGNOSIS",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "Diagnosis given at the time of admission or during the hospital stay."
+      },
+      {
+        "name": "HOSPITAL_EXPIRE_FLAG",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "Indicates whether the patient expired (died) during the hospitalization. 1 indicates the patient expired, 0 indicates they survived to discharge."
+      },
+      {
+        "name": "HAS_CHARTEVENTS_DATA",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "Indicates whether the patient has data in the CHARTEVENTS table. 1 indicates they have data, 0 indicates they do not."
+      }
+    ],
+    "relationships": [
+      {
+        "from_table": "ADMISSIONS",
+        "from_column": "SUBJECT_ID",
+        "to_table": "PATIENTS",
+        "to_column": "SUBJECT_ID",
+        "reason": "SUBJECT_ID in ADMISSIONS references SUBJECT_ID in PATIENTS, linking admissions to patient demographics."
+      },
+      {
+        "from_table": "SERVICES",
+        "from_column": "HADM_ID",
+        "to_table": "ADMISSIONS",
+        "to_column": "HADM_ID",
+        "reason": "HADM_ID in SERVICES references HADM_ID in ADMISSIONS, linking services to admissions."
+      }
+    ]
+  },
+  {
+    "table_name": "PATIENTS",
+    "description": "The `PATIENTS` table contains demographic and mortality information for patients in the dataset. It includes unique patient identifiers, gender, date of birth, and multiple date of death records from different sources (general, hospital, and Social Security Administration). An expire flag indicates the patient's mortality status. This table serves as a core demographic reference for linking patient data across other tables in the dataset.",
+    "columns": [
+      {
+        "name": "ROW_ID",
+        "data_type": "Int64",
+        "is_primary_key": true,
+        "description": "Unique identifier for each row in the table."
+      },
+      {
+        "name": "SUBJECT_ID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "Unique identifier for each patient in the dataset."
+      },
+      {
+        "name": "GENDER",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The gender of the patient, with 'M' for male and 'F' for female."
+      },
+      {
+        "name": "DOB",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "The date of birth of the patient."
+      },
+      {
+        "name": "DOD",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "The date of death of the patient, recorded in the dataset."
+      },
+      {
+        "name": "DOD_HOSP",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "Date of death as recorded by the hospital."
+      },
+      {
+        "name": "DOD_SSN",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "Date of death as recorded by the Social Security Administration."
+      },
+      {
+        "name": "EXPIRE_FLAG",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "A binary flag indicating whether the patient has expired (1) or not (0)."
+      }
+    ]
+  },
+  {
+    "table_name": "SERVICES",
+    "description": "The `SERVICES` table contains information about patient transfers between different hospital services (departments or units) during a specific hospital admission. It includes the time of transfer, the previous service the patient was in, and the current service the patient was transferred to. This table allows tracking patient movement and service utilization within the hospital.",
+    "columns": [
+      {
+        "name": "ROW_ID",
+        "data_type": "Int64",
+        "is_primary_key": true,
+        "description": "Unique identifier for each row in the table."
+      },
+      {
+        "name": "SUBJECT_ID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "The patient identifier, unique to each patient."
+      },
+      {
+        "name": "HADM_ID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "The hospital admission identifier, unique to each patient's hospital visit."
+      },
+      {
+        "name": "TRANSFERTIME",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "Timestamp of when the patient was transferred during the hospital admission."
+      },
+      {
+        "name": "PREV_SERVICE",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The patient's previous service (department or unit) before the transfer."
+      },
+      {
+        "name": "CURR_SERVICE",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The patient's current service (department or unit) after the transfer."
+      }
+    ],
+    "relationships": [
+      {
+        "from_table": "SERVICES",
+        "from_column": "SUBJECT_ID",
+        "to_table": "PATIENTS",
+        "to_column": "SUBJECT_ID",
+        "reason": "SUBJECT_ID in SERVICES references SUBJECT_ID in PATIENTS, linking services to patient demographics."
+      },
+      {
+        "from_table": "SERVICES",
+        "from_column": "HADM_ID",
+        "to_table": "ADMISSIONS",
+        "to_column": "HADM_ID",
+        "reason": "HADM_ID in SERVICES references HADM_ID in ADMISSIONS, linking services to admissions."
       }
     ]
   }
