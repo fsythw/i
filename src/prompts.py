@@ -155,16 +155,44 @@ def judge_and_improve_table_schema(table_name, schema_info, client, threshold=8,
     return current_schema
 
 
-def enrich_metadata_with_relationships(metadata_list, client):
-    prompt = f"""
-    Given the following table schemas, identify potential foreign key relationships between tables. 
-    Use data type, column description, and primary key status to infer if a column references another table's primary key.
-    Also give a description of the entire database.
+# def enrich_metadata_with_relationships(metadata_list, client):
+#     prompt = f"""
+#     Given the following table schemas, identify potential foreign key relationships between tables. 
+#     Use data type, column description, and primary key status to infer if a column references another table's primary key.
+#     Also give a description of the entire database.
     
 
 
+#     Schemas:
+#     {json.dumps(metadata_list, indent=2)}
+#     """
+
+#     response = client.models.generate_content(
+#         model="gemini-2.0-flash",
+#         contents=prompt,
+#         config={"response_mime_type": "application/json",
+#                 "response_schema": Data,}
+
+#     )
+
+#     try:
+#         return json.loads(response.text)
+#     except Exception as e:
+#         print("Failed to parse enriched response:", e)
+#         return metadata_list  # fallback to original
+
+def enrich_metadata_with_relationships(metadata_list, fk_list, client):
+    prompt = f"""
+    Given the following table schemas, and potential foreign keys, verify potential foreign key relationships between tables. 
+    Use data type, column description, and primary key status to infer if a column references another table's primary key.
+    Also give a description of the entire database.
+    Return an enriched schema of the database.
+
     Schemas:
     {json.dumps(metadata_list, indent=2)}
+
+    Foreign key list:{fk_list}
+
     """
 
     response = client.models.generate_content(

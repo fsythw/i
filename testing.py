@@ -4,7 +4,8 @@ import json
 
 from google import genai
 from src.prompts import call_gemini_descriptions, call_gemini_table_description, judge_and_improve_table_schema, enrich_metadata_with_relationships
-from src.visualisation import render_er_diagram
+from src.visualisation import convert_to_er_graphviz
+from src.utils import discover_primary_key, find_inclusion_dependencies_from_metadata
 
 client = genai.Client(api_key=st.secrets['google']["GENAI_API_KEY"])
 ONE_SHOT_EXAMPLE = {
@@ -12,30 +13,21 @@ ONE_SHOT_EXAMPLE = {
     "data_type": "string",
     "is_primary_key": False,
     "example_values": ["M", "F"],
-    "description": "Patient's gender, recorded as either 'M' (male) or 'F' (female).",
-    "statistic": [{'statistic': 'count', 'GENDER': '46520'}, {'statistic': 'null_count', 'GENDER': '0'}, {'statistic': 'mean', 'GENDER': None}, {'statistic': 'std', 'GENDER': None}, {'statistic': 'min', 'GENDER': 'F'}, {'statistic': '25%', 'GENDER': None}, {'statistic': '50%', 'GENDER': None}, {'statistic': '75%', 'GENDER': None}, {'statistic': 'max', 'GENDER': 'M'}]
+    "statistic": [{'statistic': 'count', 'GENDER': '46520'}, {'statistic': 'null_count', 'GENDER': '0'}, {'statistic': 'mean', 'GENDER': None}, {'statistic': 'std', 'GENDER': None}, {'statistic': 'min', 'GENDER': 'F'}, {'statistic': '25%', 'GENDER': None}, {'statistic': '50%', 'GENDER': None}, {'statistic': '75%', 'GENDER': None}, {'statistic': 'max', 'GENDER': 'M'}],
+    "description": "Patient's gender, recorded as either 'M' (male) or 'F' (female)."
+
 }
 
-# def get_representative_values(series, max_len=20):
-#     unique_vals = series.unique()
-#     if len(unique_vals) <= max_len:
-#         return unique_vals.to_list()
-#     # Otherwise, sample intelligently
-#     return series.sample(n=min(max_len, len(series)), seed=42, with_replacement=False).to_list()
-# Load existing metadata if it exists
 try:
     with open("all_metadata.json", "r") as f:
         cached_data = json.load(f)
 except FileNotFoundError:
     cached_data = []
 
-# Turn into a dictionary keyed by table name
+# dictionary keyed by table name
 cached_metadata = {table["table_name"]: table for table in cached_data}
 
-
 st.title("CSV Metadata Explorer")
-
-
 
 uploaded_files = st.file_uploader("Upload CSV files", type="csv", accept_multiple_files=True)
 
@@ -45,25 +37,27 @@ if uploaded_files:
     for uploaded_file in uploaded_files:
         table_name = uploaded_file.name.split('.')[0]
 
-        # 🛑 Skip if already cached
+        # continue if cached
         if table_name in cached_metadata:
-            st.info(f"✅ Skipped {table_name} (already processed)")
+            st.info(f"skipped {table_name} (already processed)")
             continue
 
         df = pl.read_csv(uploaded_file, rechunk=False, try_parse_dates=True, ignore_errors=True)
+        pk_cols = set(discover_primary_key(df))
         st.subheader(f"{table_name}")
 
-        unique_counts = df.select(pl.all().n_unique()).row(0)
+        unique_counts = df.select(pl.all().n_unique()).row(0) 
         null_counts = df.null_count().row(0)
         n_rows = df.height
 
         schema_info = []
+        
         for col, dtype, uniq, nulls in zip(df.columns, df.dtypes, unique_counts, null_counts):
             stats = df.select(col).drop_nulls().describe().to_dicts()
             schema_info.append({
                 "name": col,
                 "data_type": str(dtype),
-                "is_primary_key": (uniq == n_rows and nulls == 0),
+                "is_primary_key": col in pk_cols,
                 "example_values": df[col].unique().sample(n=3, seed=42, with_replacement=True).to_list(),
                 "statistics": stats
             })
@@ -88,56 +82,41 @@ if uploaded_files:
         }
 
         st.write(table_description)
-        st.subheader("📄 Column Metadata")
+        st.subheader("Column Metadata")
         st.dataframe(refined_schema, use_container_width=True)
-        st.subheader("📦 Final Metadata (JSON)")
+        st.subheader("Final Metadata (JSON)")
         st.json(final_metadata)
 
         new_metadata.append(final_metadata)
 
-    # Merge new into cached
     for table in new_metadata:
-        cached_metadata[table["table_name"]] = table
+        cached_metadata[table["table_name"]] = table #merge
 
-    # Write updated cache
     with open("all_metadata.json", "w") as f:
-        json.dump(list(cached_metadata.values()), f, indent=2)
+        json.dump(list(cached_metadata.values()), f, indent=2) #write
 
-    st.success("✅ Metadata updated and saved.")
+    st.success("saved.")
 
+    if st.button("relationships"):
+        #enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values()), client)
 
-
-
-    # if st.button("Enrich with Relationships"):
-    #     enriched_response = enrich_metadata_with_relationships(all_metadata, client)
-
-    #     try:
-    #         all_metadata = enriched_response["metadata"]
-    #         db_desc = enriched_response.get("database_name", "Untitled")
-    #         st.subheader("w/ relationships")
-    #         st.write(f"database description: {db_desc}")
-    #         st.json(all_metadata)
-    #         with open("all_metadata.json", "w") as f:
-    #             json.dump(all_metadata, f, indent=2)
-
-    #     except Exception as e:
-    #         st.error(f"Enrichment failed: {e}")
-    if st.button("Enrich with Relationships"):
-        enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values()), client)
-
+        foreign_keys = find_inclusion_dependencies_from_metadata(list(cached_metadata.values()))
+        enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values), foreign_keys, client)
         try:
             enriched_metadata = enriched_response["metadata"]
             db_desc = enriched_response.get("database_name", "Untitled")
-            st.subheader("📡 Enriched Metadata")
-            st.write(f"📚 Database description: {db_desc}")
+            st.subheader("Enriched Metadata")
+            st.write(f"Database description: {db_desc}")
             st.json(enriched_metadata)
 
             with open("all_metadata.json", "w") as f:
                 json.dump(enriched_metadata, f, indent=2)
             
-            st.subheader("📊 ER Diagram")
-            diagram = render_er_diagram(enriched_metadata)
+            st.subheader("ER Diagram")
+            diagram = convert_to_er_graphviz(enriched_metadata)
             st.graphviz_chart(diagram)
+
+
 
         except Exception as e:
             st.error(f"Enrichment failed: {e}")
