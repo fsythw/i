@@ -6,6 +6,8 @@ from google import genai
 from src.prompts import call_gemini_descriptions, call_gemini_table_description, judge_and_improve_table_schema, enrich_metadata_with_relationships
 from src.visualisation import convert_to_er_graphviz
 from src.utils import discover_primary_key, find_inclusion_dependencies_from_metadata
+from src.cache import compute_file_hash, is_cached, add_to_cache
+
 
 client = genai.Client(api_key=st.secrets['google']["GENAI_API_KEY"])
 ONE_SHOT_EXAMPLE = {
@@ -40,10 +42,18 @@ if uploaded_files:
     for uploaded_file in uploaded_files:
         table_name = uploaded_file.name.split('.')[0]
 
-        # continue if cached
-        if table_name in cached_metadata:
-            st.info(f"skipped {table_name} (already processed)")
+
+        file_hash = compute_file_hash(uploaded_file)
+
+        if is_cached(file_hash):
+            st.info(f"{uploaded_file.name} skipped (already cached)")
             continue
+
+        metadata_file_path = f"data/{uploaded_file.name.split('.')[0]}.json"
+        # with open(metadata_file_path, "w") as f:
+        #     json.dump(final_metadata, f)
+
+        add_to_cache(file_hash, uploaded_file.name, metadata_file_path)
 
         df = pl.read_csv(uploaded_file, rechunk=False, try_parse_dates=True, ignore_errors=True)
         pk_cols = set(discover_primary_key(df))
@@ -98,6 +108,10 @@ if uploaded_files:
         st.subheader("Final Metadata (JSON)")
         st.json(final_metadata)
 
+        with open(f"data/{table_name}.json", "w") as f:
+        #json.dump(list(cached_metadata.values()), f, indent=2) #write
+            json.dump(final_metadata, f, indent=2)
+
         new_metadata.append(final_metadata)
 
     for table in new_metadata:
@@ -114,7 +128,9 @@ if uploaded_files:
         #enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values()), client)
 
         foreign_keys = find_inclusion_dependencies_from_metadata(list(cached_metadata.values()))
-        print(foreign_keys)
+        for each in foreign_keys:
+            print(each)
+            print("\n")
         enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values()), foreign_keys, client)
         try:
             enriched_metadata = enriched_response["metadata"]

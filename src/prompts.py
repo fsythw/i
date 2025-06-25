@@ -92,12 +92,12 @@ Based on the table name and the descriptions of the columns, write a brief overv
     return response.text
 
 
-def judge_and_improve_table_schema(table_name, schema_info, client, threshold=8, max_iter=3):
+def judge_and_improve_table_schema(table_name, schema_info, client, threshold=8, max_iter=1):
     current_schema = schema_info
 
     for iteration in range(max_iter):
         prompt = f"""
-        You are a data documentation expert.
+        You are a data documentation expert. 
 
         Given the metadata for a table named `{table_name}`, evaluate the overall quality of column descriptions. Consider:
         - clarity, precision

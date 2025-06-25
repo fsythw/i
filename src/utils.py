@@ -2,6 +2,7 @@ import itertools
 import polars as pl
 from datetime import datetime
 import re 
+import hashlib 
 
 def discover_primary_key(df: pl.DataFrame) -> list[str]:
 
@@ -97,3 +98,4 @@ def convert_str_to_datetime(obj):
             return obj
     else:
         return obj
+    

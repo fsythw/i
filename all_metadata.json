@@ -1,249 +1,187 @@
 [
   {
-    "table_name": "ADMISSIONS",
-    "description": "The ADMISSIONS table contains information about patient hospital admissions, including admission and discharge times, admission type and location, discharge location, insurance details, patient demographics (language, religion, marital status, ethnicity), diagnosis, and in-hospital mortality. It also indicates the availability of chart event data for each admission. Each row represents a unique hospital admission.",
+    "table_name": "XYZ123 - Copy",
+    "description": "The \"XYZ123 - Copy\" table contains patient admission information, including demographics, admission and discharge times, admission types and locations, insurance details, language, religion, marital status, ethnicity, emergency department visit timestamps, diagnoses, and flags indicating expiration and chart data availability. Each row represents a unique hospital admission identified by the `HADMID` primary key. The data spans from 2100 to 2210.\n",
     "columns": [
       {
-        "name": "ROW_ID",
+        "name": "SJID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "n_unique": 46520,
+        "min": "2",
+        "max": "99999",
+        "nullable": false,
+        "description": "Subject ID: Identifier for the subject or patient. A single subject can have multiple hospital admissions."
+      },
+      {
+        "name": "HADMID",
         "data_type": "Int64",
         "is_primary_key": true,
-        "description": "Unique identifier for each row in the table."
+        "n_unique": 58976,
+        "min": "100001",
+        "max": "199999",
+        "nullable": false,
+        "description": "Hospital Admission ID: Unique identifier for the specific hospital admission."
       },
       {
-        "name": "SUBJECT_ID",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "Unique identifier for a patient."
-      },
-      {
-        "name": "HADM_ID",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "Unique identifier for a patient's hospital admission."
-      },
-      {
-        "name": "ADMITTIME",
+        "name": "ADMTM",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "description": "Timestamp of when the patient was admitted to the hospital."
+        "n_unique": 58651,
+        "min": "2100-06-07 19:59:00",
+        "max": "2210-08-17 17:13:00",
+        "nullable": false,
+        "description": "Admission Time: Date and time when the patient was admitted to the hospital."
       },
       {
-        "name": "DISCHTIME",
+        "name": "DCTM",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "description": "Timestamp of when the patient was discharged from the hospital."
+        "n_unique": 58657,
+        "min": "2100-06-09 17:09:00",
+        "max": "2210-08-24 19:43:00",
+        "nullable": false,
+        "description": "Discharge Time: Date and time when the patient was discharged from the hospital."
       },
       {
-        "name": "DEATHTIME",
+        "name": "DTHTM",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "description": "Timestamp of when the patient died, if applicable. Null if the patient did not die during the hospitalization."
+        "n_unique": 5835,
+        "min": "2100-06-19 08:15:00",
+        "max": "2208-02-05 11:45:00",
+        "nullable": true,
+        "description": "Death Time: Date and time when the patient died."
       },
       {
-        "name": "ADMISSION_TYPE",
+        "name": "ADM_TP",
         "data_type": "String",
         "is_primary_key": false,
-        "description": "Type of admission, e.g., EMERGENCY, URGENT, or ELECTIVE."
+        "n_unique": 4,
+        "min": "ELECTIVE",
+        "max": "URGENT",
+        "nullable": false,
+        "description": "Admission Type: Type of admission, e.g., ELECTIVE, NEWBORN, URGENT."
       },
       {
-        "name": "ADMISSION_LOCATION",
+        "name": "ADM_LOC",
         "data_type": "String",
         "is_primary_key": false,
-        "description": "Location of the patient prior to admission."
+        "n_unique": 9,
+        "min": "** INFO NOT AVAILABLE **",
+        "max": "TRSF WITHIN THIS FACILITY",
+        "nullable": false,
+        "description": "Admission Location: Location or source of the patient prior to admission."
       },
       {
-        "name": "DISCHARGE_LOCATION",
+        "name": "DSC_LOC",
         "data_type": "String",
         "is_primary_key": false,
-        "description": "Location to which the patient was discharged."
+        "n_unique": 17,
+        "min": "DEAD/EXPIRED",
+        "max": "SNF-MEDICAID ONLY CERTIF",
+        "nullable": false,
+        "description": "Discharge Location: Location to which the patient was discharged."
       },
       {
-        "name": "INSURANCE",
+        "name": "INSR",
         "data_type": "String",
         "is_primary_key": false,
-        "description": "Type of insurance the patient has."
+        "n_unique": 5,
+        "min": "Government",
+        "max": "Self Pay",
+        "nullable": false,
+        "description": "Insurance: Type of insurance the patient has."
       },
       {
-        "name": "LANGUAGE",
+        "name": "LANG",
         "data_type": "String",
         "is_primary_key": false,
-        "description": "Primary language of the patient. Note: values prefixed with '*' may indicate a need for interpretation or translation."
+        "n_unique": 76,
+        "min": "* BE",
+        "max": "VIET",
+        "nullable": true,
+        "description": "Language: The primary language spoken by the patient."
       },
       {
-        "name": "RELIGION",
+        "name": "REL",
         "data_type": "String",
         "is_primary_key": false,
-        "description": "Patient's religion."
+        "n_unique": 21,
+        "min": "7TH DAY ADVENTIST",
+        "max": "UNOBTAINABLE",
+        "nullable": true,
+        "description": "Religion: The patient's religious affiliation."
       },
       {
-        "name": "MARITAL_STATUS",
+        "name": "MAR_STS",
         "data_type": "String",
         "is_primary_key": false,
-        "description": "Patient's marital status."
+        "n_unique": 8,
+        "min": "DIVORCED",
+        "max": "WIDOWED",
+        "nullable": true,
+        "description": "Marital Status: The patient's current marital status."
       },
       {
-        "name": "ETHNICITY",
+        "name": "ETHN",
         "data_type": "String",
         "is_primary_key": false,
-        "description": "Patient's ethnicity."
+        "n_unique": 41,
+        "min": "AMERICAN INDIAN/ALASKA NATIVE",
+        "max": "WHITE - RUSSIAN",
+        "nullable": false,
+        "description": "Ethnicity: The patient's self-identified ethnicity."
       },
       {
         "name": "EDREGTIME",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "description": "Timestamp when the patient was registered in the emergency department. Only present for admissions involving the emergency department."
+        "n_unique": 30875,
+        "min": "2100-06-07 13:14:00",
+        "max": "2210-08-17 10:14:00",
+        "nullable": true,
+        "description": "Emergency Department Registration Time: Date and time when the patient registered in the emergency department."
       },
       {
         "name": "EDOUTTIME",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "description": "Timestamp when the patient left the emergency department. Only present for admissions involving the emergency department."
+        "n_unique": 30865,
+        "min": "2100-06-08 00:06:00",
+        "max": "2210-08-17 18:25:00",
+        "nullable": true,
+        "description": "Emergency Department Out Time: Date and time when the patient left the emergency department."
       },
       {
-        "name": "DIAGNOSIS",
+        "name": "DIAG",
         "data_type": "String",
         "is_primary_key": false,
-        "description": "Diagnosis given at the time of admission or during the hospital stay."
+        "n_unique": 15689,
+        "min": "        MITRAL STENOSIS\\MITRAL VALVE REPLACEMENT /SDA",
+        "max": "ZYGOMATIC FRACTURE LEFT",
+        "nullable": true,
+        "description": "Diagnosis: Primary diagnosis recorded for the patient during this hospital admission."
       },
       {
-        "name": "HOSPITAL_EXPIRE_FLAG",
+        "name": "EXP_FLG",
         "data_type": "Int64",
         "is_primary_key": false,
-        "description": "Indicates whether the patient expired (died) during the hospitalization. 1 indicates the patient expired, 0 indicates they survived to discharge."
+        "n_unique": 2,
+        "min": "0",
+        "max": "1",
+        "nullable": false,
+        "description": "Expiration Flag: Indicates whether the patient expired during the admission (1) or not (0)."
       },
       {
-        "name": "HAS_CHARTEVENTS_DATA",
+        "name": "HAS_CHRT_DATA",
         "data_type": "Int64",
         "is_primary_key": false,
-        "description": "Indicates whether the patient has data in the CHARTEVENTS table. 1 indicates they have data, 0 indicates they do not."
-      }
-    ],
-    "relationships": [
-      {
-        "from_table": "ADMISSIONS",
-        "from_column": "SUBJECT_ID",
-        "to_table": "PATIENTS",
-        "to_column": "SUBJECT_ID",
-        "reason": "SUBJECT_ID in ADMISSIONS references SUBJECT_ID in PATIENTS, linking admissions to patient demographics."
-      },
-      {
-        "from_table": "SERVICES",
-        "from_column": "HADM_ID",
-        "to_table": "ADMISSIONS",
-        "to_column": "HADM_ID",
-        "reason": "HADM_ID in SERVICES references HADM_ID in ADMISSIONS, linking services to admissions."
-      }
-    ]
-  },
-  {
-    "table_name": "PATIENTS",
-    "description": "The `PATIENTS` table contains demographic and mortality information for patients in the dataset. It includes unique patient identifiers, gender, date of birth, and multiple date of death records from different sources (general, hospital, and Social Security Administration). An expire flag indicates the patient's mortality status. This table serves as a core demographic reference for linking patient data across other tables in the dataset.",
-    "columns": [
-      {
-        "name": "ROW_ID",
-        "data_type": "Int64",
-        "is_primary_key": true,
-        "description": "Unique identifier for each row in the table."
-      },
-      {
-        "name": "SUBJECT_ID",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "Unique identifier for each patient in the dataset."
-      },
-      {
-        "name": "GENDER",
-        "data_type": "String",
-        "is_primary_key": false,
-        "description": "The gender of the patient, with 'M' for male and 'F' for female."
-      },
-      {
-        "name": "DOB",
-        "data_type": "Datetime(time_unit='us', time_zone=None)",
-        "is_primary_key": false,
-        "description": "The date of birth of the patient."
-      },
-      {
-        "name": "DOD",
-        "data_type": "Datetime(time_unit='us', time_zone=None)",
-        "is_primary_key": false,
-        "description": "The date of death of the patient, recorded in the dataset."
-      },
-      {
-        "name": "DOD_HOSP",
-        "data_type": "Datetime(time_unit='us', time_zone=None)",
-        "is_primary_key": false,
-        "description": "Date of death as recorded by the hospital."
-      },
-      {
-        "name": "DOD_SSN",
-        "data_type": "Datetime(time_unit='us', time_zone=None)",
-        "is_primary_key": false,
-        "description": "Date of death as recorded by the Social Security Administration."
-      },
-      {
-        "name": "EXPIRE_FLAG",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "A binary flag indicating whether the patient has expired (1) or not (0)."
-      }
-    ]
-  },
-  {
-    "table_name": "SERVICES",
-    "description": "The `SERVICES` table contains information about patient transfers between different hospital services (departments or units) during a specific hospital admission. It includes the time of transfer, the previous service the patient was in, and the current service the patient was transferred to. This table allows tracking patient movement and service utilization within the hospital.",
-    "columns": [
-      {
-        "name": "ROW_ID",
-        "data_type": "Int64",
-        "is_primary_key": true,
-        "description": "Unique identifier for each row in the table."
-      },
-      {
-        "name": "SUBJECT_ID",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "The patient identifier, unique to each patient."
-      },
-      {
-        "name": "HADM_ID",
-        "data_type": "Int64",
-        "is_primary_key": false,
-        "description": "The hospital admission identifier, unique to each patient's hospital visit."
-      },
-      {
-        "name": "TRANSFERTIME",
-        "data_type": "Datetime(time_unit='us', time_zone=None)",
-        "is_primary_key": false,
-        "description": "Timestamp of when the patient was transferred during the hospital admission."
-      },
-      {
-        "name": "PREV_SERVICE",
-        "data_type": "String",
-        "is_primary_key": false,
-        "description": "The patient's previous service (department or unit) before the transfer."
-      },
-      {
-        "name": "CURR_SERVICE",
-        "data_type": "String",
-        "is_primary_key": false,
-        "description": "The patient's current service (department or unit) after the transfer."
-      }
-    ],
-    "relationships": [
-      {
-        "from_table": "SERVICES",
-        "from_column": "SUBJECT_ID",
-        "to_table": "PATIENTS",
-        "to_column": "SUBJECT_ID",
-        "reason": "SUBJECT_ID in SERVICES references SUBJECT_ID in PATIENTS, linking services to patient demographics."
-      },
-      {
-        "from_table": "SERVICES",
-        "from_column": "HADM_ID",
-        "to_table": "ADMISSIONS",
-        "to_column": "HADM_ID",
-        "reason": "HADM_ID in SERVICES references HADM_ID in ADMISSIONS, linking services to admissions."
+        "n_unique": 2,
+        "min": "0",
+        "max": "1",
+        "nullable": false,
+        "description": "Has Chart Data: Indicates whether the patient has chart data available (1) or not (0)."
       }
     ]
   }
