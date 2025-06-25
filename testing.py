@@ -157,3 +157,9 @@ if uploaded_files:
 
         except Exception as e:
             st.error(f"Enrichment failed: {e}")
+
+
+
+##### PUT IN ALL THE CSVS AND 
+### 1. HAVE OPTION TO DROP DOWN AND DISPLAY
+### 2. UPLOAD THE SPECIFIC FILE
