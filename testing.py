@@ -108,6 +108,13 @@ if uploaded_files:
         st.subheader("Final Metadata (JSON)")
         st.json(final_metadata)
 
+        st.download_button(
+            label="Download JSON",
+            file_name="data.json",
+            mime="application/json",
+            data=json.dumps(final_metadata),
+        )
+
         with open(f"data/{table_name}.json", "w") as f:
         #json.dump(list(cached_metadata.values()), f, indent=2) #write
             json.dump(final_metadata, f, indent=2)

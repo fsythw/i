@@ -1,7 +1,7 @@
 [
   {
     "table_name": "XYZ123 - Copy",
-    "description": "The \"XYZ123 - Copy\" table contains patient admission information, including demographics, admission and discharge times, admission types and locations, insurance details, language, religion, marital status, ethnicity, emergency department visit timestamps, diagnoses, and flags indicating expiration and chart data availability. Each row represents a unique hospital admission identified by the `HADMID` primary key. The data spans from 2100 to 2210.\n",
+    "description": "The \"XYZ123 - Copy\" table contains patient admission information, including demographics, admission and discharge details, insurance, and diagnoses. The table's primary key is HADMID (Hospital Admission ID). It also includes information on emergency department registration and departure times, an expiration flag indicating in-hospital mortality, and a flag indicating the availability of chart data. This table is likely used for analyzing patient demographics, admission patterns, and outcomes.\n",
     "columns": [
       {
         "name": "SJID",
@@ -11,7 +11,7 @@
         "min": "2",
         "max": "99999",
         "nullable": false,
-        "description": "Subject ID: Identifier for the subject or patient. A single subject can have multiple hospital admissions."
+        "description": "Subject ID: Unique identifier for each patient or subject in the dataset."
       },
       {
         "name": "HADMID",
@@ -21,7 +21,7 @@
         "min": "100001",
         "max": "199999",
         "nullable": false,
-        "description": "Hospital Admission ID: Unique identifier for the specific hospital admission."
+        "description": "Hospital Admission ID: Unique identifier for each hospital admission."
       },
       {
         "name": "ADMTM",
@@ -51,7 +51,7 @@
         "min": "2100-06-19 08:15:00",
         "max": "2208-02-05 11:45:00",
         "nullable": true,
-        "description": "Death Time: Date and time when the patient died."
+        "description": "Date/Time of Death: Date and time of patient's death, if applicable."
       },
       {
         "name": "ADM_TP",
@@ -61,7 +61,7 @@
         "min": "ELECTIVE",
         "max": "URGENT",
         "nullable": false,
-        "description": "Admission Type: Type of admission, e.g., ELECTIVE, NEWBORN, URGENT."
+        "description": "Admission Type: The type of admission, such as 'EMERGENCY', 'ELECTIVE', or 'URGENT'."
       },
       {
         "name": "ADM_LOC",
@@ -71,7 +71,7 @@
         "min": "** INFO NOT AVAILABLE **",
         "max": "TRSF WITHIN THIS FACILITY",
         "nullable": false,
-        "description": "Admission Location: Location or source of the patient prior to admission."
+        "description": "Admission Location: The location from which the patient was admitted (e.g., 'EMERGENCY ROOM ADMIT', 'TRANSFER FROM HOSP/EXTRAM')."
       },
       {
         "name": "DSC_LOC",
@@ -81,7 +81,7 @@
         "min": "DEAD/EXPIRED",
         "max": "SNF-MEDICAID ONLY CERTIF",
         "nullable": false,
-        "description": "Discharge Location: Location to which the patient was discharged."
+        "description": "Discharge Location: The location to which the patient was discharged (e.g., 'SHORT TERM HOSPITAL', 'LONG TERM CARE HOSPITAL', 'HOME')."
       },
       {
         "name": "INSR",
@@ -91,7 +91,7 @@
         "min": "Government",
         "max": "Self Pay",
         "nullable": false,
-        "description": "Insurance: Type of insurance the patient has."
+        "description": "Insurance: The type of insurance the patient has (e.g., 'Government', 'Self Pay')."
       },
       {
         "name": "LANG",
@@ -121,7 +121,7 @@
         "min": "DIVORCED",
         "max": "WIDOWED",
         "nullable": true,
-        "description": "Marital Status: The patient's current marital status."
+        "description": "Marital Status: The patient's marital status (e.g., 'SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED')."
       },
       {
         "name": "ETHN",
@@ -131,7 +131,7 @@
         "min": "AMERICAN INDIAN/ALASKA NATIVE",
         "max": "WHITE - RUSSIAN",
         "nullable": false,
-        "description": "Ethnicity: The patient's self-identified ethnicity."
+        "description": "Ethnicity: The patient's ethnicity."
       },
       {
         "name": "EDREGTIME",
@@ -141,7 +141,7 @@
         "min": "2100-06-07 13:14:00",
         "max": "2210-08-17 10:14:00",
         "nullable": true,
-        "description": "Emergency Department Registration Time: Date and time when the patient registered in the emergency department."
+        "description": "Emergency Department Registration Time: Date and time when the patient was registered in the emergency department."
       },
       {
         "name": "EDOUTTIME",
@@ -161,7 +161,7 @@
         "min": "        MITRAL STENOSIS\\MITRAL VALVE REPLACEMENT /SDA",
         "max": "ZYGOMATIC FRACTURE LEFT",
         "nullable": true,
-        "description": "Diagnosis: Primary diagnosis recorded for the patient during this hospital admission."
+        "description": "Diagnosis: Patient's diagnosis during the admission."
       },
       {
         "name": "EXP_FLG",
@@ -171,7 +171,7 @@
         "min": "0",
         "max": "1",
         "nullable": false,
-        "description": "Expiration Flag: Indicates whether the patient expired during the admission (1) or not (0)."
+        "description": "Expired Flag: A binary indicator (0 or 1) indicating whether the patient expired during the admission (1) or not (0)."
       },
       {
         "name": "HAS_CHRT_DATA",
@@ -181,7 +181,7 @@
         "min": "0",
         "max": "1",
         "nullable": false,
-        "description": "Has Chart Data: Indicates whether the patient has chart data available (1) or not (0)."
+        "description": "Has Chart Data: A binary indicator (0 or 1) indicating whether the patient has chart data available (1) or not (0)."
       }
     ]
   }
