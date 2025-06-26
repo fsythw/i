@@ -1,12 +1,14 @@
 import streamlit as st
 import polars as pl
 import json
+import os
 
 from google import genai
 from src.prompts import call_gemini_descriptions, call_gemini_table_description, judge_and_improve_table_schema, enrich_metadata_with_relationships
 from src.visualisation import convert_to_er_graphviz
-from src.utils import discover_primary_key, find_inclusion_dependencies_from_metadata
+from src.utils import discover_primary_key, find_valid_foreign_keys_from_csv
 from src.cache import compute_file_hash, is_cached, add_to_cache
+from src.embeddings import get_embedding
 
 
 client = genai.Client(api_key=st.secrets['google']["GENAI_API_KEY"])
@@ -62,24 +64,21 @@ if uploaded_files:
         unique_counts = df.select(pl.all().n_unique()).row(0) 
         null_counts = df.null_count().row(0)
         n_rows = df.height
-    
+
 
         schema_info = []
         
         for col, dtype, uniq, nulls in zip(df.columns, df.dtypes, unique_counts, null_counts):
             stats = df.select(col).drop_nulls().describe().to_dicts()
-            col_min = str(df[col].min())
-            col_max = str(df[col].max())
+            
+
             schema_info.append({
                 "name": col,
                 "data_type": str(dtype),
                 "is_primary_key": col in pk_cols,
                 "n_unique": uniq,
-                "min": col_min,
-                "max": col_max,
-                "nullable": nulls > 0,
                 "example_values": df[col].unique().sample(n=3, seed=42, with_replacement=True).to_list(),
-                "statistics": stats
+                "statistics": stats,
                 
             })
 
@@ -110,9 +109,10 @@ if uploaded_files:
 
         st.download_button(
             label="Download JSON",
-            file_name="data.json",
+            file_name=f"{table_name}.json",
             mime="application/json",
             data=json.dumps(final_metadata),
+            key=f"download_{table_name}"
         )
 
         with open(f"data/{table_name}.json", "w") as f:
@@ -131,32 +131,55 @@ if uploaded_files:
 
     st.success("saved.")
 
-    if st.button("relationships"):
-        #enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values()), client)
 
-        foreign_keys = find_inclusion_dependencies_from_metadata(list(cached_metadata.values()))
-        for each in foreign_keys:
-            print(each)
-            print("\n")
-        enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values()), foreign_keys, client)
-        try:
-            enriched_metadata = enriched_response["metadata"]
-            db_desc = enriched_response.get("database_name", "Untitled")
-            st.subheader("Enriched Metadata")
-            st.write(f"Database description: {db_desc}")
-            st.json(enriched_metadata)
+    #     #enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values()), client)
+    #     print(cached_metadata)
+    #     specifc_table = st.file_uploader("Upload CSV files", type="csv")
+    #     top_tables = find_valid_foreign_keys_from_csv(specifc_table, )
+    #     find_valid_foreign_keys_from_csv(target_table, all_tables, csv_dir, embed_fn, top_n=10):
+    specific_file = st.file_uploader("Upload a target CSV file to match relationships", type="csv")
 
-            with open("all_metadata.json", "w") as f:
-                json.dump(enriched_metadata, f, indent=2)
+    if specific_file:
+        st.success(f"Uploaded file: {specific_file.name}")  # Confirm it's loaded
+        with open(f"data/{table_name}.json", 'r') as file:
+            df = json.load(file)
+
+        if st.button("Find Relationships"):
+            fk_matches = find_valid_foreign_keys_from_csv(
+                target_table=df,
+                all_tables=list(cached_metadata.values()),
+                csv_dir="csv_data",
+                embed_fn=get_embedding,
+                top_n=10
+            )
+            st.subheader("Foreign Key Candidates")
+            st.json(fk_matches)
+
+
+
+        #foreign_keys = find_inclusion_dependencies_from_metadata(list(cached_metadata.values()))
+        # for each in foreign_keys:
+        #     print(each)
+        #     print("\n")
+        # enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values()), foreign_keys, client)
+        # try:
+        #     enriched_metadata = enriched_response["metadata"]
+        #     db_desc = enriched_response.get("database_name", "Untitled")
+        #     st.subheader("Enriched Metadata")
+        #     st.write(f"Database description: {db_desc}")
+        #     st.json(enriched_metadata)
+
+        #     with open("all_metadata.json", "w") as f:
+        #         json.dump(enriched_metadata, f, indent=2)
             
-            st.subheader("ER Diagram")
-            diagram = convert_to_er_graphviz(enriched_metadata)
-            st.graphviz_chart(diagram)
+        #     st.subheader("ER Diagram")
+        #     diagram = convert_to_er_graphviz(enriched_metadata)
+        #     st.graphviz_chart(diagram)
 
 
 
-        except Exception as e:
-            st.error(f"Enrichment failed: {e}")
+        # except Exception as e:
+        #     st.error(f"Enrichment failed: {e}")
 
 
 

@@ -1,0 +1,158 @@
+{
+  "table_name": "ADMISSIONS",
+  "description": "The ADMISSIONS table contains information about patient hospital admissions, including admission and discharge times, admission types and locations, insurance details, demographic information (language, religion, marital status, ethnicity), diagnoses, and mortality flags. It provides a comprehensive overview of each patient's hospital stay, linking patient identifiers to specific admission details and outcomes.\n",
+  "columns": [
+    {
+      "name": "ROW_ID",
+      "data_type": "Int64",
+      "is_primary_key": true,
+      "n_unique": 58976,
+      "unique_values_path": "unique_values\\ADMISSIONS__ROW_ID.parquet",
+      "description": "Unique identifier for each row in the table."
+    },
+    {
+      "name": "SUBJECT_ID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 46520,
+      "unique_values_path": "unique_values\\ADMISSIONS__SUBJECT_ID.parquet",
+      "description": "Unique identifier for the patient."
+    },
+    {
+      "name": "HADM_ID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 58976,
+      "unique_values_path": "unique_values\\ADMISSIONS__HADM_ID.parquet",
+      "description": "Unique identifier for the patient's hospital admission."
+    },
+    {
+      "name": "ADMITTIME",
+      "data_type": "Datetime(time_unit='us', time_zone=None)",
+      "is_primary_key": false,
+      "n_unique": 58651,
+      "unique_values_path": "unique_values\\ADMISSIONS__ADMITTIME.parquet",
+      "description": "Date and time when the patient was admitted to the hospital."
+    },
+    {
+      "name": "DISCHTIME",
+      "data_type": "Datetime(time_unit='us', time_zone=None)",
+      "is_primary_key": false,
+      "n_unique": 58657,
+      "unique_values_path": "unique_values\\ADMISSIONS__DISCHTIME.parquet",
+      "description": "Date and time when the patient was discharged from the hospital."
+    },
+    {
+      "name": "DEATHTIME",
+      "data_type": "Datetime(time_unit='us', time_zone=None)",
+      "is_primary_key": false,
+      "n_unique": 5835,
+      "unique_values_path": "unique_values\\ADMISSIONS__DEATHTIME.parquet",
+      "description": "Date and time of the patient's death, if it occurred during the hospital stay. If the patient did not die during the stay, this field is null."
+    },
+    {
+      "name": "ADMISSION_TYPE",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 4,
+      "unique_values_path": "unique_values\\ADMISSIONS__ADMISSION_TYPE.parquet",
+      "description": "Type of admission, e.g., ELECTIVE, EMERGENCY, URGENT."
+    },
+    {
+      "name": "ADMISSION_LOCATION",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 9,
+      "unique_values_path": "unique_values\\ADMISSIONS__ADMISSION_LOCATION.parquet",
+      "description": "Location from which the patient was admitted, e.g., EMERGENCY ROOM ADMIT, TRANSFER FROM OTHER HEALT."
+    },
+    {
+      "name": "DISCHARGE_LOCATION",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 17,
+      "unique_values_path": "unique_values\\ADMISSIONS__DISCHARGE_LOCATION.parquet",
+      "description": "Location to which the patient was discharged, e.g., HOME, DISCH-TRAN TO PSYCH HOSP."
+    },
+    {
+      "name": "INSURANCE",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 5,
+      "unique_values_path": "unique_values\\ADMISSIONS__INSURANCE.parquet",
+      "description": "Type of insurance the patient has, e.g., Private, Medicare, Self Pay."
+    },
+    {
+      "name": "LANGUAGE",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 76,
+      "unique_values_path": "unique_values\\ADMISSIONS__LANGUAGE.parquet",
+      "description": "The primary language of the patient. Note: the language is represented by an abbreviation."
+    },
+    {
+      "name": "RELIGION",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 21,
+      "unique_values_path": "unique_values\\ADMISSIONS__RELIGION.parquet",
+      "description": "The patient's religion."
+    },
+    {
+      "name": "MARITAL_STATUS",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 8,
+      "unique_values_path": "unique_values\\ADMISSIONS__MARITAL_STATUS.parquet",
+      "description": "The patient's marital status."
+    },
+    {
+      "name": "ETHNICITY",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 41,
+      "unique_values_path": "unique_values\\ADMISSIONS__ETHNICITY.parquet",
+      "description": "The patient's ethnicity."
+    },
+    {
+      "name": "EDREGTIME",
+      "data_type": "Datetime(time_unit='us', time_zone=None)",
+      "is_primary_key": false,
+      "n_unique": 30875,
+      "unique_values_path": "unique_values\\ADMISSIONS__EDREGTIME.parquet",
+      "description": "Date and time when the patient was registered in the emergency department."
+    },
+    {
+      "name": "EDOUTTIME",
+      "data_type": "Datetime(time_unit='us', time_zone=None)",
+      "is_primary_key": false,
+      "n_unique": 30865,
+      "unique_values_path": "unique_values\\ADMISSIONS__EDOUTTIME.parquet",
+      "description": "Date and time when the patient left the emergency department."
+    },
+    {
+      "name": "DIAGNOSIS",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 15692,
+      "unique_values_path": "unique_values\\ADMISSIONS__DIAGNOSIS.parquet",
+      "description": "The diagnosis recorded for the patient during the admission."
+    },
+    {
+      "name": "HOSPITAL_EXPIRE_FLAG",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 2,
+      "unique_values_path": "unique_values\\ADMISSIONS__HOSPITAL_EXPIRE_FLAG.parquet",
+      "description": "A flag indicating whether the patient expired in the hospital (1) or not (0)."
+    },
+    {
+      "name": "HAS_CHARTEVENTS_DATA",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 2,
+      "unique_values_path": "unique_values\\ADMISSIONS__HAS_CHARTEVENTS_DATA.parquet",
+      "description": "Indicates whether chartevents data is available for this patient's admission (1) or not (0)."
+    }
+  ]
+}

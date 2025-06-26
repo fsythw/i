@@ -2,7 +2,9 @@ import itertools
 import polars as pl
 from datetime import datetime
 import re 
-import hashlib 
+import os
+from src.embeddings import get_similar_tables
+
 
 def discover_primary_key(df: pl.DataFrame) -> list[str]:
 
@@ -37,41 +39,151 @@ def discover_primary_key(df: pl.DataFrame) -> list[str]:
 
     return list(filtered[0])  # fallback to first composite
 
-def find_inclusion_dependencies_from_metadata(metadata, error_threshold=0.1):
-    fk_candidates = []
+# def find_inclusion_dependencies_from_metadata(metadata, error_threshold=0.1):
+#     fk_candidates = []
 
-    pk_index = {
-        (table["table_name"], col["name"]): col
-        for table in metadata
-        for col in table["columns"]
-        if col.get("is_primary_key")
-    }
+#     pk_index = {
+#         (table["table_name"], col["name"]): col
+#         for table in metadata
+#         for col in table["columns"]
+#         if col.get("is_primary_key")
+#     }
 
-    for table in metadata:
-        for col in table["columns"]:
-            if col.get("is_primary_key"):
+#     for table in metadata:
+#         for col in table["columns"]:
+#             if col.get("is_primary_key"):
+#                 continue
+#             fk_min, fk_max = col.get("min"), col.get("max")
+#             fk_name = col["name"]
+#             fk_table = table["table_name"]
+
+#             for (pk_table, pk_col), pk_meta in pk_index.items():
+#                 pk_min, pk_max = pk_meta.get("min"), pk_meta.get("max")
+
+#                 # If any min/max missing, skip
+#                 if None in [fk_min, fk_max, pk_min, pk_max]:
+#                     continue
+
+#                 if fk_min >= pk_min and fk_max <= pk_max:
+#                     fk_candidates.append({
+#                         "from_table": fk_table,
+#                         "from_column": fk_name,
+#                         "to_table": pk_table,
+#                         "to_column": pk_col,
+#                         "match_type": "range_inclusion"
+#                     })
+
+#     return fk_candidates
+
+# import polars as pl
+# import os
+
+# def find_inclusion_dependencies_from_metadata(metadata, error_threshold=0.0):
+#     fk_candidates = []
+
+#     pk_index = {
+#         (table["table_name"], col["name"]): [col["unique_values_path"], col["data_type"]]
+#         for table in metadata
+#         for col in table["columns"]
+#         if col.get("is_primary_key") and os.path.exists(col.get("unique_values_path", ""))
+#     }
+#     print(pk_index)
+
+#     for table in metadata:
+#         for col in table["columns"]:
+#             if col.get("is_primary_key"):
+#                 continue
+
+#             fk_table = table["table_name"]
+#             fk_col = col["name"]
+#             fk_path = col.get("unique_values_path", "")
+#             print(fk_path)
+#             fk_type = col.get("data_type")
+#             print(fk_type)
+            
+#             if not os.path.exists(fk_path):
+#                 continue
+
+#             fk_vals = pl.read_parquet(fk_path).select(fk_col).unique()
+
+#             for (pk_table, pk_col), (pk_path, pk_type) in pk_index.items():
+#                 if pk_type != fk_type:
+#                     continue
+
+#                 pk_vals = pl.read_parquet(pk_path).select(pk_col).unique()
+
+#                 unmatched = pk_vals.join(fk_vals, on=pk_col, how="anti").to_dicts()
+
+#                 if not unmatched:
+#                     fk_candidates.append({
+#                         "from_table": fk_table,
+#                         "from_column": fk_col,
+#                         "to_table": pk_table,
+#                         "to_column": pk_col,
+#                         "match_type": "value_inclusion",
+
+#                     })
+
+#     return fk_candidates
+
+
+
+def find_valid_foreign_keys_from_csv(target_table, all_tables, csv_dir, embed_fn, top_n=10):
+    confirmed_fk = []
+    print("before similar tables")
+    similar_tables = get_similar_tables(target_table, all_tables, top_n)
+    print(similar_tables)
+
+    # Load target table dataframe
+    fk_df_path = os.path.join(csv_dir, f"{target_table['table_name']}.csv")
+    if not os.path.exists(fk_df_path):
+        return []
+
+    fk_df = pl.read_csv(fk_df_path, rechunk=False, try_parse_dates=True, ignore_errors=True)
+
+    for fk_col in target_table["columns"]:
+        fk_col_name = fk_col["name"]
+        fk_col_type = fk_col["data_type"]
+
+        # Skip primary keys as foreign keys
+        # if fk_col.get("is_primary_key"):
+        #     continue
+
+        fk_vals = fk_df.select(fk_col_name).unique()
+
+        for candidate_table in similar_tables:
+            pk_df_path = os.path.join(csv_dir, f"{candidate_table['table_name']}.csv")
+            if not os.path.exists(pk_df_path):
                 continue
-            fk_min, fk_max = col.get("min"), col.get("max")
-            fk_name = col["name"]
-            fk_table = table["table_name"]
 
-            for (pk_table, pk_col), pk_meta in pk_index.items():
-                pk_min, pk_max = pk_meta.get("min"), pk_meta.get("max")
+            pk_df = pl.read_csv(pk_df_path,rechunk=False, try_parse_dates=True, ignore_errors=True)
 
-                # If any min/max missing, skip
-                if None in [fk_min, fk_max, pk_min, pk_max]:
+            for pk_col in candidate_table["columns"]:
+                # if not pk_col.get("is_primary_key"):
+                #     continue
+
+                if pk_col["data_type"] != fk_col_type:
                     continue
 
-                if fk_min >= pk_min and fk_max <= pk_max:
-                    fk_candidates.append({
-                        "from_table": fk_table,
-                        "from_column": fk_name,
-                        "to_table": pk_table,
-                        "to_column": pk_col,
-                        "match_type": "range_inclusion"
-                    })
+                pk_col_name = pk_col["name"]
+                pk_vals = pk_df.select(pk_col_name).unique()
+                print(pk_col_name, fk_col_name)
 
-    return fk_candidates
+                # Check inclusion via anti-join
+                unmatched = fk_df.join(pk_df, left_on=fk_col_name, right_on=pk_col_name, how="anti")
+                print(unmatched)
+                if unmatched.is_empty():
+                    confirmed_fk.append({
+                        "from_table": target_table["table_name"],
+                        "from_column": fk_col_name,
+                        "to_table": candidate_table["table_name"],
+                        "to_column": pk_col_name,
+                        "match_type": "value_inclusion"
+                    })
+    print(confirmed_fk)
+    return confirmed_fk
+
+
 
 
 def convert_datetime_to_str(obj):

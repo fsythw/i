@@ -1,187 +1,229 @@
 [
   {
-    "table_name": "XYZ123 - Copy",
-    "description": "The \"XYZ123 - Copy\" table contains patient admission information, including demographics, admission and discharge details, insurance, and diagnoses. The table's primary key is HADMID (Hospital Admission ID). It also includes information on emergency department registration and departure times, an expiration flag indicating in-hospital mortality, and a flag indicating the availability of chart data. This table is likely used for analyzing patient demographics, admission patterns, and outcomes.\n",
+    "table_name": "PATIENTS",
+    "description": "The PATIENTS table contains demographic information for patients in the database. It includes a unique patient identifier (SUBJECT_ID), gender, date of birth (DOB), dates of death from various sources (DOD, DOD_HOSP, DOD_SSN), and an expiration flag indicating patient mortality.\n",
     "columns": [
       {
-        "name": "SJID",
+        "name": "ROW_ID",
+        "data_type": "Int64",
+        "is_primary_key": true,
+        "n_unique": 46520,
+        "unique_values_path": "unique_values\\PATIENTS__ROW_ID.parquet",
+        "description": "Unique identifier for each row in the table."
+      },
+      {
+        "name": "SUBJECT_ID",
         "data_type": "Int64",
         "is_primary_key": false,
         "n_unique": 46520,
-        "min": "2",
-        "max": "99999",
-        "nullable": false,
-        "description": "Subject ID: Unique identifier for each patient or subject in the dataset."
+        "unique_values_path": "unique_values\\PATIENTS__SUBJECT_ID.parquet",
+        "description": "Unique identifier for each patient in the database."
       },
       {
-        "name": "HADMID",
+        "name": "GENDER",
+        "data_type": "String",
+        "is_primary_key": false,
+        "n_unique": 2,
+        "unique_values_path": "unique_values\\PATIENTS__GENDER.parquet",
+        "description": "The gender of the patient, either 'F' for female or 'M' for male."
+      },
+      {
+        "name": "DOB",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "n_unique": 32540,
+        "unique_values_path": "unique_values\\PATIENTS__DOB.parquet",
+        "description": "The patient's date of birth."
+      },
+      {
+        "name": "DOD",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "n_unique": 12912,
+        "unique_values_path": "unique_values\\PATIENTS__DOD.parquet",
+        "description": "The patient's date of death."
+      },
+      {
+        "name": "DOD_HOSP",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "n_unique": 8748,
+        "unique_values_path": "unique_values\\PATIENTS__DOD_HOSP.parquet",
+        "description": "The date of death as recorded by the hospital."
+      },
+      {
+        "name": "DOD_SSN",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "n_unique": 11302,
+        "unique_values_path": "unique_values\\PATIENTS__DOD_SSN.parquet",
+        "description": "The date of death as recorded by the Social Security Administration."
+      },
+      {
+        "name": "EXPIRE_FLAG",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "n_unique": 2,
+        "unique_values_path": "unique_values\\PATIENTS__EXPIRE_FLAG.parquet",
+        "description": "A binary flag indicating whether the patient has expired (1) or is still alive (0)."
+      }
+    ]
+  },
+  {
+    "table_name": "ADMISSIONS",
+    "description": "The ADMISSIONS table contains information about patient hospital admissions, including admission and discharge times, admission types and locations, insurance details, demographic information (language, religion, marital status, ethnicity), diagnoses, and mortality flags. It provides a comprehensive overview of each patient's hospital stay, linking patient identifiers to specific admission details and outcomes.\n",
+    "columns": [
+      {
+        "name": "ROW_ID",
         "data_type": "Int64",
         "is_primary_key": true,
         "n_unique": 58976,
-        "min": "100001",
-        "max": "199999",
-        "nullable": false,
-        "description": "Hospital Admission ID: Unique identifier for each hospital admission."
+        "unique_values_path": "unique_values\\ADMISSIONS__ROW_ID.parquet",
+        "description": "Unique identifier for each row in the table."
       },
       {
-        "name": "ADMTM",
+        "name": "SUBJECT_ID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "n_unique": 46520,
+        "unique_values_path": "unique_values\\ADMISSIONS__SUBJECT_ID.parquet",
+        "description": "Unique identifier for the patient."
+      },
+      {
+        "name": "HADM_ID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "n_unique": 58976,
+        "unique_values_path": "unique_values\\ADMISSIONS__HADM_ID.parquet",
+        "description": "Unique identifier for the patient's hospital admission."
+      },
+      {
+        "name": "ADMITTIME",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
         "n_unique": 58651,
-        "min": "2100-06-07 19:59:00",
-        "max": "2210-08-17 17:13:00",
-        "nullable": false,
-        "description": "Admission Time: Date and time when the patient was admitted to the hospital."
+        "unique_values_path": "unique_values\\ADMISSIONS__ADMITTIME.parquet",
+        "description": "Date and time when the patient was admitted to the hospital."
       },
       {
-        "name": "DCTM",
+        "name": "DISCHTIME",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
         "n_unique": 58657,
-        "min": "2100-06-09 17:09:00",
-        "max": "2210-08-24 19:43:00",
-        "nullable": false,
-        "description": "Discharge Time: Date and time when the patient was discharged from the hospital."
+        "unique_values_path": "unique_values\\ADMISSIONS__DISCHTIME.parquet",
+        "description": "Date and time when the patient was discharged from the hospital."
       },
       {
-        "name": "DTHTM",
+        "name": "DEATHTIME",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
         "n_unique": 5835,
-        "min": "2100-06-19 08:15:00",
-        "max": "2208-02-05 11:45:00",
-        "nullable": true,
-        "description": "Date/Time of Death: Date and time of patient's death, if applicable."
+        "unique_values_path": "unique_values\\ADMISSIONS__DEATHTIME.parquet",
+        "description": "Date and time of the patient's death, if it occurred during the hospital stay. If the patient did not die during the stay, this field is null."
       },
       {
-        "name": "ADM_TP",
+        "name": "ADMISSION_TYPE",
         "data_type": "String",
         "is_primary_key": false,
         "n_unique": 4,
-        "min": "ELECTIVE",
-        "max": "URGENT",
-        "nullable": false,
-        "description": "Admission Type: The type of admission, such as 'EMERGENCY', 'ELECTIVE', or 'URGENT'."
+        "unique_values_path": "unique_values\\ADMISSIONS__ADMISSION_TYPE.parquet",
+        "description": "Type of admission, e.g., ELECTIVE, EMERGENCY, URGENT."
       },
       {
-        "name": "ADM_LOC",
+        "name": "ADMISSION_LOCATION",
         "data_type": "String",
         "is_primary_key": false,
         "n_unique": 9,
-        "min": "** INFO NOT AVAILABLE **",
-        "max": "TRSF WITHIN THIS FACILITY",
-        "nullable": false,
-        "description": "Admission Location: The location from which the patient was admitted (e.g., 'EMERGENCY ROOM ADMIT', 'TRANSFER FROM HOSP/EXTRAM')."
+        "unique_values_path": "unique_values\\ADMISSIONS__ADMISSION_LOCATION.parquet",
+        "description": "Location from which the patient was admitted, e.g., EMERGENCY ROOM ADMIT, TRANSFER FROM OTHER HEALT."
       },
       {
-        "name": "DSC_LOC",
+        "name": "DISCHARGE_LOCATION",
         "data_type": "String",
         "is_primary_key": false,
         "n_unique": 17,
-        "min": "DEAD/EXPIRED",
-        "max": "SNF-MEDICAID ONLY CERTIF",
-        "nullable": false,
-        "description": "Discharge Location: The location to which the patient was discharged (e.g., 'SHORT TERM HOSPITAL', 'LONG TERM CARE HOSPITAL', 'HOME')."
+        "unique_values_path": "unique_values\\ADMISSIONS__DISCHARGE_LOCATION.parquet",
+        "description": "Location to which the patient was discharged, e.g., HOME, DISCH-TRAN TO PSYCH HOSP."
       },
       {
-        "name": "INSR",
+        "name": "INSURANCE",
         "data_type": "String",
         "is_primary_key": false,
         "n_unique": 5,
-        "min": "Government",
-        "max": "Self Pay",
-        "nullable": false,
-        "description": "Insurance: The type of insurance the patient has (e.g., 'Government', 'Self Pay')."
+        "unique_values_path": "unique_values\\ADMISSIONS__INSURANCE.parquet",
+        "description": "Type of insurance the patient has, e.g., Private, Medicare, Self Pay."
       },
       {
-        "name": "LANG",
+        "name": "LANGUAGE",
         "data_type": "String",
         "is_primary_key": false,
         "n_unique": 76,
-        "min": "* BE",
-        "max": "VIET",
-        "nullable": true,
-        "description": "Language: The primary language spoken by the patient."
+        "unique_values_path": "unique_values\\ADMISSIONS__LANGUAGE.parquet",
+        "description": "The primary language of the patient. Note: the language is represented by an abbreviation."
       },
       {
-        "name": "REL",
+        "name": "RELIGION",
         "data_type": "String",
         "is_primary_key": false,
         "n_unique": 21,
-        "min": "7TH DAY ADVENTIST",
-        "max": "UNOBTAINABLE",
-        "nullable": true,
-        "description": "Religion: The patient's religious affiliation."
+        "unique_values_path": "unique_values\\ADMISSIONS__RELIGION.parquet",
+        "description": "The patient's religion."
       },
       {
-        "name": "MAR_STS",
+        "name": "MARITAL_STATUS",
         "data_type": "String",
         "is_primary_key": false,
         "n_unique": 8,
-        "min": "DIVORCED",
-        "max": "WIDOWED",
-        "nullable": true,
-        "description": "Marital Status: The patient's marital status (e.g., 'SINGLE', 'MARRIED', 'DIVORCED', 'WIDOWED')."
+        "unique_values_path": "unique_values\\ADMISSIONS__MARITAL_STATUS.parquet",
+        "description": "The patient's marital status."
       },
       {
-        "name": "ETHN",
+        "name": "ETHNICITY",
         "data_type": "String",
         "is_primary_key": false,
         "n_unique": 41,
-        "min": "AMERICAN INDIAN/ALASKA NATIVE",
-        "max": "WHITE - RUSSIAN",
-        "nullable": false,
-        "description": "Ethnicity: The patient's ethnicity."
+        "unique_values_path": "unique_values\\ADMISSIONS__ETHNICITY.parquet",
+        "description": "The patient's ethnicity."
       },
       {
         "name": "EDREGTIME",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
         "n_unique": 30875,
-        "min": "2100-06-07 13:14:00",
-        "max": "2210-08-17 10:14:00",
-        "nullable": true,
-        "description": "Emergency Department Registration Time: Date and time when the patient was registered in the emergency department."
+        "unique_values_path": "unique_values\\ADMISSIONS__EDREGTIME.parquet",
+        "description": "Date and time when the patient was registered in the emergency department."
       },
       {
         "name": "EDOUTTIME",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
         "n_unique": 30865,
-        "min": "2100-06-08 00:06:00",
-        "max": "2210-08-17 18:25:00",
-        "nullable": true,
-        "description": "Emergency Department Out Time: Date and time when the patient left the emergency department."
+        "unique_values_path": "unique_values\\ADMISSIONS__EDOUTTIME.parquet",
+        "description": "Date and time when the patient left the emergency department."
       },
       {
-        "name": "DIAG",
+        "name": "DIAGNOSIS",
         "data_type": "String",
         "is_primary_key": false,
-        "n_unique": 15689,
-        "min": "        MITRAL STENOSIS\\MITRAL VALVE REPLACEMENT /SDA",
-        "max": "ZYGOMATIC FRACTURE LEFT",
-        "nullable": true,
-        "description": "Diagnosis: Patient's diagnosis during the admission."
+        "n_unique": 15692,
+        "unique_values_path": "unique_values\\ADMISSIONS__DIAGNOSIS.parquet",
+        "description": "The diagnosis recorded for the patient during the admission."
       },
       {
-        "name": "EXP_FLG",
+        "name": "HOSPITAL_EXPIRE_FLAG",
         "data_type": "Int64",
         "is_primary_key": false,
         "n_unique": 2,
-        "min": "0",
-        "max": "1",
-        "nullable": false,
-        "description": "Expired Flag: A binary indicator (0 or 1) indicating whether the patient expired during the admission (1) or not (0)."
+        "unique_values_path": "unique_values\\ADMISSIONS__HOSPITAL_EXPIRE_FLAG.parquet",
+        "description": "A flag indicating whether the patient expired in the hospital (1) or not (0)."
       },
       {
-        "name": "HAS_CHRT_DATA",
+        "name": "HAS_CHARTEVENTS_DATA",
         "data_type": "Int64",
         "is_primary_key": false,
         "n_unique": 2,
-        "min": "0",
-        "max": "1",
-        "nullable": false,
-        "description": "Has Chart Data: A binary indicator (0 or 1) indicating whether the patient has chart data available (1) or not (0)."
+        "unique_values_path": "unique_values\\ADMISSIONS__HAS_CHARTEVENTS_DATA.parquet",
+        "description": "Indicates whether chartevents data is available for this patient's admission (1) or not (0)."
       }
     ]
   }
