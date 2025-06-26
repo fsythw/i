@@ -16,9 +16,6 @@ ONE_SHOT_EXAMPLE = {
     "name": "GENDER",
     "data_type": "string",
     "is_primary_key": False,
-    "min": "F",
-    "max": "M",
-    "nullable": 0,
     "example_values": ["M", "F"],
     "statistic": [{'statistic': 'count', 'GENDER': '46520'}, {'statistic': 'null_count', 'GENDER': '0'}, {'statistic': 'mean', 'GENDER': None}, {'statistic': 'std', 'GENDER': None}, {'statistic': 'min', 'GENDER': 'F'}, {'statistic': '25%', 'GENDER': None}, {'statistic': '50%', 'GENDER': None}, {'statistic': '75%', 'GENDER': None}, {'statistic': 'max', 'GENDER': 'M'}],
     "description": "Patient's gender, recorded as either 'M' (male) or 'F' (female)."
@@ -48,7 +45,21 @@ if uploaded_files:
         file_hash = compute_file_hash(uploaded_file)
 
         if is_cached(file_hash):
-            st.info(f"{uploaded_file.name} skipped (already cached)")
+            st.info(f"{table_name} skipped (already cached)")
+            with open(f"data/{table_name}.json", 'r') as file:
+                df = json.load(file)
+            st.header(table_name)
+            st.write(df["description"])
+            st.subheader("Column Metadata")
+            st.dataframe(df["columns"], use_container_width=True)
+            
+            st.download_button(
+                label="Download JSON",
+                file_name=f"{table_name}.json",
+                mime="application/json",
+                data=json.dumps(df),
+                key=f"download_{table_name}"
+            )
             continue
 
         metadata_file_path = f"data/{uploaded_file.name.split('.')[0]}.json"
@@ -131,12 +142,6 @@ if uploaded_files:
 
     st.success("saved.")
 
-
-    #     #enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values()), client)
-    #     print(cached_metadata)
-    #     specifc_table = st.file_uploader("Upload CSV files", type="csv")
-    #     top_tables = find_valid_foreign_keys_from_csv(specifc_table, )
-    #     find_valid_foreign_keys_from_csv(target_table, all_tables, csv_dir, embed_fn, top_n=10):
     specific_file = st.file_uploader("Upload a target CSV file to match relationships", type="csv")
 
     if specific_file:
