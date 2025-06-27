@@ -7,67 +7,52 @@
         "name": "ROW_ID",
         "data_type": "Int64",
         "is_primary_key": true,
-        "n_unique": 46520,
-        "unique_values_path": "unique_values\\PATIENTS__ROW_ID.parquet",
         "description": "Unique identifier for each row in the table."
       },
       {
         "name": "SUBJECT_ID",
         "data_type": "Int64",
         "is_primary_key": false,
-        "n_unique": 46520,
-        "unique_values_path": "unique_values\\PATIENTS__SUBJECT_ID.parquet",
         "description": "Unique identifier for each patient in the database."
       },
       {
         "name": "GENDER",
         "data_type": "String",
         "is_primary_key": false,
-        "n_unique": 2,
-        "unique_values_path": "unique_values\\PATIENTS__GENDER.parquet",
         "description": "The gender of the patient, either 'F' for female or 'M' for male."
       },
       {
         "name": "DOB",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "n_unique": 32540,
-        "unique_values_path": "unique_values\\PATIENTS__DOB.parquet",
         "description": "The patient's date of birth."
       },
       {
         "name": "DOD",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "n_unique": 12912,
-        "unique_values_path": "unique_values\\PATIENTS__DOD.parquet",
         "description": "The patient's date of death."
       },
       {
         "name": "DOD_HOSP",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "n_unique": 8748,
-        "unique_values_path": "unique_values\\PATIENTS__DOD_HOSP.parquet",
         "description": "The date of death as recorded by the hospital."
       },
       {
         "name": "DOD_SSN",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "n_unique": 11302,
-        "unique_values_path": "unique_values\\PATIENTS__DOD_SSN.parquet",
         "description": "The date of death as recorded by the Social Security Administration."
       },
       {
         "name": "EXPIRE_FLAG",
         "data_type": "Int64",
         "is_primary_key": false,
-        "n_unique": 2,
-        "unique_values_path": "unique_values\\PATIENTS__EXPIRE_FLAG.parquet",
         "description": "A binary flag indicating whether the patient has expired (1) or is still alive (0)."
       }
-    ]
+    ],
+    "relationships": []
   },
   {
     "table_name": "ADMISSIONS",
@@ -77,153 +62,376 @@
         "name": "ROW_ID",
         "data_type": "Int64",
         "is_primary_key": true,
-        "n_unique": 58976,
-        "unique_values_path": "unique_values\\ADMISSIONS__ROW_ID.parquet",
         "description": "Unique identifier for each row in the table."
       },
       {
         "name": "SUBJECT_ID",
         "data_type": "Int64",
         "is_primary_key": false,
-        "n_unique": 46520,
-        "unique_values_path": "unique_values\\ADMISSIONS__SUBJECT_ID.parquet",
         "description": "Unique identifier for the patient."
       },
       {
         "name": "HADM_ID",
         "data_type": "Int64",
         "is_primary_key": false,
-        "n_unique": 58976,
-        "unique_values_path": "unique_values\\ADMISSIONS__HADM_ID.parquet",
         "description": "Unique identifier for the patient's hospital admission."
       },
       {
         "name": "ADMITTIME",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "n_unique": 58651,
-        "unique_values_path": "unique_values\\ADMISSIONS__ADMITTIME.parquet",
         "description": "Date and time when the patient was admitted to the hospital."
       },
       {
         "name": "DISCHTIME",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "n_unique": 58657,
-        "unique_values_path": "unique_values\\ADMISSIONS__DISCHTIME.parquet",
         "description": "Date and time when the patient was discharged from the hospital."
       },
       {
         "name": "DEATHTIME",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "n_unique": 5835,
-        "unique_values_path": "unique_values\\ADMISSIONS__DEATHTIME.parquet",
         "description": "Date and time of the patient's death, if it occurred during the hospital stay. If the patient did not die during the stay, this field is null."
       },
       {
         "name": "ADMISSION_TYPE",
         "data_type": "String",
         "is_primary_key": false,
-        "n_unique": 4,
-        "unique_values_path": "unique_values\\ADMISSIONS__ADMISSION_TYPE.parquet",
         "description": "Type of admission, e.g., ELECTIVE, EMERGENCY, URGENT."
       },
       {
         "name": "ADMISSION_LOCATION",
         "data_type": "String",
         "is_primary_key": false,
-        "n_unique": 9,
-        "unique_values_path": "unique_values\\ADMISSIONS__ADMISSION_LOCATION.parquet",
         "description": "Location from which the patient was admitted, e.g., EMERGENCY ROOM ADMIT, TRANSFER FROM OTHER HEALT."
       },
       {
         "name": "DISCHARGE_LOCATION",
         "data_type": "String",
         "is_primary_key": false,
-        "n_unique": 17,
-        "unique_values_path": "unique_values\\ADMISSIONS__DISCHARGE_LOCATION.parquet",
         "description": "Location to which the patient was discharged, e.g., HOME, DISCH-TRAN TO PSYCH HOSP."
       },
       {
         "name": "INSURANCE",
         "data_type": "String",
         "is_primary_key": false,
-        "n_unique": 5,
-        "unique_values_path": "unique_values\\ADMISSIONS__INSURANCE.parquet",
         "description": "Type of insurance the patient has, e.g., Private, Medicare, Self Pay."
       },
       {
         "name": "LANGUAGE",
         "data_type": "String",
         "is_primary_key": false,
-        "n_unique": 76,
-        "unique_values_path": "unique_values\\ADMISSIONS__LANGUAGE.parquet",
         "description": "The primary language of the patient. Note: the language is represented by an abbreviation."
       },
       {
         "name": "RELIGION",
         "data_type": "String",
         "is_primary_key": false,
-        "n_unique": 21,
-        "unique_values_path": "unique_values\\ADMISSIONS__RELIGION.parquet",
         "description": "The patient's religion."
       },
       {
         "name": "MARITAL_STATUS",
         "data_type": "String",
         "is_primary_key": false,
-        "n_unique": 8,
-        "unique_values_path": "unique_values\\ADMISSIONS__MARITAL_STATUS.parquet",
         "description": "The patient's marital status."
       },
       {
         "name": "ETHNICITY",
         "data_type": "String",
         "is_primary_key": false,
-        "n_unique": 41,
-        "unique_values_path": "unique_values\\ADMISSIONS__ETHNICITY.parquet",
         "description": "The patient's ethnicity."
       },
       {
         "name": "EDREGTIME",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "n_unique": 30875,
-        "unique_values_path": "unique_values\\ADMISSIONS__EDREGTIME.parquet",
         "description": "Date and time when the patient was registered in the emergency department."
       },
       {
         "name": "EDOUTTIME",
         "data_type": "Datetime(time_unit='us', time_zone=None)",
         "is_primary_key": false,
-        "n_unique": 30865,
-        "unique_values_path": "unique_values\\ADMISSIONS__EDOUTTIME.parquet",
         "description": "Date and time when the patient left the emergency department."
       },
       {
         "name": "DIAGNOSIS",
         "data_type": "String",
         "is_primary_key": false,
-        "n_unique": 15692,
-        "unique_values_path": "unique_values\\ADMISSIONS__DIAGNOSIS.parquet",
         "description": "The diagnosis recorded for the patient during the admission."
       },
       {
         "name": "HOSPITAL_EXPIRE_FLAG",
         "data_type": "Int64",
         "is_primary_key": false,
-        "n_unique": 2,
-        "unique_values_path": "unique_values\\ADMISSIONS__HOSPITAL_EXPIRE_FLAG.parquet",
         "description": "A flag indicating whether the patient expired in the hospital (1) or not (0)."
       },
       {
         "name": "HAS_CHARTEVENTS_DATA",
         "data_type": "Int64",
         "is_primary_key": false,
-        "n_unique": 2,
-        "unique_values_path": "unique_values\\ADMISSIONS__HAS_CHARTEVENTS_DATA.parquet",
         "description": "Indicates whether chartevents data is available for this patient's admission (1) or not (0)."
+      }
+    ],
+    "relationships": [
+      {
+        "from_table": "ADMISSIONS",
+        "from_column": "SUBJECT_ID",
+        "to_table": "PATIENTS",
+        "to_column": "SUBJECT_ID",
+        "reason": "SUBJECT_ID in ADMISSIONS references SUBJECT_ID in PATIENTS, linking admissions to patients."
+      }
+    ]
+  },
+  {
+    "table_name": "ICUSTAYS",
+    "description": "The ICUSTAYS table provides information on individual ICU stays for patients within the database. It includes identifiers for the patient, hospital admission, and specific ICU stay, along with details about the source database, care units, ward IDs, admission and discharge times, and the length of stay in the ICU. This table allows for analysis of ICU utilization, patient flow, and length of stay patterns.\n",
+    "columns": [
+      {
+        "name": "ROW_ID",
+        "data_type": "Int64",
+        "is_primary_key": true,
+        "description": "Unique identifier for each row in the dataset."
+      },
+      {
+        "name": "SUBJECT_ID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "Unique identifier for each patient in the dataset."
+      },
+      {
+        "name": "HADM_ID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "Unique identifier for each hospital admission."
+      },
+      {
+        "name": "ICUSTAY_ID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "Unique identifier for each ICU stay."
+      },
+      {
+        "name": "DBSOURCE",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The database source from which the data was obtained, e.g., 'metavision' or 'carevue'."
+      },
+      {
+        "name": "FIRST_CAREUNIT",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The first care unit the patient was admitted to during the ICU stay (e.g., MICU, CSRU, CCU, TSICU, SICU, NICU)."
+      },
+      {
+        "name": "LAST_CAREUNIT",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The last care unit the patient was in during the ICU stay (e.g., TSICU, NICU, CCU, MICU, SICU, CSRU)."
+      },
+      {
+        "name": "FIRST_WARDID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "The ward ID of the first ward the patient was admitted to."
+      },
+      {
+        "name": "LAST_WARDID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "The ward ID of the last ward the patient was in."
+      },
+      {
+        "name": "INTIME",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "The date and time the patient was admitted to the ICU."
+      },
+      {
+        "name": "OUTTIME",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "The date and time the patient was discharged from the ICU."
+      },
+      {
+        "name": "LOS",
+        "data_type": "Float64",
+        "is_primary_key": false,
+        "description": "The length of stay in the ICU, in days."
+      }
+    ],
+    "relationships": [
+      {
+        "from_table": "ICUSTAYS",
+        "from_column": "SUBJECT_ID",
+        "to_table": "PATIENTS",
+        "to_column": "SUBJECT_ID",
+        "reason": "SUBJECT_ID in ICUSTAYS references SUBJECT_ID in PATIENTS, linking ICU stays to patients."
+      },
+      {
+        "from_table": "ICUSTAYS",
+        "from_column": "HADM_ID",
+        "to_table": "ADMISSIONS",
+        "to_column": "HADM_ID",
+        "reason": "HADM_ID in ICUSTAYS references HADM_ID in ADMISSIONS, linking ICU stays to hospital admissions."
+      }
+    ]
+  },
+  {
+    "table_name": "SERVICES",
+    "description": "The SERVICES table contains information on patient transfers between different hospital services during their admissions. It tracks the patient's previous and current service assignments, along with the date and time of the transfer, linking patients (SUBJECT_ID) and hospital admissions (HADM_ID) to specific service transitions.\n",
+    "columns": [
+      {
+        "name": "ROW_ID",
+        "data_type": "Int64",
+        "is_primary_key": true,
+        "description": "Unique identifier for each row in the table."
+      },
+      {
+        "name": "SUBJECT_ID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "Identifier for each patient receiving a service."
+      },
+      {
+        "name": "HADM_ID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "Identifier for each hospital admission during which a service was provided."
+      },
+      {
+        "name": "TRANSFERTIME",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "Date and time when the patient's service was transferred."
+      },
+      {
+        "name": "PREV_SERVICE",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The service the patient was on prior to the current transfer (e.g., VSURG, NSURG, CMED)."
+      },
+      {
+        "name": "CURR_SERVICE",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The service the patient is currently on (e.g., ORTHO, OBS, NMED)."
+      }
+    ],
+    "relationships": [
+      {
+        "from_table": "SERVICES",
+        "from_column": "SUBJECT_ID",
+        "to_table": "PATIENTS",
+        "to_column": "SUBJECT_ID",
+        "reason": "SUBJECT_ID in SERVICES references SUBJECT_ID in PATIENTS, linking services to patients."
+      },
+      {
+        "from_table": "SERVICES",
+        "from_column": "HADM_ID",
+        "to_table": "ADMISSIONS",
+        "to_column": "HADM_ID",
+        "reason": "HADM_ID in SERVICES references HADM_ID in ADMISSIONS, linking services to hospital admissions."
+      }
+    ]
+  },
+  {
+    "table_name": "TRANSFERS",
+    "description": "The TRANSFERS table contains data on patient transfers within the hospital, including admissions, discharges, and transfers between different care units and wards. It provides timestamps for arrival and departure (INTIME, OUTTIME) and calculates the length of stay (LOS) for each transfer event. The table links to other patient data via SUBJECT_ID, HADM_ID, and ICUSTAY_ID, and specifies the data source (DBSOURCE) and type of event (EVENTTYPE). This table allows tracking patient movement and resource utilization within the hospital.\n",
+    "columns": [
+      {
+        "name": "ROW_ID",
+        "data_type": "Int64",
+        "is_primary_key": true,
+        "description": "Unique identifier for each row in the table."
+      },
+      {
+        "name": "SUBJECT_ID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "The patient identifier."
+      },
+      {
+        "name": "HADM_ID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "The hospital admission identifier."
+      },
+      {
+        "name": "ICUSTAY_ID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "The ICU stay identifier."
+      },
+      {
+        "name": "DBSOURCE",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "Source database for the event, such as 'carevue' or 'metavision'."
+      },
+      {
+        "name": "EVENTTYPE",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "Type of event, e.g., 'admit', 'transfer', or 'discharge'."
+      },
+      {
+        "name": "PREV_CAREUNIT",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The patient's previous care unit, such as 'SICU' (Surgical Intensive Care Unit)."
+      },
+      {
+        "name": "CURR_CAREUNIT",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The patient's current care unit, such as 'SICU' (Surgical Intensive Care Unit)."
+      },
+      {
+        "name": "PREV_WARDID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "Ward identifier for the patient's previous ward."
+      },
+      {
+        "name": "CURR_WARDID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "Ward identifier for the patient's current ward."
+      },
+      {
+        "name": "INTIME",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "The timestamp of when the patient was admitted."
+      },
+      {
+        "name": "OUTTIME",
+        "data_type": "Datetime(time_unit='us', time_zone=None)",
+        "is_primary_key": false,
+        "description": "The timestamp of when the patient was discharged."
+      },
+      {
+        "name": "LOS",
+        "data_type": "Float64",
+        "is_primary_key": false,
+        "description": "Length of stay, calculated as the duration between INTIME and OUTTIME, measured in days."
+      }
+    ],
+    "relationships": [
+      {
+        "from_table": "TRANSFERS",
+        "from_column": "SUBJECT_ID",
+        "to_table": "PATIENTS",
+        "to_column": "SUBJECT_ID",
+        "reason": "SUBJECT_ID in TRANSFERS references SUBJECT_ID in PATIENTS, linking transfers to patients."
+      },
+      {
+        "from_table": "TRANSFERS",
+        "from_column": "HADM_ID",
+        "to_table": "ADMISSIONS",
+        "to_column": "HADM_ID",
+        "reason": "HADM_ID in TRANSFERS references HADM_ID in ADMISSIONS, linking transfers to hospital admissions."
       }
     ]
   }

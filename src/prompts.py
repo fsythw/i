@@ -183,8 +183,11 @@ def judge_and_improve_table_schema(table_name, schema_info, client, threshold=8,
 
 def enrich_metadata_with_relationships(metadata_list, fk_list, client):
     prompt = f"""
-    Given the following table schemas, and potential foreign keys, verify potential foreign key relationships between tables. 
-    Use data type, column description, and primary key status to infer if a column references another table's primary key.
+    You are an expert in relational databases. Given the table schemas and potential foreign keys, evaluate which foreign key relationships are valid.
+
+    Criteria:
+    - The column in the source table must reference the primary key of the destination table.
+    - Consider column names, data types, and descriptions.
     Also give a description of the entire database.
     Return an enriched schema of the database.
 

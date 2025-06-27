@@ -1,83 +1,184 @@
 import streamlit as st
-import pandas as pd
+import polars as pl
 import json
 import os
 
-from src.models import Metadata, MetadataNoRel, Data
-from src.prompts import generate_prompt
-from src.llm import call_llm_2, enrich_metadata_with_relationships
+from google import genai
+from src.prompts import (
+    call_gemini_descriptions,
+    call_gemini_table_description,
+    judge_and_improve_table_schema,
+    enrich_metadata_with_relationships,
+)
+from src.visualisation import convert_to_er_graphviz
+from src.utils import discover_primary_key, find_valid_foreign_keys_from_csv
+from src.cache import compute_file_hash, is_cached, add_to_cache
+from src.embeddings import get_embedding
 
-st.title("CSV Metadata Explorer")
+client = genai.Client(api_key=st.secrets["google"]["GENAI_API_KEY"])
+DATA_DIR = "data"
+CSV_DIR = "csv_data"
+os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(CSV_DIR, exist_ok=True)
 
-N_SAMPLE_ROWS = 50
+ONE_SHOT_EXAMPLE = {
+    "name": "GENDER",
+    "data_type": "string",
+    "is_primary_key": False,
+    "example_values": ["M", "F"],
+    "statistic": [{"statistic": "count", "GENDER": "46520"}, {"statistic": "null_count", "GENDER": "0"}],
+    "description": "Patient's gender, recorded as either 'M' (male) or 'F' (female)."
+}
 
+# Load metadata cache
+def load_all_metadata():
+    try:
+        with open("all_metadata.json", "r") as f:
+            return {table["table_name"]: table for table in json.load(f)}
+    except FileNotFoundError:
+        return {}
 
-description_path = os.path.join("data", "desc.json")
-try:
-    with open(description_path, "r") as f:
-        table_descriptions = json.load(f)
-except Exception as e:
-    st.warning(f"Could not load table descriptions: {e}")
-    table_descriptions = {}
+cached_metadata = load_all_metadata()
 
+# === Helper: Generate metadata for one table ===
+def generate_metadata_from_csv(file, table_name):
+    file_hash = compute_file_hash(file)
+    metadata_file_path = os.path.join(DATA_DIR, f"{table_name}.json")
+
+    # Save CSV
+    csv_path = os.path.join(CSV_DIR, f"{table_name}.csv")
+    with open(csv_path, "wb") as f:
+        f.write(file.getbuffer())
+
+    add_to_cache(file_hash, file.name, metadata_file_path)
+
+    df = pl.read_csv(csv_path, rechunk=False, try_parse_dates=True, ignore_errors=True)
+    pk_cols = set(discover_primary_key(df))
+    n_rows = df.height
+    unique_counts = df.select(pl.all().n_unique()).row(0)
+    null_counts = df.null_count().row(0)
+
+    schema_info = []
+    for col, dtype, uniq, nulls in zip(df.columns, df.dtypes, unique_counts, null_counts):
+        stats = df.select(col).drop_nulls().describe().to_dicts()
+        schema_info.append({
+            "name": col,
+            "data_type": str(dtype),
+            "is_primary_key": col in pk_cols,
+            "n_unique": uniq,
+            "example_values": df[col].unique().sample(n=3, seed=42, with_replacement=True).to_list(),
+            "statistics": stats,
+        })
+
+    llm_input = [{"name": col["name"], "example_values": col["example_values"], "statistics": col["statistics"]} for col in schema_info]
+    llm_output = call_gemini_descriptions(llm_input, ONE_SHOT_EXAMPLE, client)
+
+    for col in schema_info:
+        match = next((item for item in llm_output if item["name"] == col["name"]), {})
+        col["description"] = match.get("description", "No description provided.")
+        col.pop("example_values", None)
+        col.pop("statistics", None)
+
+    table_description = call_gemini_table_description(table_name, schema_info, client)
+    refined_schema = judge_and_improve_table_schema(table_name, schema_info, client)
+
+    final_metadata = {
+        "table_name": table_name,
+        "description": table_description,
+        "columns": refined_schema
+    }
+
+    # Save to disk
+    with open(metadata_file_path, "w") as f:
+        json.dump(final_metadata, f, indent=2)
+
+    return final_metadata
+
+# === Streamlit UI ===
+st.title("📊 CSV Metadata Explorer")
 
 uploaded_files = st.file_uploader("Upload CSV files", type="csv", accept_multiple_files=True)
 
 if uploaded_files:
-    all_metadata = []
-
     for uploaded_file in uploaded_files:
         table_name = uploaded_file.name.split('.')[0]
-        df = pd.read_csv(uploaded_file)
-        st.subheader(f"{table_name}")
+        
+        file_hash = compute_file_hash(uploaded_file)
 
-        default_description = table_descriptions.get(table_name, "")
-        table_description = st.text_area(f"Description for `{table_name}`", default_description)
-
-
-        sample_data = (
-            df.drop_duplicates()
-            .sample(n=N_SAMPLE_ROWS, random_state=42)
-            .to_dict(orient="records")
+        if is_cached(file_hash):
+            st.info(f"✅ {table_name} already processed.")
+            
+        else:
+            st.success(f"Processing new file: {table_name}")
+            new_meta = generate_metadata_from_csv(uploaded_file, table_name)
+            cached_metadata[table_name] = new_meta
+        with open(f"data/{table_name}.json", 'r') as file:
+                df = json.load(file)
+        st.header(table_name)
+        st.write(df["description"])
+        st.subheader("Column Metadata")
+        st.dataframe(df["columns"], use_container_width=True)
+        
+        st.download_button(
+            label="Download JSON",
+            file_name=f"{table_name}.json",
+            mime="application/json",
+            data=json.dumps(df),
+            key=f"download_{table_name}"
         )
-        st.dataframe(sample_data)
-        columns = list(df.columns)
+        continue
 
-        prompt = generate_prompt(table_name, sample_data, columns, table_description)
-        llm_response = call_llm_2(prompt)
+    with open("all_metadata.json", "w") as f:
+        json.dump(list(cached_metadata.values()), f, indent=2)
+
+    st.success("All uploaded files have been processed and metadata saved.")
+
+# === Relationship Discovery ===
+st.header("🔗 Discover Table Relationships")
+
+specific_file = st.file_uploader("Upload a single CSV to find its relationships", type="csv")
+
+if specific_file:
+    table_name = specific_file.name.split('.')[0]
+
+    # Ensure metadata is available
+    if table_name not in cached_metadata:
+        st.warning(f"No metadata found for {table_name}, generating it now...")
+        meta = generate_metadata_from_csv(specific_file, table_name)
+        cached_metadata[table_name] = meta
+
+        with open("all_metadata.json", "w") as f:
+            json.dump(list(cached_metadata.values()), f, indent=2)
+
+    target_metadata = cached_metadata[table_name]
+
+    if st.button("Find Relationships"):
+        st.info("Finding foreign key relationships...")
+        fk_matches = find_valid_foreign_keys_from_csv(
+            target_table=target_metadata,
+            all_tables=list(cached_metadata.values()),
+            csv_dir=CSV_DIR,
+            embed_fn=get_embedding,
+            top_n=10
+        )
+        st.subheader("🔍 Foreign Key Candidates")
+        st.json(fk_matches)
+
+        enriched = enrich_metadata_with_relationships(list(cached_metadata.values()), fk_matches, client)
 
         try:
-          metadata_no_rel_obj = MetadataNoRel.model_validate_json(llm_response)
-          metadata_obj = Metadata(**metadata_no_rel_obj.model_dump())
-          all_metadata.append(metadata_obj)
+            enriched_metadata = enriched["metadata"]
+            db_desc = enriched.get("database_name", "Untitled Database")
+            st.subheader("📘 Enriched Metadata")
+            st.write(f"**Database Description:** {db_desc}")
+            st.json(enriched_metadata)
 
-          st.markdown(f"### Description for `{table_name}`")
-          st.write(metadata_obj.description)
+            with open("all_metadata.json", "w") as f:
+                json.dump(enriched_metadata, f, indent=2)
 
-          columns_df = pd.DataFrame([col.model_dump() for col in metadata_obj.columns])
-          columns_df = columns_df[["name", "type", "description", "example_value"]]
-
-          st.markdown("### Column Metadata")
-          st.dataframe(columns_df, use_container_width=True)
-
-          # with st.expander("Show Raw JSON"):
-          #   st.json(metadata_obj.model_dump())
-
-          # st.markdown("### Export")
-          # metadata_json = json.dumps(metadata_obj.model_dump(), indent=2)
-          # st.download_button("Download JSON", metadata_json, file_name=f"{table_name}_metadata.json", mime="application/json")
+            st.subheader("🗺️ ER Diagram")
+            diagram = convert_to_er_graphviz(enriched_metadata)
+            st.graphviz_chart(diagram)
 
         except Exception as e:
-          st.error(f"Failed to parse metadata: {e}")
-
-    # Optional enrichment (Pass 2)
-    if st.button("Enrich with Relationships"):
-        enrichment_prompt = json.dumps([m.model_dump() for m in all_metadata], indent=2)
-        enriched_response = enrich_metadata_with_relationships(all_metadata)
-
-        try:
-            data_obj = Data.model_validate_json(enriched_response)
-            st.subheader("Enriched Metadata")
-            st.json(data_obj.model_dump())
-        except Exception as e:
-            st.error(f"Enrichment failed: {e}")
+            st.error(f"Failed to parse enriched metadata: {e}")

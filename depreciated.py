@@ -68,6 +68,13 @@ if uploaded_files:
 
         add_to_cache(file_hash, uploaded_file.name, metadata_file_path)
 
+        save_folder = "csv_data"  # Or any other desired directory
+        os.makedirs(save_folder, exist_ok=True)
+        file_path = os.path.join(save_folder, uploaded_file.name)
+        with open(file_path, "wb") as f:
+            f.write(uploaded_file.getbuffer())
+        st.success(f"File '{uploaded_file.name}' saved to '{save_folder}'")
+
         df = pl.read_csv(uploaded_file, rechunk=False, try_parse_dates=True, ignore_errors=True)
         pk_cols = set(discover_primary_key(df))
         st.subheader(f"{table_name}")
@@ -166,25 +173,25 @@ if uploaded_files:
         # for each in foreign_keys:
         #     print(each)
         #     print("\n")
-        # enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values()), foreign_keys, client)
-        # try:
-        #     enriched_metadata = enriched_response["metadata"]
-        #     db_desc = enriched_response.get("database_name", "Untitled")
-        #     st.subheader("Enriched Metadata")
-        #     st.write(f"Database description: {db_desc}")
-        #     st.json(enriched_metadata)
+            enriched_response = enrich_metadata_with_relationships(list(cached_metadata.values()), fk_matches, client)
+            try:
+                enriched_metadata = enriched_response["metadata"]
+                db_desc = enriched_response.get("database_name", "Untitled")
+                st.subheader("Enriched Metadata")
+                st.write(f"Database description: {db_desc}")
+                st.json(enriched_metadata)
 
-        #     with open("all_metadata.json", "w") as f:
-        #         json.dump(enriched_metadata, f, indent=2)
-            
-        #     st.subheader("ER Diagram")
-        #     diagram = convert_to_er_graphviz(enriched_metadata)
-        #     st.graphviz_chart(diagram)
+                with open("all_metadata.json", "w") as f:
+                    json.dump(enriched_metadata, f, indent=2)
+                
+                st.subheader("ER Diagram")
+                diagram = convert_to_er_graphviz(enriched_metadata)
+                st.graphviz_chart(diagram)
 
 
 
-        # except Exception as e:
-        #     st.error(f"Enrichment failed: {e}")
+            except Exception as e:
+                st.error(f"Enrichment failed: {e}")
 
 
 

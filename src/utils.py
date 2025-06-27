@@ -149,8 +149,6 @@ def find_valid_foreign_keys_from_csv(target_table, all_tables, csv_dir, embed_fn
         # if fk_col.get("is_primary_key"):
         #     continue
 
-        fk_vals = fk_df.select(fk_col_name).unique()
-
         for candidate_table in similar_tables:
             pk_df_path = os.path.join(csv_dir, f"{candidate_table['table_name']}.csv")
             if not os.path.exists(pk_df_path):
@@ -166,12 +164,10 @@ def find_valid_foreign_keys_from_csv(target_table, all_tables, csv_dir, embed_fn
                     continue
 
                 pk_col_name = pk_col["name"]
-                pk_vals = pk_df.select(pk_col_name).unique()
                 print(pk_col_name, fk_col_name)
 
                 # Check inclusion via anti-join
                 unmatched = fk_df.join(pk_df, left_on=fk_col_name, right_on=pk_col_name, how="anti")
-                print(unmatched)
                 if unmatched.is_empty():
                     confirmed_fk.append({
                         "from_table": target_table["table_name"],
@@ -180,7 +176,7 @@ def find_valid_foreign_keys_from_csv(target_table, all_tables, csv_dir, embed_fn
                         "to_column": pk_col_name,
                         "match_type": "value_inclusion"
                     })
-    print(confirmed_fk)
+    print(confirmed_fk, sep="\n")
     return confirmed_fk
 
 

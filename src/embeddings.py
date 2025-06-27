@@ -12,7 +12,6 @@ def get_embedding(text: str) -> List[float]:
         contents=text,
 
     )
-    print(response.embeddings)
     return response.embeddings[0].values
 
 

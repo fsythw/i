@@ -1,0 +1,48 @@
+{
+  "table_name": "SERVICES",
+  "description": "The SERVICES table contains information on patient transfers between different hospital services during their admissions. It tracks the patient's previous and current service assignments, along with the date and time of the transfer, linking patients (SUBJECT_ID) and hospital admissions (HADM_ID) to specific service transitions.\n",
+  "columns": [
+    {
+      "name": "ROW_ID",
+      "data_type": "Int64",
+      "is_primary_key": true,
+      "n_unique": 73343,
+      "description": "Unique identifier for each row in the table."
+    },
+    {
+      "name": "SUBJECT_ID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 46496,
+      "description": "Identifier for each patient receiving a service."
+    },
+    {
+      "name": "HADM_ID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 58926,
+      "description": "Identifier for each hospital admission during which a service was provided."
+    },
+    {
+      "name": "TRANSFERTIME",
+      "data_type": "Datetime(time_unit='us', time_zone=None)",
+      "is_primary_key": false,
+      "n_unique": 73336,
+      "description": "Date and time when the patient's service was transferred."
+    },
+    {
+      "name": "PREV_SERVICE",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 19,
+      "description": "The service the patient was on prior to the current transfer (e.g., VSURG, NSURG, CMED)."
+    },
+    {
+      "name": "CURR_SERVICE",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 20,
+      "description": "The service the patient is currently on (e.g., ORTHO, OBS, NMED)."
+    }
+  ]
+}
