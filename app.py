@@ -177,8 +177,17 @@ if specific_file:
                 json.dump(enriched_metadata, f, indent=2)
 
             st.subheader("🗺️ ER Diagram")
-            diagram = convert_to_er_graphviz(enriched_metadata)
-            st.graphviz_chart(diagram)
+            # diagram = convert_to_er_graphviz(enriched_metadata)
+            # st.graphviz_chart(diagram)
+            focus_table = st.selectbox("visualisations", options=[t["table_name"] for t in cached_metadata.values()])
+            #depth = st.slider("degree of rls", min_value=1, max_value=3, value=2)
+
+            dot = convert_to_er_graphviz(list(cached_metadata.values()), focus_table=focus_table, degree=1)
+            st.graphviz_chart(dot)
+            dot = convert_to_er_graphviz(list(cached_metadata.values()), focus_table=focus_table, degree=2)
+            st.graphviz_chart(dot)
+            dot = convert_to_er_graphviz(list(cached_metadata.values()), focus_table=focus_table, degree=3)
+            st.graphviz_chart(dot)
 
         except Exception as e:
             st.error(f"Failed to parse enriched metadata: {e}")
