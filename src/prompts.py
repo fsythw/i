@@ -1,5 +1,5 @@
 import json, time
-from src.schema import Metadata, Data
+from src.schema import Metadata, Data, Relationship
 
 # def generate_prompt(table_name, sample_data, columns, table_description=""):
 #     return f"""
@@ -181,15 +181,46 @@ def judge_and_improve_table_schema(table_name, schema_info, client, threshold=8,
 #         print("Failed to parse enriched response:", e)
 #         return metadata_list  # fallback to original
 
-def enrich_metadata_with_relationships(metadata_list, fk_list, client):
+# def enrich_metadata_with_relationships(metadata_list, fk_list, client):
+#     prompt = f"""
+#     You are an expert in relational databases. Given the table schemas and potential foreign keys, evaluate which foreign key relationships are valid.
+
+#     Criteria:
+#     - The column in the source table must reference the primary key of the destination table.
+#     - Consider column names, data types, and descriptions.
+#     Also give a description of the entire database.
+#     Return an enriched schema of the database.
+
+#     Schemas:
+#     {json.dumps(metadata_list, indent=2)}
+
+#     Foreign key list:{fk_list}
+
+#     """
+
+#     response = client.models.generate_content(
+#         model="gemini-2.0-flash",
+#         contents=prompt,
+#         config={"response_mime_type": "application/json",
+#                 "response_schema": Data,}
+
+#     )
+
+#     try:
+#         return json.loads(response.text)
+#     except Exception as e:
+#         print("Failed to parse enriched response:", e)
+#         return metadata_list  # fallback to original
+
+
+def enrich_metadata_with_relationships(table_metadata, metadata_list, fk_list, client):
     prompt = f"""
-    You are an expert in relational databases. Given the table schemas and potential foreign keys, evaluate which foreign key relationships are valid.
+    You are an expert in relational databases. Given the metadata of the specified table, list of metadata of other tables and potential foreign keys, evaluate which foreign key relationships are valid.
 
     Criteria:
     - The column in the source table must reference the primary key of the destination table.
     - Consider column names, data types, and descriptions.
-    Also give a description of the entire database.
-    Return an enriched schema of the database.
+    Return the enriched metadata for the original table.
 
     Schemas:
     {json.dumps(metadata_list, indent=2)}
@@ -202,7 +233,7 @@ def enrich_metadata_with_relationships(metadata_list, fk_list, client):
         model="gemini-2.0-flash",
         contents=prompt,
         config={"response_mime_type": "application/json",
-                "response_schema": Data,}
+                "response_schema": Metadata}
 
     )
 

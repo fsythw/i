@@ -462,5 +462,36 @@
         "reason": "ICUSTAY_ID in TRANSFERS references ICUSTAY_ID in ICUSTAYS, linking transfers to ICU stays."
       }
     ]
+  },
+  {
+    "table_name": "CAREGIVERS",
+    "description": "The CAREGIVERS table contains information about individual caregivers. Each row represents a unique caregiver (CGID) and includes a label potentially categorizing the caregiver, as well as a description of their job title or role. The ROW_ID serves as the unique identifier for each record in the table.\n",
+    "columns": [
+      {
+        "name": "ROW_ID",
+        "data_type": "Int64",
+        "is_primary_key": true,
+        "description": "Unique identifier for each row in the dataset."
+      },
+      {
+        "name": "CGID",
+        "data_type": "Int64",
+        "is_primary_key": false,
+        "description": "Identifier for a caregiver."
+      },
+      {
+        "name": "LABEL",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "Categorical label or code assigned to the caregiver."
+      },
+      {
+        "name": "DESCRIPTION",
+        "data_type": "String",
+        "is_primary_key": false,
+        "description": "The job title or role of the caregiver."
+      }
+    ],
+    "relationships": []
   }
 ]

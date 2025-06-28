@@ -3,6 +3,7 @@ import polars as pl
 from datetime import datetime
 import re 
 import os
+import json
 from src.embeddings import get_similar_tables
 
 
@@ -207,3 +208,31 @@ def convert_str_to_datetime(obj):
     else:
         return obj
     
+def save_relationships(from_table, fk_matches):
+    rel_path = f"data/{from_table}.relationships.json"
+    with open(rel_path, "w") as f:
+        json.dump(fk_matches, f, indent=2)
+
+def load_related_tables(table_name):
+    related_metadata = {}
+    rel_path = f"data/{table_name}.relationships.json"
+    
+    if not os.path.exists(rel_path):
+        return {}
+
+    with open(f"data/{table_name}.json") as f:
+        related_metadata[table_name] = json.load(f)
+
+    with open(rel_path) as f:
+        rels = json.load(f)
+
+    for rel in rels:
+        to_table = rel["to_table"]
+        if to_table not in related_metadata:
+            try:
+                with open(f"data/{to_table}.json") as f:
+                    related_metadata[to_table] = json.load(f)
+            except FileNotFoundError:
+                continue
+
+    return related_metadata

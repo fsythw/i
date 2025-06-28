@@ -1,0 +1,34 @@
+{
+  "table_name": "CAREGIVERS",
+  "description": "The CAREGIVERS table contains information about individual caregivers. Each row represents a unique caregiver (CGID) and includes a label potentially categorizing the caregiver, as well as a description of their job title or role. The ROW_ID serves as the unique identifier for each record in the table.\n",
+  "columns": [
+    {
+      "name": "ROW_ID",
+      "data_type": "Int64",
+      "is_primary_key": true,
+      "n_unique": 7567,
+      "description": "Unique identifier for each row in the dataset."
+    },
+    {
+      "name": "CGID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 7567,
+      "description": "Identifier for a caregiver."
+    },
+    {
+      "name": "LABEL",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 232,
+      "description": "Categorical label or code assigned to the caregiver."
+    },
+    {
+      "name": "DESCRIPTION",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 17,
+      "description": "The job title or role of the caregiver."
+    }
+  ]
+}

@@ -11,7 +11,7 @@ from src.prompts import (
     enrich_metadata_with_relationships,
 )
 from src.visualisation import convert_to_er_graphviz
-from src.utils import discover_primary_key, find_valid_foreign_keys_from_csv
+from src.utils import discover_primary_key, find_valid_foreign_keys_from_csv, save_relationships, load_related_tables
 from src.cache import compute_file_hash, is_cached, add_to_cache
 from src.embeddings import get_embedding
 
@@ -164,30 +164,16 @@ if specific_file:
         st.subheader("🔍 Foreign Key Candidates")
         st.json(fk_matches)
 
-        enriched = enrich_metadata_with_relationships(list(cached_metadata.values()), fk_matches, client)
+        
 
+        #enriched = enrich_metadata_with_relationships(list(cached_metadata.values()), fk_matches, client)
+        enriched = enrich_metadata_with_relationships(target_metadata, list(cached_metadata.values()), fk_matches, client)
+
+        save_relationships(table_name, enriched["relationships"])
         try:
-            enriched_metadata = enriched["metadata"]
-            db_desc = enriched.get("database_name", "Untitled Database")
-            st.subheader("📘 Enriched Metadata")
-            st.write(f"**Database Description:** {db_desc}")
-            st.json(enriched_metadata)
-
-            with open("all_metadata.json", "w") as f:
-                json.dump(enriched_metadata, f, indent=2)
-
-            st.subheader("🗺️ ER Diagram")
-            # diagram = convert_to_er_graphviz(enriched_metadata)
-            # st.graphviz_chart(diagram)
-            focus_table = st.selectbox("visualisations", options=[t["table_name"] for t in cached_metadata.values()])
-            #depth = st.slider("degree of rls", min_value=1, max_value=3, value=2)
-
-            dot = convert_to_er_graphviz(list(cached_metadata.values()), focus_table=focus_table, degree=1)
+            dot = convert_to_er_graphviz(enriched)
             st.graphviz_chart(dot)
-            dot = convert_to_er_graphviz(list(cached_metadata.values()), focus_table=focus_table, degree=2)
-            st.graphviz_chart(dot)
-            dot = convert_to_er_graphviz(list(cached_metadata.values()), focus_table=focus_table, degree=3)
-            st.graphviz_chart(dot)
+                    
 
         except Exception as e:
             st.error(f"Failed to parse enriched metadata: {e}")

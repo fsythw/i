@@ -1,4 +1,6 @@
 import streamlit as st
+import os
+import json
 from graphviz import Digraph
 from collections import defaultdict, deque
 
@@ -69,32 +71,70 @@ def find_related_tables(start_table, graph, depth=2):
             queue.append((neighbor, level + 1))
     return visited
 
-def convert_to_er_graphviz(metadata: list[dict], focus_table=None, degree=2) -> str:
-    graph = build_relationship_graph(metadata)
-    tables_to_show = set(t["table_name"] for t in metadata)
+# def convert_to_er_graphviz(metadata: list[dict], focus_table=None, degree=2) -> str:
+#     graph = build_relationship_graph(metadata)
+#     tables_to_show = set(t["table_name"] for t in metadata)
 
-    if focus_table:
-        tables_to_show = find_related_tables(focus_table, graph, depth=degree)
+#     if focus_table:
+#         tables_to_show = find_related_tables(focus_table, graph, depth=degree)
 
+#     lines = ["digraph ER {", "  rankdir=LR;", '  node [shape=record, fontsize=10];']
+
+#     for table in metadata:
+#         if table["table_name"] not in tables_to_show:
+#             continue
+#         col_lines = []
+#         for col in table["columns"]:
+#             prefix = "<PK> " if col.get("is_primary_key") else ""
+#             col_lines.append(f"{prefix}{col['name']}: {col['data_type']}")
+#         table_def = f'{table["table_name"]} [label="{{{table["table_name"]}|{"\\l".join(col_lines)}\\l}}"];'
+#         lines.append(f"  {table_def}")
+
+#     for table in metadata:
+#         if table["table_name"] not in tables_to_show:
+#             continue
+#         for rel in table.get("relationships", []):
+#             if rel["to_table"] not in tables_to_show:
+#                 continue
+#             lines.append(f'  {table["table_name"]} -> {rel["to_table"]} [label="{rel["from_column"]} → {rel["to_column"]}"];')
+
+#     lines.append("}")
+#     return "\n".join(lines)
+
+
+def convert_to_er_graphviz(enriched_table: dict, data_dir: str = "data") -> str:
     lines = ["digraph ER {", "  rankdir=LR;", '  node [shape=record, fontsize=10];']
 
-    for table in metadata:
-        if table["table_name"] not in tables_to_show:
-            continue
-        col_lines = []
+    visited_tables = {}
+    to_visit = {enriched_table["table_name"]: enriched_table}
+
+    # Load related tables based on relationships
+    for rel in enriched_table.get("relationships", []):
+        related_table_name = rel["to_table"]
+        rel_path = os.path.join(data_dir, f"{related_table_name}.json")
+        if os.path.exists(rel_path):
+            with open(rel_path, "r") as f:
+                related_table = json.load(f)
+                to_visit[related_table_name] = related_table
+
+    # Draw nodes
+    for table in to_visit.values():
+        visited_tables[table["table_name"]] = True
+        column_lines = []
         for col in table["columns"]:
             prefix = "<PK> " if col.get("is_primary_key") else ""
-            col_lines.append(f"{prefix}{col['name']}: {col['data_type']}")
-        table_def = f'{table["table_name"]} [label="{{{table["table_name"]}|{"\\l".join(col_lines)}\\l}}"];'
-        lines.append(f"  {table_def}")
+            column_lines.append(f"{prefix}{col['name']}: {col['data_type']}")
+        label = f'{table["table_name"]} [label="{{{table["table_name"]}|{"\\l".join(column_lines)}\\l}}"];'
+        lines.append(f"  {label}")
 
-    for table in metadata:
-        if table["table_name"] not in tables_to_show:
-            continue
-        for rel in table.get("relationships", []):
-            if rel["to_table"] not in tables_to_show:
-                continue
-            lines.append(f'  {table["table_name"]} -> {rel["to_table"]} [label="{rel["from_column"]} → {rel["to_column"]}"];')
+    # Draw edges from original table’s relationships
+    for rel in enriched_table.get("relationships", []):
+        from_table = enriched_table["table_name"]
+        to_table = rel["to_table"]
+        from_col = rel["from_column"]
+        to_col = rel["to_column"]
+        label = rel.get("reason", "")
+        lines.append(f'  {from_table} -> {to_table} [label="{from_col} → {to_col}", tooltip="{label}"];')
 
     lines.append("}")
     return "\n".join(lines)

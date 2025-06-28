@@ -21,7 +21,7 @@ class Metadata(BaseModel):
     table_name: str
     description: str
     columns: List[Column]
-    relationships: List[Relationship] = []
+    relationships: List[Relationship]
 
 class MetadataNoRel(BaseModel):
     table_name: str
