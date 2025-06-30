@@ -1,69 +1,69 @@
 {
   "table_name": "ICUSTAYS",
-  "description": "The ICUSTAYS table provides information on individual ICU stays for patients within the database. It includes identifiers for the patient, hospital admission, and specific ICU stay, along with details about the source database, care units, ward IDs, admission and discharge times, and the length of stay in the ICU. This table allows for analysis of ICU utilization, patient flow, and length of stay patterns.\n",
+  "description": "The ICUSTAYS table provides information on each patient's ICU stay within the MIMIC-III database. It links patients (`SUBJECT_ID`) to their hospital admissions (`HADM_ID`) and specific ICU stays (`ICUSTAY_ID`), including details about the database source (`DBSOURCE`), the first and last care units and wards the patient occupied, the admission and discharge times (`INTIME`, `OUTTIME`), and the length of stay (`LOS`). Each row represents a unique ICU stay.\n",
   "columns": [
     {
       "name": "ROW_ID",
       "data_type": "Int64",
       "is_primary_key": true,
       "n_unique": 61532,
-      "description": "Unique identifier for each row in the dataset."
+      "description": "Unique identifier for each row in the table."
     },
     {
       "name": "SUBJECT_ID",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 46476,
-      "description": "Unique identifier for each patient in the dataset."
+      "description": "Unique identifier for a patient."
     },
     {
       "name": "HADM_ID",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 57786,
-      "description": "Unique identifier for each hospital admission."
+      "description": "Unique identifier for a patient's hospital admission."
     },
     {
       "name": "ICUSTAY_ID",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 61532,
-      "description": "Unique identifier for each ICU stay."
+      "description": "Unique identifier for a patient's stay in the ICU."
     },
     {
       "name": "DBSOURCE",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 3,
-      "description": "The database source from which the data was obtained, e.g., 'metavision' or 'carevue'."
+      "description": "The database source where the data was originally recorded, such as 'carevue' or 'metavision'."
     },
     {
       "name": "FIRST_CAREUNIT",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 6,
-      "description": "The first care unit the patient was admitted to during the ICU stay (e.g., MICU, CSRU, CCU, TSICU, SICU, NICU)."
+      "description": "The first care unit the patient was admitted to during their ICU stay (e.g., 'CSRU', 'MICU')."
     },
     {
       "name": "LAST_CAREUNIT",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 6,
-      "description": "The last care unit the patient was in during the ICU stay (e.g., TSICU, NICU, CCU, MICU, SICU, CSRU)."
+      "description": "The last care unit the patient was in before discharge from the ICU (e.g., 'CSRU', 'MICU')."
     },
     {
       "name": "FIRST_WARDID",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 16,
-      "description": "The ward ID of the first ward the patient was admitted to."
+      "description": "The ID of the first hospital ward the patient was admitted to."
     },
     {
       "name": "LAST_WARDID",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 17,
-      "description": "The ward ID of the last ward the patient was in."
+      "description": "The ID of the last hospital ward the patient was in before discharge."
     },
     {
       "name": "INTIME",
@@ -85,6 +85,22 @@
       "is_primary_key": false,
       "n_unique": 40176,
       "description": "The length of stay in the ICU, in days."
+    }
+  ],
+  "relationships": [
+    {
+      "from_table": "ICUSTAYS",
+      "from_column": "SUBJECT_ID",
+      "to_table": "PATIENTS",
+      "to_column": "SUBJECT_ID",
+      "reason": "ICUSTAYS.SUBJECT_ID references PATIENTS.SUBJECT_ID. This represents the patient who stayed in the ICU."
+    },
+    {
+      "from_table": "ICUSTAYS",
+      "from_column": "HADM_ID",
+      "to_table": "ADMISSIONS",
+      "to_column": "HADM_ID",
+      "reason": "ICUSTAYS.HADM_ID references ADMISSIONS.HADM_ID. This represents the hospital admission during which the ICU stay occurred."
     }
   ]
 }

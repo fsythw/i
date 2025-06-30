@@ -11,9 +11,9 @@ from src.prompts import (
     enrich_metadata_with_relationships,
 )
 from src.visualisation import convert_to_er_graphviz
-from src.utils import discover_primary_key, find_valid_foreign_keys_from_csv, save_relationships, load_related_tables
+from src.utils import discover_primary_key, find_valid_foreign_keys_from_csv, save_relationships
 from src.cache import compute_file_hash, is_cached, add_to_cache
-from src.embeddings import get_embedding
+from src.embeddings import get_embedding, get_similar_tables
 
 client = genai.Client(api_key=st.secrets["google"]["GENAI_API_KEY"])
 DATA_DIR = "data"
@@ -166,13 +166,15 @@ if specific_file:
 
         
 
-        #enriched = enrich_metadata_with_relationships(list(cached_metadata.values()), fk_matches, client)
-        enriched = enrich_metadata_with_relationships(target_metadata, list(cached_metadata.values()), fk_matches, client)
-
-        save_relationships(table_name, enriched["relationships"])
+        enriched = enrich_metadata_with_relationships(list(cached_metadata.values()), fk_matches, client)
+        save_relationships(enriched["metadata"])
         try:
-            dot = convert_to_er_graphviz(enriched)
+            #related_tables = get_similar_tables(target_metadata, enriched["metadata"].pop(table_name), top_n=10)
+
+            dot = convert_to_er_graphviz(enriched["metadata"])
+            print(dot)
             st.graphviz_chart(dot)
+            #st.json(enriched["metadata"])
                     
 
         except Exception as e:

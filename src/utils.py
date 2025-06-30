@@ -208,31 +208,48 @@ def convert_str_to_datetime(obj):
     else:
         return obj
     
-def save_relationships(from_table, fk_matches):
-    rel_path = f"data/{from_table}.relationships.json"
-    with open(rel_path, "w") as f:
-        json.dump(fk_matches, f, indent=2)
+# def save_relationships(from_table, fk_matches):
+#     rel_path = f"data/{from_table}.relationships.json"
+#     with open(rel_path, "w") as f:
+#         json.dump(fk_matches, f, indent=2)
+def save_relationships(enriched_metadata: list[dict], data_dir: str = "data"):
+    for table in enriched_metadata:
+        table_name = table["table_name"]
+        file_path = os.path.join(data_dir, f"{table_name}.json")
+        
+        if not os.path.exists(file_path):
+            print(f"Metadata file for {table_name} not found. Skipping.")
+            continue
+        
+        with open(file_path, "r") as f:
+            metadata = json.load(f)
 
-def load_related_tables(table_name):
-    related_metadata = {}
-    rel_path = f"data/{table_name}.relationships.json"
+        metadata["relationships"] = table.get("relationships", [])
+
+        with open(file_path, "w") as f:
+            json.dump(metadata, f, indent=2)
+
+
+# def load_related_tables(table_name):
+#     related_metadata = {}
+#     rel_path = f"data/{table_name}.relationships.json"
     
-    if not os.path.exists(rel_path):
-        return {}
+#     if not os.path.exists(rel_path):
+#         return {}
 
-    with open(f"data/{table_name}.json") as f:
-        related_metadata[table_name] = json.load(f)
+#     with open(f"data/{table_name}.json") as f:
+#         related_metadata[table_name] = json.load(f)
 
-    with open(rel_path) as f:
-        rels = json.load(f)
+#     with open(rel_path) as f:
+#         rels = json.load(f)
 
-    for rel in rels:
-        to_table = rel["to_table"]
-        if to_table not in related_metadata:
-            try:
-                with open(f"data/{to_table}.json") as f:
-                    related_metadata[to_table] = json.load(f)
-            except FileNotFoundError:
-                continue
+#     for rel in rels:
+#         to_table = rel["to_table"]
+#         if to_table not in related_metadata:
+#             try:
+#                 with open(f"data/{to_table}.json") as f:
+#                     related_metadata[to_table] = json.load(f)
+#             except FileNotFoundError:
+#                 continue
 
-    return related_metadata
+#     return related_metadata

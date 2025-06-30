@@ -1,13 +1,12 @@
 {
   "table_name": "PATIENTS",
-  "description": "The PATIENTS table contains demographic information for patients in the database. It includes a unique patient identifier (SUBJECT_ID), gender, date of birth (DOB), dates of death from various sources (DOD, DOD_HOSP, DOD_SSN), and an expiration flag indicating patient mortality.\n",
+  "description": "The PATIENTS table contains demographic and mortality information for patients within the dataset. It includes unique patient identifiers, gender, date of birth, and date of death information from various sources (hospital records, Social Security Administration). The table also includes an expire flag to indicate record status.\n",
   "columns": [
     {
       "name": "ROW_ID",
       "data_type": "Int64",
       "is_primary_key": true,
       "n_unique": 46520,
-      "unique_values_path": "unique_values\\PATIENTS__ROW_ID.parquet",
       "description": "Unique identifier for each row in the table."
     },
     {
@@ -15,56 +14,50 @@
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 46520,
-      "unique_values_path": "unique_values\\PATIENTS__SUBJECT_ID.parquet",
-      "description": "Unique identifier for each patient in the database."
+      "description": "Unique identifier for each patient in the dataset."
     },
     {
       "name": "GENDER",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 2,
-      "unique_values_path": "unique_values\\PATIENTS__GENDER.parquet",
-      "description": "The gender of the patient, either 'F' for female or 'M' for male."
+      "description": "Patient's gender, recorded as either 'F' (female) or 'M' (male)."
     },
     {
       "name": "DOB",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 32540,
-      "unique_values_path": "unique_values\\PATIENTS__DOB.parquet",
-      "description": "The patient's date of birth."
+      "description": "Date of birth of the patient."
     },
     {
       "name": "DOD",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 12912,
-      "unique_values_path": "unique_values\\PATIENTS__DOD.parquet",
-      "description": "The patient's date of death."
+      "description": "Date of death of the patient."
     },
     {
       "name": "DOD_HOSP",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 8748,
-      "unique_values_path": "unique_values\\PATIENTS__DOD_HOSP.parquet",
-      "description": "The date of death as recorded by the hospital."
+      "description": "Date of death recorded by the hospital."
     },
     {
       "name": "DOD_SSN",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 11302,
-      "unique_values_path": "unique_values\\PATIENTS__DOD_SSN.parquet",
-      "description": "The date of death as recorded by the Social Security Administration."
+      "description": "Date of death recorded by the Social Security Administration."
     },
     {
       "name": "EXPIRE_FLAG",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 2,
-      "unique_values_path": "unique_values\\PATIENTS__EXPIRE_FLAG.parquet",
-      "description": "A binary flag indicating whether the patient has expired (1) or is still alive (0)."
+      "description": "Indicates whether the patient's record has expired. 0 indicates the record is active, 1 indicates the record is expired."
     }
-  ]
+  ],
+  "relationships": []
 }

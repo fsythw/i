@@ -213,14 +213,14 @@ def judge_and_improve_table_schema(table_name, schema_info, client, threshold=8,
 #         return metadata_list  # fallback to original
 
 
-def enrich_metadata_with_relationships(table_metadata, metadata_list, fk_list, client):
+def enrich_metadata_with_relationships(metadata_list, fk_list, client):
     prompt = f"""
     You are an expert in relational databases. Given the metadata of the specified table, list of metadata of other tables and potential foreign keys, evaluate which foreign key relationships are valid.
 
     Criteria:
     - The column in the source table must reference the primary key of the destination table.
     - Consider column names, data types, and descriptions.
-    Return the enriched metadata for the original table.
+    Return the enriched metadata for all the tables.
 
     Schemas:
     {json.dumps(metadata_list, indent=2)}
@@ -233,7 +233,7 @@ def enrich_metadata_with_relationships(table_metadata, metadata_list, fk_list, c
         model="gemini-2.0-flash",
         contents=prompt,
         config={"response_mime_type": "application/json",
-                "response_schema": Metadata}
+                "response_schema": Data}
 
     )
 

@@ -1,6 +1,6 @@
 {
   "table_name": "CAREGIVERS",
-  "description": "The CAREGIVERS table contains information about individual caregivers. Each row represents a unique caregiver (CGID) and includes a label potentially categorizing the caregiver, as well as a description of their job title or role. The ROW_ID serves as the unique identifier for each record in the table.\n",
+  "description": "The CAREGIVERS table contains information about caregivers, linking unique caregiver IDs (CGID) to job titles or roles. The table includes a shortened label for the role and a more detailed description. Each row is uniquely identified by ROW_ID.\n",
   "columns": [
     {
       "name": "ROW_ID",
@@ -21,14 +21,15 @@
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 232,
-      "description": "Categorical label or code assigned to the caregiver."
+      "description": "Shortened job title or category for a caregiver."
     },
     {
       "name": "DESCRIPTION",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 17,
-      "description": "The job title or role of the caregiver."
+      "description": "Full job title or role description for a caregiver."
     }
-  ]
+  ],
+  "relationships": []
 }

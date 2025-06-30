@@ -1,6 +1,6 @@
 {
   "table_name": "SERVICES",
-  "description": "The SERVICES table contains information on patient transfers between different hospital services during their admissions. It tracks the patient's previous and current service assignments, along with the date and time of the transfer, linking patients (SUBJECT_ID) and hospital admissions (HADM_ID) to specific service transitions.\n",
+  "description": "The SERVICES table contains information about patient transfers between different hospital services. Each row represents a single transfer event, identified by a unique ROW_ID. The table links patients (SUBJECT_ID) and their hospital admissions (HADM_ID) to the service they were transferred from (PREV_SERVICE) and to (CURR_SERVICE), along with the timestamp of the transfer (TRANSFERTIME).\n",
   "columns": [
     {
       "name": "ROW_ID",
@@ -14,35 +14,35 @@
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 46496,
-      "description": "Identifier for each patient receiving a service."
+      "description": "The patient identifier."
     },
     {
       "name": "HADM_ID",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 58926,
-      "description": "Identifier for each hospital admission during which a service was provided."
+      "description": "The hospital admission identifier."
     },
     {
       "name": "TRANSFERTIME",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 73336,
-      "description": "Date and time when the patient's service was transferred."
+      "description": "The date and time when the patient was transferred."
     },
     {
       "name": "PREV_SERVICE",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 19,
-      "description": "The service the patient was on prior to the current transfer (e.g., VSURG, NSURG, CMED)."
+      "description": "The service the patient was on prior to the current transfer, e.g., 'CMED' (Cardiothoracic Medical)."
     },
     {
       "name": "CURR_SERVICE",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 20,
-      "description": "The service the patient is currently on (e.g., ORTHO, OBS, NMED)."
+      "description": "The service the patient is currently on, e.g., 'CMED' (Cardiothoracic Medical)."
     }
   ]
 }
