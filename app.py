@@ -2,6 +2,7 @@ import streamlit as st
 import polars as pl
 import json
 import os
+import pymongo
 
 from google import genai
 from src.prompts import (
@@ -15,7 +16,9 @@ from src.utils import discover_primary_key, find_valid_foreign_keys_from_csv, sa
 from src.cache import compute_file_hash, is_cached, add_to_cache
 from src.embeddings import get_embedding, get_similar_tables
 
-client = genai.Client(api_key=st.secrets["google"]["GENAI_API_KEY"])
+gemini_client = genai.Client(api_key=st.secrets["google"]["GENAI_API_KEY"])
+mongo_client = pymongo.MongoClient("mongodb+srv://faithwansy123:rhbc1234@cluster0.oxan1it.mongodb.net/")
+
 DATA_DIR = "data"
 CSV_DIR = "csv_data"
 os.makedirs(DATA_DIR, exist_ok=True)
@@ -71,7 +74,7 @@ def generate_metadata_from_csv(file, table_name):
         })
 
     llm_input = [{"name": col["name"], "example_values": col["example_values"], "statistics": col["statistics"]} for col in schema_info]
-    llm_output = call_gemini_descriptions(llm_input, ONE_SHOT_EXAMPLE, client)
+    llm_output = call_gemini_descriptions(llm_input, ONE_SHOT_EXAMPLE, gemini_client)
 
     for col in schema_info:
         match = next((item for item in llm_output if item["name"] == col["name"]), {})
@@ -79,8 +82,8 @@ def generate_metadata_from_csv(file, table_name):
         col.pop("example_values", None)
         col.pop("statistics", None)
 
-    table_description = call_gemini_table_description(table_name, schema_info, client)
-    refined_schema = judge_and_improve_table_schema(table_name, schema_info, client)
+    table_description = call_gemini_table_description(table_name, schema_info, gemini_client)
+    refined_schema = judge_and_improve_table_schema(table_name, schema_info, gemini_client)
 
     final_metadata = {
         "table_name": table_name,
@@ -166,7 +169,7 @@ if specific_file:
 
         
         #related_tables = get_similar_tables(target_metadata, list(cached_metadata.values()), top_n=8)
-        enriched = enrich_metadata_with_relationships(list(cached_metadata.values()), fk_matches, client)
+        enriched = enrich_metadata_with_relationships(list(cached_metadata.values()), fk_matches, gemini_client)
         print(enriched["metadata"])
         save_relationships(enriched["metadata"])
         try:
