@@ -11,7 +11,7 @@ def get_mongo_client():
 # client = pymongo.MongoClient("mongodb+srv://faithwansy123:rhbc1234@cluster0.oxan1it.mongodb.net/")
 # db = client.metadata
 # collection = db.ADMISSIONS
-# requesting = []
+
 
 # with open(r"./data/ADMISSIONS.json") as f:
 #     data = json.load(f)
@@ -19,9 +19,13 @@ def get_mongo_client():
 
 
 
-# def add_to_database(metadata: dict):
-#     data = json.dump(metadata)
-#     requesting.append(InsertOne(data))
+def add_to_database(metadata: dict, table_name: str):
+    client = get_mongo_client()
+    database = client["metadata"]
+    collection = database[table_name]
 
-# result = collection.bulk_write(requesting)
-# client.close()
+    requesting = []
+
+    requesting.append(InsertOne(metadata))
+
+    collection.bulk_write(requesting)

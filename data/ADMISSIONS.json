@@ -1,6 +1,6 @@
 {
   "table_name": "ADMISSIONS",
-  "description": "The ADMISSIONS table contains information on hospital admissions for patients. Each row represents a unique hospital admission (`HADM_ID`) for a patient (`SUBJECT_ID`). The table includes timestamps for admission and discharge, patient demographics (insurance, language, religion, marital status, ethnicity), details about the admission (type, location before and after the stay, diagnosis), and flags indicating in-hospital mortality and availability of chart event data. It serves as a core table for linking patient information across the MIMIC-III database.\n",
+  "description": "The ADMISSIONS table contains information on hospital admissions for patients. It includes patient demographics, admission and discharge times, admission types and locations, insurance details, diagnoses, and mortality information. This table provides a comprehensive overview of each hospital visit.\n",
   "columns": [
     {
       "name": "ROW_ID",
@@ -14,49 +14,49 @@
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 46520,
-      "description": "Patient identifier; links to the PATIENTS table."
+      "description": "Unique identifier for a patient."
     },
     {
       "name": "HADM_ID",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 58976,
-      "description": "Hospital admission identifier; links to the ADMISSIONS table. Uniquely identifies a patient's hospital stay."
+      "description": "Unique identifier for a patient's hospital admission."
     },
     {
       "name": "ADMITTIME",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 58651,
-      "description": "Timestamp of when the patient was admitted to the hospital."
+      "description": "Date and time when the patient was admitted to the hospital."
     },
     {
       "name": "DISCHTIME",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 58657,
-      "description": "Timestamp of when the patient was discharged from the hospital."
+      "description": "Date and time when the patient was discharged from the hospital."
     },
     {
       "name": "DEATHTIME",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 5835,
-      "description": "Timestamp of when the patient died, if applicable. If the patient did not die in the hospital, this field is null."
+      "description": "Date and time when the patient died (if applicable)."
     },
     {
       "name": "ADMISSION_TYPE",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 4,
-      "description": "Type of admission, e.g., EMERGENCY, ELECTIVE, URGENT."
+      "description": "Type of admission (e.g., URGENT, ELECTIVE, NEWBORN)."
     },
     {
       "name": "ADMISSION_LOCATION",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 9,
-      "description": "Location of the patient prior to admission to the hospital."
+      "description": "Location of the patient prior to hospital admission."
     },
     {
       "name": "DISCHARGE_LOCATION",
@@ -77,14 +77,14 @@
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 76,
-      "description": "Primary language of the patient. Note: certain values begin with special characters."
+      "description": "Primary language of the patient."
     },
     {
       "name": "RELIGION",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 21,
-      "description": "Religion of the patient."
+      "description": "Patient's religion."
     },
     {
       "name": "MARITAL_STATUS",
@@ -98,51 +98,42 @@
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 41,
-      "description": "Ethnic group of the patient."
+      "description": "Ethnicity of the patient."
     },
     {
       "name": "EDREGTIME",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 30875,
-      "description": "Timestamp of when the patient was registered in the emergency department (ED)."
+      "description": "Date and time when the patient was registered in the Emergency Department."
     },
     {
       "name": "EDOUTTIME",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 30865,
-      "description": "Timestamp of when the patient left the emergency department (ED)."
+      "description": "Date and time when the patient left the Emergency Department."
     },
     {
       "name": "DIAGNOSIS",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 15692,
-      "description": "The diagnosis given upon admission for the patient's hospital stay."
+      "description": "Primary diagnosis of the patient during the hospital admission."
     },
     {
       "name": "HOSPITAL_EXPIRE_FLAG",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 2,
-      "description": "Flag indicating whether the patient expired (died) during the hospital stay (1) or not (0)."
+      "description": "Indicates whether the patient expired in the hospital (1) or not (0)."
     },
     {
       "name": "HAS_CHARTEVENTS_DATA",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 2,
-      "description": "Flag indicating whether the patient's hospital stay has data in the CHARTEVENTS table (1) or not (0)."
-    }
-  ],
-  "relationships": [
-    {
-      "from_table": "ADMISSIONS",
-      "from_column": "SUBJECT_ID",
-      "to_table": "PATIENTS",
-      "to_column": "SUBJECT_ID",
-      "reason": "SUBJECT_ID in ADMISSIONS references SUBJECT_ID (patient identifier) in PATIENTS"
+      "description": "Indicates whether the patient has data in the CHARTEVENTS table (1) or not (0)."
     }
   ]
 }

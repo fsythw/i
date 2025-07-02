@@ -12,12 +12,7 @@ from src.prompts import (
 )
 from src.utils import discover_primary_key
 from src.cache import compute_file_hash, is_cached, add_to_cache
-from src.mongo import get_mongo_client
-
-
-
-mongo_client = get_mongo_client()
-db = mongo_client["metadata"]
+from src.mongo import add_to_database
 
 
 client = genai.Client(api_key=st.secrets["google"]["GENAI_API_KEY"])
@@ -97,7 +92,7 @@ def generate_metadata_from_csv(file, table_name):
     with open(metadata_file_path, "w") as f:
         json.dump(final_metadata, f, indent=2)
 
-    
+    add_to_database(final_metadata, table_name)
 
     return final_metadata
 
@@ -120,11 +115,7 @@ if uploaded_files:
             new_meta = generate_metadata_from_csv(uploaded_file, table_name)
             cached_metadata[table_name] = new_meta
         with open(f"data/{table_name}.json", 'r') as file:
-                df = json.load(file)
-        st.header(table_name)
-        st.write(df["description"])
-        st.subheader("Column Metadata")
-        st.dataframe(df["columns"], use_container_width=True)
+            df = json.load(file)
         
         st.download_button(
             label="Download JSON",
@@ -133,7 +124,10 @@ if uploaded_files:
             data=json.dumps(df),
             key=f"download_{table_name}"
         )
-        continue
+        
+        for table in cached_metadata.values():
+            table.pop("_id", None)
+
 
     with open("all_metadata.json", "w") as f:
         json.dump(list(cached_metadata.values()), f, indent=2)

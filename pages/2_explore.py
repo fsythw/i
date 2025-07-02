@@ -26,16 +26,12 @@ CSV_DIR = "csv_data"
 os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(CSV_DIR, exist_ok=True)
 
-
 # Connect to MongoDB
 mongo_client = get_mongo_client()
 db = mongo_client["metadata"]
 
 collection_names = db.list_collection_names()
 
-# Search / select
-# search = st.text_input("Search for a table:")
-# filtered = [t for t in collection_names if search.lower() in t.lower()]
 selected_table = st.selectbox("Select a table", collection_names)
 
 if selected_table:
