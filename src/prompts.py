@@ -215,7 +215,7 @@ def judge_and_improve_table_schema(table_name, schema_info, client, threshold=8,
 
 def enrich_metadata_with_relationships(metadata_list, fk_list, client):
     prompt = f"""
-    You are an expert in relational databases. Given the metadata of the specified table, list of metadata of other tables and potential foreign keys, evaluate which foreign key relationships are valid.
+    You are an expert in relational databases. Given a list of metadata of other tables and potential foreign keys, evaluate which foreign key relationships are valid.
 
     Criteria:
     - The column in the source table must reference the primary key of the destination table.

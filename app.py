@@ -159,17 +159,18 @@ if specific_file:
             all_tables=list(cached_metadata.values()),
             csv_dir=CSV_DIR,
             embed_fn=get_embedding,
-            top_n=10
+            top_n=8
         )
         st.subheader("🔍 Foreign Key Candidates")
-        st.json(fk_matches)
+        #st.json(fk_matches)
 
         
-
+        #related_tables = get_similar_tables(target_metadata, list(cached_metadata.values()), top_n=8)
         enriched = enrich_metadata_with_relationships(list(cached_metadata.values()), fk_matches, client)
+        print(enriched["metadata"])
         save_relationships(enriched["metadata"])
         try:
-            #related_tables = get_similar_tables(target_metadata, enriched["metadata"].pop(table_name), top_n=10)
+            
 
             dot = convert_to_er_graphviz(enriched["metadata"])
             print(dot)

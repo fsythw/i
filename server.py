@@ -6,5 +6,11 @@ mcp = FastMCP("test")
 def greet(name: str) -> str:
     return f"Hello, {name}!"
 
+@mcp.tool
+def retrieve_table_names() -> str:
+    return 
+
+
 if __name__ == "__main__":
     mcp.run()
+
