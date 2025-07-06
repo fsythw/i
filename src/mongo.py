@@ -5,7 +5,7 @@ import streamlit as st
 
 @st.cache_resource
 def get_mongo_client():
-    return pymongo.MongoClient(st.secrets["mongo"]["URI"])
+    return pymongo.MongoClient("mongodb+srv://t7059941:xrcdgKjgG3bwMpth@cluster0.ggwp7zk.mongodb.net/")
 
 
 # client = pymongo.MongoClient("mongodb+srv://faithwansy123:rhbc1234@cluster0.oxan1it.mongodb.net/")

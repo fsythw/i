@@ -1,0 +1,90 @@
+{
+  "table_name": "ICUSTAYS",
+  "description": "The ICUSTAYS table provides information on individual Intensive Care Unit (ICU) stays for patients. It links patient identifiers (SUBJECT_ID, HADM_ID) to specific ICU stay identifiers (ICUSTAY_ID) and records details such as the database source, first and last care units, ward IDs, admission and discharge timestamps (INTIME, OUTTIME), and the length of stay (LOS) in days. This table allows for analysis of patient movement and duration of stay within the ICU.\n",
+  "columns": [
+    {
+      "name": "ROW_ID",
+      "data_type": "Int64",
+      "is_primary_key": true,
+      "n_unique": 61532,
+      "description": "Unique identifier for each row in the dataset."
+    },
+    {
+      "name": "SUBJECT_ID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 46476,
+      "description": "The patient identifier."
+    },
+    {
+      "name": "HADM_ID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 57786,
+      "description": "Identifier for the patient's hospital admission."
+    },
+    {
+      "name": "ICUSTAY_ID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 61532,
+      "description": "Identifier for the patient's ICU stay."
+    },
+    {
+      "name": "DBSOURCE",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 3,
+      "description": "The database source where the data was obtained, e.g., 'metavision'."
+    },
+    {
+      "name": "FIRST_CAREUNIT",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 6,
+      "description": "The first ICU care unit the patient was admitted to, e.g., 'NICU', 'CCU'."
+    },
+    {
+      "name": "LAST_CAREUNIT",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 6,
+      "description": "The last ICU care unit the patient was in during their stay, e.g., 'MICU', 'SICU'."
+    },
+    {
+      "name": "FIRST_WARDID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 16,
+      "description": "The ward ID of the patient upon admission to the ICU."
+    },
+    {
+      "name": "LAST_WARDID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 17,
+      "description": "The ward ID of the patient at discharge from the ICU."
+    },
+    {
+      "name": "INTIME",
+      "data_type": "Datetime(time_unit='us', time_zone=None)",
+      "is_primary_key": false,
+      "n_unique": 61531,
+      "description": "Timestamp when the patient was admitted to the ICU."
+    },
+    {
+      "name": "OUTTIME",
+      "data_type": "Datetime(time_unit='us', time_zone=None)",
+      "is_primary_key": false,
+      "n_unique": 61519,
+      "description": "Timestamp when the patient was discharged from the ICU."
+    },
+    {
+      "name": "LOS",
+      "data_type": "Float64",
+      "is_primary_key": false,
+      "n_unique": 40176,
+      "description": "Length of stay in the ICU, in days."
+    }
+  ]
+}

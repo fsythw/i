@@ -1,6 +1,6 @@
 {
   "table_name": "ADMISSIONS",
-  "description": "The ADMISSIONS table contains information on hospital admissions for patients. It includes patient demographics, admission and discharge times, admission types and locations, insurance details, diagnoses, and mortality information. This table provides a comprehensive overview of each hospital visit.\n",
+  "description": "The ADMISSIONS table contains information about hospital admissions for patients in the database. It includes patient identifiers, admission and discharge times, admission types and locations, discharge locations, insurance details, demographic information (language, religion, marital status, ethnicity), diagnosis, and flags indicating in-hospital mortality and the availability of data in the CHARTEVENTS table. This table provides a comprehensive overview of each patient's hospital stay.\n",
   "columns": [
     {
       "name": "ROW_ID",
@@ -14,126 +14,126 @@
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 46520,
-      "description": "Unique identifier for a patient."
+      "description": "The patient identifier, unique across the entire MIMIC-III database."
     },
     {
       "name": "HADM_ID",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 58976,
-      "description": "Unique identifier for a patient's hospital admission."
+      "description": "Identifier for the patient's hospital admission."
     },
     {
       "name": "ADMITTIME",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 58651,
-      "description": "Date and time when the patient was admitted to the hospital."
+      "description": "The date and time the patient was admitted to the hospital."
     },
     {
       "name": "DISCHTIME",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 58657,
-      "description": "Date and time when the patient was discharged from the hospital."
+      "description": "The date and time the patient was discharged from the hospital."
     },
     {
       "name": "DEATHTIME",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 5835,
-      "description": "Date and time when the patient died (if applicable)."
+      "description": "The date and time of the patient's death, if it occurred during the hospital stay. Null if the patient did not die during the admission."
     },
     {
       "name": "ADMISSION_TYPE",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 4,
-      "description": "Type of admission (e.g., URGENT, ELECTIVE, NEWBORN)."
+      "description": "Type of admission, e.g., 'ELECTIVE', 'URGENT', 'EMERGENCY'."
     },
     {
       "name": "ADMISSION_LOCATION",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 9,
-      "description": "Location of the patient prior to hospital admission."
+      "description": "The location of the patient prior to admission."
     },
     {
       "name": "DISCHARGE_LOCATION",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 17,
-      "description": "Location to which the patient was discharged after the hospital stay."
+      "description": "The location to which the patient was discharged (e.g., Home, Skilled Nursing Facility)."
     },
     {
       "name": "INSURANCE",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 5,
-      "description": "Type of insurance the patient has."
+      "description": "The type of insurance the patient has."
     },
     {
       "name": "LANGUAGE",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 76,
-      "description": "Primary language of the patient."
+      "description": "The primary language of the patient."
     },
     {
       "name": "RELIGION",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 21,
-      "description": "Patient's religion."
+      "description": "The patient's self-identified religion."
     },
     {
       "name": "MARITAL_STATUS",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 8,
-      "description": "Marital status of the patient."
+      "description": "The patient's marital status."
     },
     {
       "name": "ETHNICITY",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 41,
-      "description": "Ethnicity of the patient."
+      "description": "The patient's self-identified ethnicity."
     },
     {
       "name": "EDREGTIME",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 30875,
-      "description": "Date and time when the patient was registered in the Emergency Department."
+      "description": "The date and time the patient was registered in the emergency department (ED)."
     },
     {
       "name": "EDOUTTIME",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 30865,
-      "description": "Date and time when the patient left the Emergency Department."
+      "description": "The date and time the patient left the emergency department (ED)."
     },
     {
       "name": "DIAGNOSIS",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 15692,
-      "description": "Primary diagnosis of the patient during the hospital admission."
+      "description": "The primary diagnosis for the patient's admission."
     },
     {
       "name": "HOSPITAL_EXPIRE_FLAG",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 2,
-      "description": "Indicates whether the patient expired in the hospital (1) or not (0)."
+      "description": "A binary flag indicating whether the patient expired in the hospital (1) or not (0)."
     },
     {
       "name": "HAS_CHARTEVENTS_DATA",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 2,
-      "description": "Indicates whether the patient has data in the CHARTEVENTS table (1) or not (0)."
+      "description": "A binary flag indicating whether or not the patient's admission has corresponding data in the CHARTEVENTS table (1) or not (0)."
     }
   ]
 }
