@@ -122,8 +122,10 @@ load_dotenv()
 
 logger.info("Setting Streamlit page config and title.")
 st.set_page_config(page_title="query", page_icon="💬")
-st.title("query")
+st.title("3. query")
 
+## streamlit does not support async so we need to find our own way
+## background thread
 class AsyncWorker:
     """worker thread for async operations"""
     
@@ -218,7 +220,7 @@ def invoke_agent_sync(agent, messages, config):
     """synchronous wrapper for agent invocation"""
     return async_worker.execute_async(agent.ainvoke(messages, config))
 
-logger.info("Initializing Streamlit session state variables if not present.")
+logger.info("initializing Streamlit session state variables if not present.")
 if 'chat_history' not in st.session_state:
     st.session_state['chat_history'] = []
 if 'lc_history' not in st.session_state:

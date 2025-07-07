@@ -10,7 +10,7 @@ from src.embeddings import get_embedding
 from src.prompts import enrich_metadata_with_relationships
 from src.utils import find_valid_foreign_keys_from_csv, save_relationships
 
-st.header("2. explore")
+st.title("2. explore")
 
 def load_all_metadata():
     try:
