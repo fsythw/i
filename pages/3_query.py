@@ -121,7 +121,7 @@ logger.info("Loading environment variables from .env file...")
 load_dotenv()
 
 logger.info("Setting Streamlit page config and title.")
-st.set_page_config(page_title="query", page_icon="💬")
+st.set_page_config(page_title="query")
 st.title("3. query")
 
 ## streamlit does not support async so we need to find our own way
@@ -153,6 +153,12 @@ class AsyncWorker:
     
     def _worker_loop(self):
         """main worker loop running in dedicated thread"""
+
+        # start async event loop
+        # wait for tasks in request_queue
+        # execute, await
+        # store result in response_queue
+
         self.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.loop)
         
@@ -169,7 +175,7 @@ class AsyncWorker:
                     try:
   
                         result = self.loop.run_until_complete(coro)
-                        self.response_queue.put((request_id, 'success', result))
+                        self.response_queue.put((request_id, 'success', result)) #response
                     except Exception as e:
                         self.response_queue.put((request_id, 'error', str(e)))
                         
@@ -183,6 +189,12 @@ class AsyncWorker:
     
     def execute_async(self, coro, timeout=30):
         """execute async coroutine and wait"""
+
+        # main streamlit thread
+        # put coroutine in request_queue
+        # wait for it to be done
+        # return or throw exception 
+
         if not self.running:
             self.start()
         
@@ -214,13 +226,14 @@ async_worker = get_async_worker()
 
 def setup_agent_sync():
     """synchronous wrapper for setup_agent"""
-    return async_worker.execute_async(setup_agent())
+    return async_worker.execute_async(setup_agent()) #setup_agent is the coroutine
 
 def invoke_agent_sync(agent, messages, config):
     """synchronous wrapper for agent invocation"""
-    return async_worker.execute_async(agent.ainvoke(messages, config))
+    return async_worker.execute_async(agent.ainvoke(messages, config)) 
 
-logger.info("initializing Streamlit session state variables if not present.")
+# store and persist state
+logger.info("initialize st session state variables if not present.")
 if 'chat_history' not in st.session_state:
     st.session_state['chat_history'] = []
 if 'lc_history' not in st.session_state:
@@ -239,19 +252,19 @@ if 'initialization_error' not in st.session_state:
 # agent initialization
 if st.session_state['agent'] is None and st.session_state['initialization_error'] is None:
     logger.info("Agent not found in session state. Initializing...")
-    with st.spinner("Setting up MCP agent..."):
+    with st.spinner("Setting up agent..."):
         try:
             client, tools, agent, system_prompt = setup_agent_sync()
             st.session_state['client'] = client
             st.session_state['tools'] = tools
             st.session_state['agent'] = agent
             st.session_state['system_prompt'] = system_prompt
-            st.success("MCP agent ready!")
-            logger.info("MCP agent setup complete and stored in session state.")
+            st.success(" agent ready")
+            logger.info(" agent setup complete and stored in session state.")
         except Exception as e:
-            logger.error(f"Error setting up MCP agent: {e}")
+            logger.error(f"Error setting up agent: {e}")
             st.session_state['initialization_error'] = str(e)
-            st.error(f"Failed to set up MCP agent: {e}")
+            st.error(f"Failed to set up agent: {e}")
 
 # handle error
 if st.session_state['initialization_error']:
@@ -265,32 +278,32 @@ if st.session_state['agent'] is not None:
     st.markdown("---")
     
     # actual user input text box
-    user_input = st.text_area("Type your message:", key="user_input", height=100)
+    user_input = st.text_area("query:", key="user_input", height=100)
     col1, col2 = st.columns([1, 4])
     
     with col1:
-        send_btn = st.button("Send", use_container_width=True)
+        send_btn = st.button("send", use_container_width=True)
     
     with col2:
         if st.session_state['chat_history']:
-            clear_btn = st.button("Clear Chat", use_container_width=True)
+            clear_btn = st.button("clear", use_container_width=True)
             if clear_btn:
                 st.session_state['chat_history'] = []
                 st.session_state['lc_history'] = []
                 st.rerun()
 
     if send_btn and user_input:
-        logger.info(f"User submitted input: {user_input}")
+        logger.info(f"user submitted input: {user_input}")
         
         # add if first
         if len(st.session_state['lc_history']) == 0 and st.session_state['system_prompt']:
             st.session_state['lc_history'].append(SystemMessage(st.session_state['system_prompt']))
         
-        # add HumanMessage to LC history
+        # add to lc history
         st.session_state['lc_history'].append(HumanMessage(user_input))
         st.session_state['chat_history'].append(("user", user_input))
         
-        with st.spinner("Agent is thinking..."):
+        with st.spinner("agent is thinking..."):
             try:
                 logger.info("Invoking agent with chat history...")
                 config = {
@@ -330,7 +343,7 @@ if st.session_state['agent'] is not None:
             else:
                 st.markdown(f"<div style='text-align:left; color:#34a853; margin-bottom: 10px;'><b>Assistant:</b> {msg}</div>", unsafe_allow_html=True)
     else:
-        st.info("Start a conversation by typing a message above!")
+        st.info("start!")
 
 # garbage
 import atexit

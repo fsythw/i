@@ -15,7 +15,6 @@ MCP_TOKEN = os.environ.get("MCP_TOKEN", "YOUR_TOKEN")
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY", "YOUR_GOOGLE_API_KEY")
 
 async def setup_agent():
-    """set up the MCP agent with proper async handling"""
     logger.info("Setting up MultiServerMCPClient...")
     
     client = MultiServerMCPClient({
@@ -55,7 +54,7 @@ When a user asks a question, your process should be as follows:
 
 **Your knowledge base includes:**
 *   General domain knowledge.
-*   The ability to interpret and explain database schemas and data relationships, especially within a healthcare context.
+*   The ability to interpret and explain database schemas and data relationships.
 
 **Constraints:**
 *   Always prioritize providing accurate information based on the available metadata.
@@ -63,16 +62,15 @@ When a user asks a question, your process should be as follows:
 *   Maintain a helpful and informative tone.
 
 """
-
         
         logger.info("Creating Gemini model...")
         gemini_model = ChatGoogleGenerativeAI(
             model="gemini-2.0-flash", 
             google_api_key=GOOGLE_API_KEY,
             temperature=0.7,
-            convert_system_message_to_human=True,  # Gemini-specific parameter
-            timeout=30,  # Add timeout to prevent hanging
-            max_retries=3  # Add retry logic
+            convert_system_message_to_human=True,  # gemini
+            timeout=30,  
+            max_retries=3  
         )
         
         logger.info("ReACT agent with Gemini and auto-tool-invocation configuration...")
@@ -83,7 +81,7 @@ When a user asks a question, your process should be as follows:
             interrupt_after=[]
         )
         
-        logger.info("Agent created successfully with Gemini integration.")
+        logger.info("agent created successfully")
         return client, tools, agent, system_prompt
         
     except Exception as e:
@@ -96,7 +94,6 @@ When a user asks a question, your process should be as follows:
         raise
 
 async def cleanup_agent(client):
-    """Clean up agent resources"""
     try:
         if client and hasattr(client, 'close'):
             await client.close()

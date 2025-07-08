@@ -1,0 +1,63 @@
+{
+  "table_name": "DRGCODES",
+  "description": "The DRGCODES table contains Diagnosis Related Group (DRG) codes assigned to patient hospital admissions. It provides information on the type of DRG coding system used (e.g., APR or MS), the DRG code itself, a description of the code, and severity/mortality risk associated with the DRG. This table links patient admissions (HADM_ID) to specific DRG classifications for billing and diagnostic analysis.\n",
+  "columns": [
+    {
+      "name": "ROW_ID",
+      "data_type": "Int64",
+      "is_primary_key": true,
+      "n_unique": 125557,
+      "description": "Unique identifier for each row in the table."
+    },
+    {
+      "name": "SUBJECT_ID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 46511,
+      "description": "The patient identifier. Each unique SUBJECT_ID represents a single patient."
+    },
+    {
+      "name": "HADM_ID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 58890,
+      "description": "The hospital admission identifier. Each unique HADM_ID represents a single hospital visit for a patient."
+    },
+    {
+      "name": "DRG_TYPE",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 3,
+      "description": "The type of Diagnosis Related Group (DRG) coding system used. Values include 'APR' (All Patient Refined) and 'MS' (Medicare Severity)."
+    },
+    {
+      "name": "DRG_CODE",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 1667,
+      "description": "The Diagnosis Related Group (DRG) code assigned to the patient's hospital stay. This code is used for billing and classification of diagnoses."
+    },
+    {
+      "name": "DESCRIPTION",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 1368,
+      "description": "A textual description of the Diagnosis Related Group (DRG) code. Provides a human-readable explanation of the DRG_CODE."
+    },
+    {
+      "name": "DRG_SEVERITY",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 6,
+      "description": "The severity level associated with the Diagnosis Related Group (DRG). Higher values indicate greater severity of illness."
+    },
+    {
+      "name": "DRG_MORTALITY",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 6,
+      "description": "The mortality risk associated with the Diagnosis Related Group (DRG).  Indicates the likelihood of mortality for patients within this DRG."
+    }
+  ],
+  "relationships": []
+}

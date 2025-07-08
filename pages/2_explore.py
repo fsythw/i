@@ -51,7 +51,7 @@ if selected_table:
         if st.button("Find Relationships"):
             st.info("Finding foreign key relationships...")
             fk_matches = find_valid_foreign_keys_from_csv(
-                target_table=doc.drop,
+                target_table=doc,
                 all_tables=list(cached_metadata.values()),
                 csv_dir=CSV_DIR,
                 embed_fn=get_embedding,

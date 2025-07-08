@@ -1,0 +1,35 @@
+{
+  "table_name": "CAREGIVERS",
+  "description": "The CAREGIVERS table contains information about caregivers, including their unique identifier (CGID), abbreviated job title (LABEL), and full job title (DESCRIPTION). Each row is uniquely identified by ROW_ID. This table provides a mapping between caregiver identifiers and their corresponding roles.\n",
+  "columns": [
+    {
+      "name": "ROW_ID",
+      "data_type": "Int64",
+      "is_primary_key": true,
+      "n_unique": 7567,
+      "description": "Unique identifier for each row in the dataset."
+    },
+    {
+      "name": "CGID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 7567,
+      "description": "Identifier for a caregiver."
+    },
+    {
+      "name": "LABEL",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 232,
+      "description": "Abbreviated job title or role of a caregiver (e.g., RN, CNA)."
+    },
+    {
+      "name": "DESCRIPTION",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 17,
+      "description": "Full job title or role of a caregiver, corresponding to the abbreviated LABEL (e.g., Registered Nurse)."
+    }
+  ],
+  "relationships": []
+}

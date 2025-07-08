@@ -1,6 +1,6 @@
 {
   "table_name": "ICUSTAYS",
-  "description": "The ICUSTAYS table provides information on individual Intensive Care Unit (ICU) stays for patients. It links patient identifiers (SUBJECT_ID, HADM_ID) to specific ICU stay identifiers (ICUSTAY_ID) and records details such as the database source, first and last care units, ward IDs, admission and discharge timestamps (INTIME, OUTTIME), and the length of stay (LOS) in days. This table allows for analysis of patient movement and duration of stay within the ICU.\n",
+  "description": "The ICUSTAYS table contains information on individual ICU stays for patients within the database. It provides unique identifiers for each stay, the associated patient and hospital admission, the source database, the care units and wards involved, admission and discharge timestamps, and the calculated length of stay in the ICU. This table can be used to analyze ICU utilization, patient flow, and length of stay patterns.\n",
   "columns": [
     {
       "name": "ROW_ID",
@@ -14,77 +14,78 @@
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 46476,
-      "description": "The patient identifier."
+      "description": "Unique identifier for each patient."
     },
     {
       "name": "HADM_ID",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 57786,
-      "description": "Identifier for the patient's hospital admission."
+      "description": "Unique identifier for each hospital admission."
     },
     {
       "name": "ICUSTAY_ID",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 61532,
-      "description": "Identifier for the patient's ICU stay."
+      "description": "Unique identifier for each ICU stay."
     },
     {
       "name": "DBSOURCE",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 3,
-      "description": "The database source where the data was obtained, e.g., 'metavision'."
+      "description": "The database source the data was extracted from; values include 'carevue', 'metavision' or 'both'."
     },
     {
       "name": "FIRST_CAREUNIT",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 6,
-      "description": "The first ICU care unit the patient was admitted to, e.g., 'NICU', 'CCU'."
+      "description": "The first care unit the patient was admitted to during the ICU stay. Possible values include CCU, CSRU, MICU, NICU, SICU, and TSICU."
     },
     {
       "name": "LAST_CAREUNIT",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 6,
-      "description": "The last ICU care unit the patient was in during their stay, e.g., 'MICU', 'SICU'."
+      "description": "The last care unit the patient was in during the ICU stay. Possible values include CCU, CSRU, MICU, NICU, SICU, and TSICU."
     },
     {
       "name": "FIRST_WARDID",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 16,
-      "description": "The ward ID of the patient upon admission to the ICU."
+      "description": "The ward ID of the patient at the start of the ICU stay."
     },
     {
       "name": "LAST_WARDID",
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 17,
-      "description": "The ward ID of the patient at discharge from the ICU."
+      "description": "The ward ID of the patient at the end of the ICU stay."
     },
     {
       "name": "INTIME",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 61531,
-      "description": "Timestamp when the patient was admitted to the ICU."
+      "description": "The timestamp of when the patient was admitted to the ICU."
     },
     {
       "name": "OUTTIME",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 61519,
-      "description": "Timestamp when the patient was discharged from the ICU."
+      "description": "The timestamp of when the patient was discharged from the ICU."
     },
     {
       "name": "LOS",
       "data_type": "Float64",
       "is_primary_key": false,
       "n_unique": 40176,
-      "description": "Length of stay in the ICU, in days."
+      "description": "The length of stay (LOS) in the ICU, calculated as the difference between OUTTIME and INTIME in days."
     }
-  ]
+  ],
+  "relationships": []
 }

@@ -1,0 +1,49 @@
+{
+  "table_name": "SERVICES",
+  "description": "The `SERVICES` table tracks patient transfers between different hospital services or departments. Each row represents a single patient transfer, identified by a unique `ROW_ID`. The table includes the patient's identifier (`SUBJECT_ID`), hospital admission identifier (`HADM_ID`), the date and time of the transfer (`TRANSFERTIME`), the previous service the patient was on (`PREV_SERVICE`), and the current service the patient is on (`CURR_SERVICE`). This table can be used to analyze patient flow within the hospital.\n",
+  "columns": [
+    {
+      "name": "ROW_ID",
+      "data_type": "Int64",
+      "is_primary_key": true,
+      "n_unique": 73343,
+      "description": "Unique identifier for each row in the table."
+    },
+    {
+      "name": "SUBJECT_ID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 46496,
+      "description": "The patient identifier, unique to a patient across the entire database."
+    },
+    {
+      "name": "HADM_ID",
+      "data_type": "Int64",
+      "is_primary_key": false,
+      "n_unique": 58926,
+      "description": "The hospital admission identifier, unique to a patient's hospital stay."
+    },
+    {
+      "name": "TRANSFERTIME",
+      "data_type": "Datetime(time_unit='us', time_zone=None)",
+      "is_primary_key": false,
+      "n_unique": 73336,
+      "description": "The date and time when a patient was transferred to a new service or location."
+    },
+    {
+      "name": "PREV_SERVICE",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 19,
+      "description": "The service the patient was on prior to the current transfer, represented by a department code."
+    },
+    {
+      "name": "CURR_SERVICE",
+      "data_type": "String",
+      "is_primary_key": false,
+      "n_unique": 20,
+      "description": "The service the patient is currently on, represented by a department code."
+    }
+  ],
+  "relationships": []
+}

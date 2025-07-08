@@ -23,3 +23,24 @@ Traceback (most recent call last):
     self._sock.shutdown(socket.SHUT_RDWR)
 ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
 2025-07-07 16:14:23,913 INFO Terminating session: ef5e5c68347648a7a7e6f1796fa9fb02
+2025-07-08 09:40:50,915 INFO [Tool] list_tables called
+2025-07-08 09:40:51,195 INFO StreamableHTTP session manager started
+2025-07-08 09:42:52,605 INFO Created new transport with session ID: fe5663f1bf544c8ca97d0460445eba65
+2025-07-08 09:42:53,194 INFO Processing request of type ListToolsRequest
+2025-07-08 09:42:53,205 ERROR Exception in callback _ProactorBasePipeTransport._call_connection_lost(None)
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost(None)>
+Traceback (most recent call last):
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2025-07-08 09:42:53,470 INFO Terminating session: fe5663f1bf544c8ca97d0460445eba65
+2025-07-08 09:42:53,477 ERROR Exception in callback _ProactorBasePipeTransport._call_connection_lost(None)
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost(None)>
+Traceback (most recent call last):
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\events.py", line 84, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host

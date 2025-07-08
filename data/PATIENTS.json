@@ -1,6 +1,6 @@
 {
   "table_name": "PATIENTS",
-  "description": "The PATIENTS table contains demographic and mortality information for each patient in the dataset. It includes the patient's gender, date of birth, and multiple date of death records from different sources (hospital, social security, and a general patient table record), as well as an expire flag indicating patient mortality. The table uses `SUBJECT_ID` as a unique patient identifier.\n",
+  "description": "The PATIENTS table contains demographic and mortality information for patients in the database. It includes unique patient identifiers (SUBJECT_ID), gender, date of birth (DOB), dates of death from various sources (DOD, DOD_HOSP, DOD_SSN), and an expiration flag (EXPIRE_FLAG) indicating patient mortality status. Each row is uniquely identified by ROW_ID.\n",
   "columns": [
     {
       "name": "ROW_ID",
@@ -14,42 +14,42 @@
       "data_type": "Int64",
       "is_primary_key": false,
       "n_unique": 46520,
-      "description": "Identifier for each patient."
+      "description": "The unique identifier for each patient."
     },
     {
       "name": "GENDER",
       "data_type": "String",
       "is_primary_key": false,
       "n_unique": 2,
-      "description": "The gender of the patient, either 'F' (female) or 'M' (male)."
+      "description": "The gender of the patient, recorded as 'M' (male) or 'F' (female)."
     },
     {
       "name": "DOB",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 32540,
-      "description": "The patient's date of birth."
+      "description": "The date of birth of the patient."
     },
     {
       "name": "DOD",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 12912,
-      "description": "The patient's date of death, if available."
+      "description": "Date of death for the patient."
     },
     {
       "name": "DOD_HOSP",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 8748,
-      "description": "The patient's date of death recorded during hospitalization, if available."
+      "description": "Date of death as recorded by the hospital."
     },
     {
       "name": "DOD_SSN",
       "data_type": "Datetime(time_unit='us', time_zone=None)",
       "is_primary_key": false,
       "n_unique": 11302,
-      "description": "The patient's date of death as recorded by the Social Security Administration, if available."
+      "description": "Date of death as recorded by the Social Security Administration."
     },
     {
       "name": "EXPIRE_FLAG",
@@ -58,5 +58,6 @@
       "n_unique": 2,
       "description": "A flag indicating whether the patient has expired (1) or not (0)."
     }
-  ]
+  ],
+  "relationships": []
 }
