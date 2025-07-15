@@ -297,7 +297,7 @@ if st.session_state['agent'] is not None:
         
         # add if first
         if len(st.session_state['lc_history']) == 0 and st.session_state['system_prompt']:
-            st.session_state['lc_history'].append(SystemMessage(st.session_state['system_prompt']))
+            st.session_state['lc_history'].append(SystemMessage(st.session_state['system_prompt'])) # add to history
         
         # add to lc history
         st.session_state['lc_history'].append(HumanMessage(user_input))
@@ -314,7 +314,7 @@ if st.session_state['agent'] is not None:
                 }
                 response = invoke_agent_sync(
                     st.session_state['agent'],
-                    {"messages": st.session_state['lc_history']}, 
+                    {"messages": st.session_state['lc_history']}, ##invoke with history 
                     config
                 )
                 logger.info(f"Agent response: {response}")
@@ -328,6 +328,8 @@ if st.session_state['agent'] is not None:
                     logger.info(f"Agent response (non-dict): {response}")
                     st.session_state['lc_history'].append(AIMessage(str(response)))
                     st.session_state['chat_history'].append(("assistant", str(response)))
+                # print(AIMessage(reply))
+                # print(AIMessage(response))
             except Exception as e:
                 logger.error(f"Error during agent invocation: {e}")
                 st.session_state['chat_history'].append(("assistant", f"Error: {e}"))

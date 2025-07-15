@@ -59,5 +59,41 @@
       "description": "A flag indicating whether the patient has expired (1) or not (0)."
     }
   ],
-  "relationships": []
+  "relationships": [
+    {
+      "from_table": "PATIENTS",
+      "from_column": "SUBJECT_ID",
+      "to_table": "ADMISSIONS",
+      "to_column": "SUBJECT_ID",
+      "reason": "PATIENTS.SUBJECT_ID references ADMISSIONS.SUBJECT_ID. SUBJECT_ID in PATIENTS is the unique identifier for each patient, and SUBJECT_ID in ADMISSIONS links the admission to the patient."
+    },
+    {
+      "from_table": "PATIENTS",
+      "from_column": "SUBJECT_ID",
+      "to_table": "SERVICES",
+      "to_column": "SUBJECT_ID",
+      "reason": "PATIENTS.SUBJECT_ID references SERVICES.SUBJECT_ID. SUBJECT_ID in PATIENTS is the unique identifier for each patient, and SUBJECT_ID in SERVICES links the services to the patient."
+    },
+    {
+      "from_table": "PATIENTS",
+      "from_column": "SUBJECT_ID",
+      "to_table": "TRANSFERS",
+      "to_column": "SUBJECT_ID",
+      "reason": "PATIENTS.SUBJECT_ID references TRANSFERS.SUBJECT_ID. SUBJECT_ID in PATIENTS is the unique identifier for each patient, and SUBJECT_ID in TRANSFERS links the transfers to the patient."
+    },
+    {
+      "from_table": "PATIENTS",
+      "from_column": "SUBJECT_ID",
+      "to_table": "ICUSTAYS",
+      "to_column": "SUBJECT_ID",
+      "reason": "PATIENTS.SUBJECT_ID references ICUSTAYS.SUBJECT_ID. SUBJECT_ID in PATIENTS is the unique identifier for each patient, and SUBJECT_ID in ICUSTAYS links the icustays to the patient."
+    },
+    {
+      "from_table": "PATIENTS",
+      "from_column": "SUBJECT_ID",
+      "to_table": "DRGCODES",
+      "to_column": "SUBJECT_ID",
+      "reason": "PATIENTS.SUBJECT_ID references DRGCODES.SUBJECT_ID. SUBJECT_ID in PATIENTS is the unique identifier for each patient, and SUBJECT_ID in DRGCODES links the DRGCODES to the patient."
+    }
+  ]
 }

@@ -98,30 +98,23 @@
     {
       "from_table": "TRANSFERS",
       "from_column": "SUBJECT_ID",
-      "to_table": "ADMISSIONS",
-      "to_column": "SUBJECT_ID",
-      "reason": "TRANSFERS.SUBJECT_ID references ADMISSIONS.SUBJECT_ID. SUBJECT_ID is a foreign key in TRANSFERS referencing the SUBJECT_ID which is not a primary key but a column in ADMISSIONS table. However, it can be considered a valid foreign key since SUBJECT_ID is present in both tables."
-    },
-    {
-      "from_table": "TRANSFERS",
-      "from_column": "SUBJECT_ID",
       "to_table": "PATIENTS",
       "to_column": "SUBJECT_ID",
-      "reason": "TRANSFERS.SUBJECT_ID references PATIENTS.SUBJECT_ID. SUBJECT_ID is a foreign key in TRANSFERS referencing the SUBJECT_ID which is not a primary key but a column in PATIENTS table. However, it can be considered a valid foreign key since SUBJECT_ID is present in both tables."
-    },
-    {
-      "from_table": "TRANSFERS",
-      "from_column": "SUBJECT_ID",
-      "to_table": "DRGCODES",
-      "to_column": "ROW_ID",
-      "reason": "TRANSFERS.SUBJECT_ID does not reference DRGCODES.ROW_ID. The datatypes do match, but the columns do not represent the same data. The SUBJECT_ID in TRANSFERS references a patient ID, while ROW_ID in DRGCODES is the unique identifier for each row."
+      "reason": "TRANSFERS.SUBJECT_ID references PATIENTS.SUBJECT_ID. SUBJECT_ID in PATIENTS is the primary key of the PATIENTS table."
     },
     {
       "from_table": "TRANSFERS",
       "from_column": "HADM_ID",
       "to_table": "ADMISSIONS",
       "to_column": "HADM_ID",
-      "reason": "TRANSFERS.HADM_ID references ADMISSIONS.HADM_ID. HADM_ID is a foreign key in TRANSFERS referencing the HADM_ID which is not a primary key but a column in ADMISSIONS table. However, it can be considered a valid foreign key since HADM_ID is present in both tables."
+      "reason": "TRANSFERS.HADM_ID references ADMISSIONS.HADM_ID. HADM_ID in ADMISSIONS is the primary key of the ADMISSIONS table."
+    },
+    {
+      "from_table": "TRANSFERS",
+      "from_column": "ICUSTAY_ID",
+      "to_table": "ICUSTAYS",
+      "to_column": "ICUSTAY_ID",
+      "reason": "TRANSFERS.ICUSTAY_ID references ICUSTAYS.ICUSTAY_ID. ICUSTAY_ID in ICUSTAYS is a primary key of the ICUSTAYS table."
     }
   ]
 }

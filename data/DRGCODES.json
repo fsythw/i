@@ -59,5 +59,20 @@
       "description": "The mortality risk associated with the Diagnosis Related Group (DRG).  Indicates the likelihood of mortality for patients within this DRG."
     }
   ],
-  "relationships": []
+  "relationships": [
+    {
+      "from_table": "DRGCODES",
+      "from_column": "SUBJECT_ID",
+      "to_table": "PATIENTS",
+      "to_column": "SUBJECT_ID",
+      "reason": "DRGCODES.SUBJECT_ID references PATIENTS.SUBJECT_ID. SUBJECT_ID in PATIENTS is the primary key of the PATIENTS table."
+    },
+    {
+      "from_table": "DRGCODES",
+      "from_column": "HADM_ID",
+      "to_table": "ADMISSIONS",
+      "to_column": "HADM_ID",
+      "reason": "DRGCODES.HADM_ID references ADMISSIONS.HADM_ID. HADM_ID in ADMISSIONS is the primary key of the ADMISSIONS table."
+    }
+  ]
 }
