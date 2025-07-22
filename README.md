@@ -20,6 +20,8 @@ python server.py
 ```
 
 ## run app
+in a separate terminal run 
+
 ```bash
 streamlit run app.py
 ```
