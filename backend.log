@@ -544,3 +544,5 @@ Traceback (most recent call last):
   File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
     self._sock.shutdown(socket.SHUT_RDWR)
 ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2025-07-22 17:06:28,635 INFO [Tool] list_tables called
+2025-07-22 17:06:28,882 INFO StreamableHTTP session manager started
