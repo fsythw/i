@@ -8,7 +8,7 @@ pip install -r requirements.txt
 ## api keys
 create .env file 
 
-MONGO_URI=mongodb+srv://<username>:<password>@<cluster-url>/
+MONGO_URI=mongodb+srv://username:password@cluster-url/
 
 GOOGLE_API_KEY=your-google-api-key
 
