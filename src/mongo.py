@@ -2,21 +2,14 @@ import pymongo
 import json
 from pymongo import MongoClient, InsertOne
 import streamlit as st
+import os
 
 @st.cache_resource
 def get_mongo_client():
-    return pymongo.MongoClient("mongodb+srv://t7059941:xrcdgKjgG3bwMpth@cluster0.ggwp7zk.mongodb.net/")
 
-
-# client = pymongo.MongoClient("mongodb+srv://faithwansy123:rhbc1234@cluster0.oxan1it.mongodb.net/")
-# db = client.metadata
-# collection = db.ADMISSIONS
-
-
-# with open(r"./data/ADMISSIONS.json") as f:
-#     data = json.load(f)
-#     requesting.append(InsertOne(data))
-
+    MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
+    client = MongoClient(MONGO_URI)
+    return client
 
 
 def add_to_database(metadata: dict, table_name: str):

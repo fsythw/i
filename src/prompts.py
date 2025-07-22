@@ -1,44 +1,5 @@
 import json, time
-from src.schema import Metadata, Data, Relationship
-
-# def generate_prompt(table_name, sample_data, columns, table_description=""):
-#     return f"""
-# You are a data catalog assistant. Your task is to generate metadata for a dataset.
-
-# Table name: "{table_name}"
-# {f"Table description: {table_description}" if table_description else ""}
-
-# Sample data:
-# {json.dumps(sample_data, indent=2)}
-
-# Columns:
-# {columns}
-
-# For each column, provide:
-# - name
-# - type (e.g., string, integer, float, date, boolean)
-# - description. If it might be a primary or foreign key, indicate so.
-# - Example values from the sample
-# Use the table-level description provided. 
-
-# Output the metadata as a JSON object.
-# """
-
-# def generate_enrichment_prompt(metadata_list: list[Metadata]) -> str:
-#     metadata_jsons = [m.model_dump() for m in metadata_list]
-#     return f"""
-# You are a metadata enrichment assistant. Your task is to analyze multiple tables' metadata and enrich each with possible relationships to other tables.
-
-# Here is the current metadata for all tables:
-# {json.dumps(metadata_jsons, indent=2)}
-
-# Instructions:
-# - For each table, look at all columns and try to identify if any of them reference another table's primary key.
-# - Add a "relationships" key to each table, with a list of relationship objects. A relationship should appear in both tables.
-
-
-# Return the full metadata for the database.
-# """
+from src.schema import Data
 
 
 def call_gemini_descriptions(columns, example, client):
@@ -153,65 +114,6 @@ def judge_and_improve_table_schema(table_name, schema_info, client, threshold=8,
         time.sleep(1)
 
     return current_schema
-
-
-# def enrich_metadata_with_relationships(metadata_list, client):
-#     prompt = f"""
-#     Given the following table schemas, identify potential foreign key relationships between tables. 
-#     Use data type, column description, and primary key status to infer if a column references another table's primary key.
-#     Also give a description of the entire database.
-    
-
-
-#     Schemas:
-#     {json.dumps(metadata_list, indent=2)}
-#     """
-
-#     response = client.models.generate_content(
-#         model="gemini-2.0-flash",
-#         contents=prompt,
-#         config={"response_mime_type": "application/json",
-#                 "response_schema": Data,}
-
-#     )
-
-#     try:
-#         return json.loads(response.text)
-#     except Exception as e:
-#         print("Failed to parse enriched response:", e)
-#         return metadata_list  # fallback to original
-
-# def enrich_metadata_with_relationships(metadata_list, fk_list, client):
-#     prompt = f"""
-#     You are an expert in relational databases. Given the table schemas and potential foreign keys, evaluate which foreign key relationships are valid.
-
-#     Criteria:
-#     - The column in the source table must reference the primary key of the destination table.
-#     - Consider column names, data types, and descriptions.
-#     Also give a description of the entire database.
-#     Return an enriched schema of the database.
-
-#     Schemas:
-#     {json.dumps(metadata_list, indent=2)}
-
-#     Foreign key list:{fk_list}
-
-#     """
-
-#     response = client.models.generate_content(
-#         model="gemini-2.0-flash",
-#         contents=prompt,
-#         config={"response_mime_type": "application/json",
-#                 "response_schema": Data,}
-
-#     )
-
-#     try:
-#         return json.loads(response.text)
-#     except Exception as e:
-#         print("Failed to parse enriched response:", e)
-#         return metadata_list  # fallback to original
-
 
 def enrich_metadata_with_relationships(metadata_list, fk_list, client):
     prompt = f"""

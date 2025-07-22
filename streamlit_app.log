@@ -1688,3 +1688,25 @@ content.list[union[str,dict[any,any]]]
 2025-07-22 15:52:52,519 INFO Loading environment variables from .env file...
 2025-07-22 15:52:52,523 INFO Setting Streamlit page config and title.
 2025-07-22 15:52:52,525 INFO initialize st session state variables if not present.
+2025-07-22 17:16:03,729 INFO Loading environment variables from .env file...
+2025-07-22 17:16:03,729 INFO Setting Streamlit page config and title.
+2025-07-22 17:16:03,733 INFO initialize st session state variables if not present.
+2025-07-22 17:16:03,733 INFO Agent not found in session state. Initializing...
+2025-07-22 17:16:03,746 INFO Setting up MultiServerMCPClient...
+2025-07-22 17:16:03,746 INFO Fetching tools from MCP server...
+2025-07-22 17:16:04,214 INFO HTTP Request: POST http://localhost:8000/mcp "HTTP/1.1 307 Temporary Redirect"
+2025-07-22 17:16:04,229 INFO HTTP Request: POST http://localhost:8000/mcp/ "HTTP/1.1 200 OK"
+2025-07-22 17:16:04,229 INFO Received session ID: d852b5fc0e1c453fb440b2ae744ebff5
+2025-07-22 17:16:04,508 INFO HTTP Request: GET http://localhost:8000/mcp "HTTP/1.1 307 Temporary Redirect"
+2025-07-22 17:16:04,514 INFO HTTP Request: POST http://localhost:8000/mcp "HTTP/1.1 307 Temporary Redirect"
+2025-07-22 17:16:04,514 INFO HTTP Request: GET http://localhost:8000/mcp/ "HTTP/1.1 200 OK"
+2025-07-22 17:16:04,519 INFO HTTP Request: POST http://localhost:8000/mcp/ "HTTP/1.1 202 Accepted"
+2025-07-22 17:16:04,791 INFO HTTP Request: POST http://localhost:8000/mcp "HTTP/1.1 307 Temporary Redirect"
+2025-07-22 17:16:04,794 INFO HTTP Request: POST http://localhost:8000/mcp/ "HTTP/1.1 200 OK"
+2025-07-22 17:16:05,071 INFO HTTP Request: DELETE http://localhost:8000/mcp "HTTP/1.1 307 Temporary Redirect"
+2025-07-22 17:16:05,072 INFO HTTP Request: DELETE http://localhost:8000/mcp/ "HTTP/1.1 200 OK"
+2025-07-22 17:16:05,079 INFO Tools fetched: ['list_tables', 'get_schema', 'get_description']
+2025-07-22 17:16:05,081 INFO Creating Gemini model...
+2025-07-22 17:16:05,098 INFO ReACT agent with Gemini and auto-tool-invocation configuration...
+2025-07-22 17:16:05,109 INFO agent created successfully
+2025-07-22 17:16:05,110 INFO  agent setup complete and stored in session state.

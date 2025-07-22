@@ -2,6 +2,7 @@ import streamlit as st
 import polars as pl
 import json
 import os
+from dotenv import load_dotenv
 
 from google import genai
 from src.prompts import (
@@ -14,8 +15,10 @@ from src.utils import discover_primary_key
 from src.cache import compute_file_hash, is_cached, add_to_cache
 from src.mongo import add_to_database
 
+load_dotenv()
 
-client = genai.Client(api_key=st.secrets["google"]["GENAI_API_KEY"])
+client = genai.Client(api_key=os.environ.get("GENAI_API_KEY"))
+
 
 DATA_DIR = "./data"
 CSV_DIR = "./csv_data"

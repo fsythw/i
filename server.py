@@ -4,6 +4,7 @@ from pymongo import MongoClient
 import os
 from dotenv import load_dotenv
 import logging 
+from src.mongo import get_mongo_client
 
 # logging
 logging.basicConfig(
@@ -18,9 +19,7 @@ logger = logging.getLogger(__name__)
 
 load_dotenv()
 
-# mongo
-MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
-client = MongoClient(MONGO_URI)
+client = get_mongo_client()
 metadata_db = client["metadata"]
 
 mcp = FastMCP("Metadata MCP Server")
@@ -35,7 +34,6 @@ def list_tables() -> List[str]:
     tables = metadata_db.list_collection_names()
     return tables
 
-#patients, admissions, demographics, and hospital stays
 
 @mcp.tool()
 def get_schema(table: str) -> Optional[dict]:
@@ -63,10 +61,8 @@ def get_description(table: str) -> Optional[str]:
         return doc["description"]
     return None
 
-#, such as age, gender, admission dates, and length of stay.
 
 
 if __name__ == "__main__":
-    print("Connecting to MongoDB at", MONGO_URI)
     print("Available tables:", list_tables())
     mcp.run(transport="streamable-http")

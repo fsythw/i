@@ -1,10 +1,12 @@
 import numpy as np
-import json
-import streamlit as st
 from typing import List, Dict
 from google import genai
+import os
+from dotenv import load_dotenv
 
-client = genai.Client(api_key=st.secrets['google']["GENAI_API_KEY"])
+load_dotenv()
+
+client = genai.Client(api_key=os.environ.get("GENAI_API_KEY"))
 
 def get_embedding(text: str) -> List[float]:
     response = client.models.embed_content(

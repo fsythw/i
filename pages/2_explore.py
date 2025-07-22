@@ -59,7 +59,8 @@ if selected_table:
             )
   
    
-            enriched = enrich_metadata_with_relationships(list(cached_metadata.values()), fk_matches, genai.Client(api_key=st.secrets["google"]["GENAI_API_KEY"]))
+            enriched = enrich_metadata_with_relationships(list(cached_metadata.values()), fk_matches, genai.Client(api_key=os.environ.get("GENAI_API_KEY")))
+
             print(enriched["metadata"])
             save_relationships(enriched["metadata"])
             try:

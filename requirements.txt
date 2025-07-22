@@ -1,0 +1,13 @@
+streamlit
+langchain-mcp-adapters
+langgraph
+langchain-core
+langchain-google-genai
+python-dotenv
+markdown
+pymongo
+mcp[cli]
+polars
+tinydb
+numpy
+graphviz

@@ -546,3 +546,8 @@ Traceback (most recent call last):
 ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
 2025-07-22 17:06:28,635 INFO [Tool] list_tables called
 2025-07-22 17:06:28,882 INFO StreamableHTTP session manager started
+2025-07-22 17:14:20,156 INFO StreamableHTTP session manager shutting down
+2025-07-22 17:14:22,956 INFO [Tool] list_tables called
+2025-07-22 17:14:37,915 INFO [Tool] list_tables called
+2025-07-22 17:15:43,040 INFO [Tool] list_tables called
+2025-07-22 17:15:43,241 INFO StreamableHTTP session manager started
