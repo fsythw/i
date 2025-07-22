@@ -93,14 +93,14 @@
       "from_column": "SUBJECT_ID",
       "to_table": "PATIENTS",
       "to_column": "SUBJECT_ID",
-      "reason": "ICUSTAYS.SUBJECT_ID references PATIENTS.SUBJECT_ID. SUBJECT_ID in PATIENTS is the primary key of the PATIENTS table."
+      "reason": "ICUSTAYS.SUBJECT_ID references PATIENTS.SUBJECT_ID. SUBJECT_ID is the patient identifier and a foreign key in ICUSTAYS referencing PATIENTS."
     },
     {
       "from_table": "ICUSTAYS",
       "from_column": "HADM_ID",
       "to_table": "ADMISSIONS",
       "to_column": "HADM_ID",
-      "reason": "ICUSTAYS.HADM_ID references ADMISSIONS.HADM_ID. HADM_ID in ADMISSIONS is the primary key of the ADMISSIONS table."
+      "reason": "ICUSTAYS.HADM_ID references ADMISSIONS.HADM_ID. HADM_ID is the hospital admission identifier, and a foreign key in ICUSTAYS referencing ADMISSIONS."
     }
   ]
 }

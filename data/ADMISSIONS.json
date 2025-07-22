@@ -142,28 +142,7 @@
       "from_column": "SUBJECT_ID",
       "to_table": "PATIENTS",
       "to_column": "SUBJECT_ID",
-      "reason": "ADMISSIONS.SUBJECT_ID references PATIENTS.SUBJECT_ID. SUBJECT_ID in PATIENTS is the primary key of the PATIENTS table."
-    },
-    {
-      "from_table": "ADMISSIONS",
-      "from_column": "HADM_ID",
-      "to_table": "DRGCODES",
-      "to_column": "HADM_ID",
-      "reason": "ADMISSIONS.HADM_ID references DRGCODES.HADM_ID. HADM_ID in DRGCODES provides info of DRG codes for a given admission."
-    },
-    {
-      "from_table": "ADMISSIONS",
-      "from_column": "HADM_ID",
-      "to_table": "ICUSTAYS",
-      "to_column": "HADM_ID",
-      "reason": "ADMISSIONS.HADM_ID references ICUSTAYS.HADM_ID. HADM_ID in ICUSTAYS provides info of icustays for a given admission."
-    },
-    {
-      "from_table": "ADMISSIONS",
-      "from_column": "HADM_ID",
-      "to_table": "SERVICES",
-      "to_column": "HADM_ID",
-      "reason": "ADMISSIONS.HADM_ID references SERVICES.HADM_ID. HADM_ID in SERVICES links the services information to specific admissions."
+      "reason": "ADMISSIONS.SUBJECT_ID references PATIENTS.SUBJECT_ID. SUBJECT_ID is the patient identifier and a foreign key in ADMISSIONS referencing PATIENTS."
     }
   ]
 }

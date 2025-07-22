@@ -67,7 +67,7 @@ When a user asks a question, your process should be as follows:
         gemini_model = ChatGoogleGenerativeAI(
             model="gemini-2.0-flash", 
             google_api_key=GOOGLE_API_KEY,
-            temperature=0.7,
+            temperature=0.7, #ok but why
             convert_system_message_to_human=True,  # gemini
             timeout=30,  
             max_retries=3  

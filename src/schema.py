@@ -16,17 +16,19 @@ class Column(BaseModel):
     is_primary_key: bool
     description: str
     
+class MetadataNoRel(BaseModel):
+    table_name: str
+    description: str
+    columns: List[Column]
 
+    
 class Metadata(BaseModel):
     table_name: str
     description: str
     columns: List[Column]
     relationships: List[Relationship]
 
-class MetadataNoRel(BaseModel):
-    table_name: str
-    description: str
-    columns: List[Column]
+
 
 class Data(BaseModel):
     database_name: str

@@ -65,35 +65,35 @@
       "from_column": "SUBJECT_ID",
       "to_table": "ADMISSIONS",
       "to_column": "SUBJECT_ID",
-      "reason": "PATIENTS.SUBJECT_ID references ADMISSIONS.SUBJECT_ID. SUBJECT_ID in PATIENTS is the unique identifier for each patient, and SUBJECT_ID in ADMISSIONS links the admission to the patient."
-    },
-    {
-      "from_table": "PATIENTS",
-      "from_column": "SUBJECT_ID",
-      "to_table": "SERVICES",
-      "to_column": "SUBJECT_ID",
-      "reason": "PATIENTS.SUBJECT_ID references SERVICES.SUBJECT_ID. SUBJECT_ID in PATIENTS is the unique identifier for each patient, and SUBJECT_ID in SERVICES links the services to the patient."
+      "reason": "PATIENTS.SUBJECT_ID references ADMISSIONS.SUBJECT_ID. SUBJECT_ID is the patient identifier and a foreign key in ADMISSIONS referencing PATIENTS."
     },
     {
       "from_table": "PATIENTS",
       "from_column": "SUBJECT_ID",
       "to_table": "TRANSFERS",
       "to_column": "SUBJECT_ID",
-      "reason": "PATIENTS.SUBJECT_ID references TRANSFERS.SUBJECT_ID. SUBJECT_ID in PATIENTS is the unique identifier for each patient, and SUBJECT_ID in TRANSFERS links the transfers to the patient."
-    },
-    {
-      "from_table": "PATIENTS",
-      "from_column": "SUBJECT_ID",
-      "to_table": "ICUSTAYS",
-      "to_column": "SUBJECT_ID",
-      "reason": "PATIENTS.SUBJECT_ID references ICUSTAYS.SUBJECT_ID. SUBJECT_ID in PATIENTS is the unique identifier for each patient, and SUBJECT_ID in ICUSTAYS links the icustays to the patient."
+      "reason": "PATIENTS.SUBJECT_ID references TRANSFERS.SUBJECT_ID. SUBJECT_ID is the patient identifier and a foreign key in TRANSFERS referencing PATIENTS."
     },
     {
       "from_table": "PATIENTS",
       "from_column": "SUBJECT_ID",
       "to_table": "DRGCODES",
       "to_column": "SUBJECT_ID",
-      "reason": "PATIENTS.SUBJECT_ID references DRGCODES.SUBJECT_ID. SUBJECT_ID in PATIENTS is the unique identifier for each patient, and SUBJECT_ID in DRGCODES links the DRGCODES to the patient."
+      "reason": "PATIENTS.SUBJECT_ID references DRGCODES.SUBJECT_ID. SUBJECT_ID is the patient identifier and a foreign key in DRGCODES referencing PATIENTS."
+    },
+    {
+      "from_table": "PATIENTS",
+      "from_column": "SUBJECT_ID",
+      "to_table": "SERVICES",
+      "to_column": "SUBJECT_ID",
+      "reason": "PATIENTS.SUBJECT_ID references SERVICES.SUBJECT_ID. SUBJECT_ID is the patient identifier and a foreign key in SERVICES referencing PATIENTS."
+    },
+    {
+      "from_table": "PATIENTS",
+      "from_column": "SUBJECT_ID",
+      "to_table": "ICUSTAYS",
+      "to_column": "SUBJECT_ID",
+      "reason": "PATIENTS.SUBJECT_ID references ICUSTAYS.SUBJECT_ID. SUBJECT_ID is the patient identifier and a foreign key in ICUSTAYS referencing PATIENTS."
     }
   ]
 }
